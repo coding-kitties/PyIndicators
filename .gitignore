@@ -133,11 +133,6 @@ bot_configuration.db
 .idea
 *log*
 
-!plugins/strategies/
-plugins/strategies/*.py
-!plugins/data_providers/
-plugins/data_providers/*.py
-
 .tox
 _test_run/
 bin/
@@ -147,7 +142,4 @@ lib/
 bumpversion.egg-info/
 *.sqlite3
 
-**/backtest_data/*
-*/backtest_reports/
-**/backtest_reports/*
 .vscode/
