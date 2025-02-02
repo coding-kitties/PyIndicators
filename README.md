@@ -5,7 +5,7 @@ PyIndicators is a powerful and user-friendly Python library for technical analys
 ## Features
 
 * Native Python implementation
-* Supports both pandas dataframes and polars dataframes
+* Dataframe first approach, with support for both pandas dataframes and polars dataframes
 
 ## Indicators
 

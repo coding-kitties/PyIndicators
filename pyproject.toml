@@ -7,7 +7,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pandas = "^2.1.4"
 
+
+[tool.poetry.group.dev.dependencies]
+ta-lib = "^0.4.28"
+investing-algorithm-framework = "^2.1.0"
 
 [build-system]
 requires = ["poetry-core"]
