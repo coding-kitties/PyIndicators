@@ -11,17 +11,23 @@ def is_crossover(
     strict=True,
 ) -> bool:
     """
-    Returns a boolean when the first series crosses above the second series at any point or within the last n data points.
+    Returns a boolean when the first series crosses above the second
+        series at any point or within the last n data points.
 
     Args:
         data (Union[PdDataFrame, PlDataFrame]): The input data.
         first_column (str): The name of the first series.
         second_column (str): The name of the second series.
-        data_points (int, optional): The number of data points to consider. Defaults to None.
-        strict (bool, optional): If True, the first series must be strictly greater than the second series. If False, the first series must be greater than or equal to the second series. Defaults to True.
+        data_points (int, optional): The number of data points
+            to consider. Defaults to None.
+        strict (bool, optional): If True, the first series must
+            be strictly greater than the second series. If False,
+            the first series must be greater than or equal
+            to the second series. Defaults to True.
 
     Returns:
-        bool: Returns True if the first series crosses above the second series at any point or within the last n data points.
+        bool: Returns True if the first series crosses above the
+            second series at any point or within the last n data points.
     """
 
     if len(data) < 2:

@@ -21,7 +21,8 @@ def sma(
             simple moving average. Defaults to None.
 
     Returns:
-        Union[PdDataFrame, PlDataFrame]: Returns a DataFrame with the simple moving average of the series.
+        Union[PdDataFrame, PlDataFrame]: Returns a DataFrame
+            with the simple moving average of the series.
     """
 
     if len(data) < period:
@@ -38,8 +39,7 @@ def sma(
         data[result_column] = data[source_column].rolling(window=period).mean()
     else:
         data = data.with_column(
-            data[source_column]
-                .rolling(window=period).mean(),
+            data[source_column].rolling(window=period).mean(),
             result_column
         )
 

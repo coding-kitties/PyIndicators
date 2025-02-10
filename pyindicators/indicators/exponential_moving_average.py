@@ -4,6 +4,7 @@ from polars import DataFrame as PlDataFrame
 import polars as pl
 from pyindicators.exceptions import PyIndicatorException
 
+
 def ema(
     data: Union[PdDataFrame, PlDataFrame],
     source_column: str,
@@ -21,7 +22,8 @@ def ema(
             exponential moving average. Defaults to None.
 
     Returns:
-        Union[PdDataFrame, PlDataFrame]: Returns a DataFrame with the EMA of the series.
+        Union[PdDataFrame, PlDataFrame]: Returns a DataFrame with
+            the EMA of the series.
     """
 
     if len(data) < period:
@@ -35,9 +37,11 @@ def ema(
         result_column = f"EMA_{source_column}_{period}"
 
     if isinstance(data, PdDataFrame):
-        data[result_column] = data[source_column].ewm(span=period, adjust=False).mean()
+        data[result_column] = data[source_column]\
+            .ewm(span=period, adjust=False).mean()
     else:
-        # Polars does not have a direct EWM function, so we implement it manually
+        # Polars does not have a direct EWM function,
+        # so we implement it manually
         alpha = 2 / (period + 1)
         ema_values = []
         ema_prev = data[source_column][0]  # Initialize with the first value

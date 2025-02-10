@@ -1,5 +1,6 @@
 from pandas import Series
 
+
 def rsi(series: Series, timeperiod=14):
     """
     Calculate the Relative Strength Index (RSI) for a given Pandas series.
@@ -30,8 +31,9 @@ def rsi(series: Series, timeperiod=14):
             i]) / timeperiod
 
     # Calculate relative strength (RS)
-    rs = avg_gain / avg_loss.replace(0,
-                                     1)  # Replace 0s with 1 to avoid division by zero
+    rs = avg_gain / avg_loss.replace(
+        0, 1
+    )  # Replace 0s with 1 to avoid division by zero
 
     # Calculate RSI
     rsi_values = 100 - (100 / (1 + rs))
