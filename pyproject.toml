@@ -6,15 +6,10 @@ authors = ["Marc van Duyn"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-pandas = "^2.1.4"
-polars = "^0.46.0"
-
-[tool.poetry.group.dev.dependencies]
-ta-lib = "^0.4.28"
-investing-algorithm-framework = "5.0.0"
+python = "^3.8"
+pandas = "^1.0.0"
+polars = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-Črtomirova ulica 22, 1000 Ljubljana, Slovenia
