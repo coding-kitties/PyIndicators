@@ -1,6 +1,7 @@
 from typing import Union
 from pandas import DataFrame as PdDataFrame
 from polars import DataFrame as PlDataFrame
+import polars as pl
 from pyindicators.exceptions import PyIndicatorException
 
 def ema(

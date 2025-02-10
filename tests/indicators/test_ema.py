@@ -1,44 +1,76 @@
-from datetime import timedelta
-from unittest import TestCase
-
 import pandas as pd
-import talib as ta
-import numpy as np
-import tulipy as ti
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+import polars as pl
+import pandas.testing as pdt
+from polars.testing import assert_frame_equal
 
-import pyindicators as pyi
+from tests.resources import TestBaseline
+from pyindicators import ema
 
 
-class Test(TestCase):
+class Test(TestBaseline):
+    correct_output_csv_filename = \
+        "EMA_200_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
 
-    def test(self):
-        data_source = CSVOHLCVMarketDataSource(
-            csv_file_path="../test_data/OHLCV_BTC-EUR_BINANCE_15m"
-                          "_2023-12-01:00:00_2023-12-25:00:00.csv",
+    def generate_pandas_df(self, polars_source_df):
+        polars_source_df = ema(
+            data=polars_source_df,
+            period=200,
+            result_column="EMA_200",
+            source_column="Close"
         )
-        data_source.end_date = data_source.start_date \
-            + timedelta(days=4, hours=4)
+        return polars_source_df
 
-        while not data_source.empty():
-            data = data_source.get_data(market_credential_service=None)
-            df = pd.DataFrame(
-                data,
-                columns=['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
-            )
-            pyi_ema = pyi.ema(series=df["Close"], period=200)
-            ta_ema = ta.EMA(df["Close"], timeperiod=200).astype('float64')
-            ti_ema = pd.Series(ti.ema(df["Close"].to_numpy(), period=200))
+    def generate_polars_df(self, pandas_source_df):
+        pandas_source_df = ema(
+            data=pandas_source_df,
+            period=200,
+            result_column="EMA_200",
+            source_column="Close"
+        )
+        return pandas_source_df
 
-            # Define a tolerance for comparison
-            tolerance = 1e-9
-            print(ta_ema.iloc[-1], ti_ema.iloc[-1])
+    def test_comparison_pandas(self):
 
-            # Compare the two Series with tolerance
-            # nan_mask = ~np.isnan(ta_sma) & ~np.isnan(pyi_sma)
-            # comparison_result = np.abs(
-            #     ta_sma[nan_mask] - pyi_sma[nan_mask]) <= tolerance
-            # data_source.start_date = \
-            #     data_source.start_date + timedelta(minutes=15)
-            # data_source.end_date = data_source.end_date + timedelta(minutes=15)
-            # self.assertTrue(all(comparison_result))
+        # Load the correct output in a pandas dataframe
+        correct_output_pd = pd.read_csv(self.get_correct_output_csv_path())
+
+        # Load the source in a pandas dataframe
+        source = pd.read_csv(self.get_source_csv_path())
+
+        # Generate the pandas dataframe
+        output = self.generate_pandas_df(source)
+        output = output[correct_output_pd.columns]
+        output["Datetime"] = \
+            pd.to_datetime(output["Datetime"]).dt.tz_localize(None)
+        correct_output_pd["Datetime"] = \
+            pd.to_datetime(correct_output_pd["Datetime"]).dt.tz_localize(None)
+
+        pdt.assert_frame_equal(correct_output_pd, output)
+
+    def test_comparison_polars(self):
+
+        # Load the correct output in a polars dataframe
+        correct_output_pl = pl.read_csv(self.get_correct_output_csv_path())
+
+        # Load the source in a polars dataframe
+        source = pl.read_csv(self.get_source_csv_path())
+
+        # Generate the polars dataframe
+        output = self.generate_polars_df(source)
+
+        # Convert the datetime columns to datetime
+        # Convert the 'Datetime' column in both DataFrames to datetime
+        output = output.with_columns(
+            pl.col("Datetime").str.strptime(pl.Datetime).alias("Datetime")
+        )
+
+        correct_output_pl = correct_output_pl.with_columns(
+            pl.col("Datetime").str.strptime(pl.Datetime).alias("Datetime")
+        )
+        output = output[correct_output_pl.columns]
+        output = self.make_polars_column_datetime_naive(output, "Datetime")
+        correct_output_pl = self.make_polars_column_datetime_naive(
+            correct_output_pl, "Datetime"
+        )
+
+        assert_frame_equal(correct_output_pl, output)
