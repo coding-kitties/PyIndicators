@@ -1,19 +1,20 @@
 [tool.poetry]
 name = "pyindicators"
 version = "0.1.0"
-description = "PyIndicators is a powerful Python library designed to simplify technical analysis in financial markets. Whether you're a seasoned quant or a novice trader, PyIndicators provides a user-friendly interface for integrating a wide range of technical indicators into your data analysis and trading strategies."
+description = "PyIndicators is a powerful and user-friendly Python library for technical analysis indicators and metrics. Written entirely in Python, it requires no external dependencies, ensuring seamless integration and ease of use."
 authors = ["Marc van Duyn"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
 pandas = "^2.1.4"
-
+polars = "^0.46.0"
 
 [tool.poetry.group.dev.dependencies]
 ta-lib = "^0.4.28"
-investing-algorithm-framework = "^2.1.0"
+investing-algorithm-framework = "5.0.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+Črtomirova ulica 22, 1000 Ljubljana, Slovenia

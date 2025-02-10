@@ -1,8 +1,8 @@
-from .indicators import sma, rsi, crossover, crossunder, ema
+from .indicators import sma, rsi, is_crossover, crossunder, ema
 
 __all__ = [
     'sma',
-    'crossover',
+    'is_crossover',
     'crossunder',
     'ema',
     'rsi',

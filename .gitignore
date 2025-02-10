@@ -143,3 +143,5 @@ bumpversion.egg-info/
 *.sqlite3
 
 .vscode/
+
+test.ipynb
