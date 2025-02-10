@@ -9,7 +9,7 @@ from pyindicators import ema
 
 class Test(TestBaseline):
     correct_output_csv_filename = \
-        "EMA_200_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+        "EMA_200_BTC-EUR_BINANCE_15m_2023-12-01-00-00_2023-12-25-00-00.csv"
 
     def generate_pandas_df(self, polars_source_df):
         polars_source_df = ema(
