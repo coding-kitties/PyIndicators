@@ -6,9 +6,10 @@ authors = ["Marc van Duyn"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8.1"
+python = "^3.9"
 pandas = "^2.0.0"
 polars = "^1.0.0"
+numpy = "^1.26.4"
 
 [tool.poetry.group.test.dependencies]
 coverage= "7.4.2"
