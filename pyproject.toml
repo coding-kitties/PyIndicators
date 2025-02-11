@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
-pandas = "^1.0.0"
+pandas = "^2.0.0"
 polars = "^1.0.0"
 
 [tool.poetry.group.test.dependencies]
