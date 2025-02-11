@@ -6,7 +6,7 @@ authors = ["Marc van Duyn"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.8.1"
 pandas = "^1.0.0"
 polars = "^1.0.0"
 
