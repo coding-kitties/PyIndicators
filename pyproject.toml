@@ -10,6 +10,10 @@ python = "^3.8"
 pandas = "^1.0.0"
 polars = "^1.0.0"
 
+[tool.poetry.group.test.dependencies]
+coverage= "7.4.2"
+flake8 = "7.0.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
