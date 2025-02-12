@@ -18,6 +18,7 @@ pip install pyindicators
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
 * Momentum indicators
+  * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
 
 ## Indicators
 
