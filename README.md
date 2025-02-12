@@ -19,7 +19,7 @@ pip install pyindicators
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
 * Momentum indicators
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
-  * [Relative Strength Index Wilders method (RSI)](#relative-strength-index-rsi)
+  * [Relative Strength Index Wilders method (RSI)](#wilders-relative-strength-index-wilders-rsi)
 
 ## Indicators
 
