@@ -64,11 +64,11 @@ data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
 pl_df = data_source.get_data()
 pd_df = data_source.get_data(pandas=True)
 
-# Calculate SMA for Polars DataFrame
+# Calculate EMA for Polars DataFrame
 pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
 pl_df.show(10)
 
-# Calculate SMA for Pandas DataFrame
+# Calculate EMA for Pandas DataFrame
 pd_df = ema(pd_df, source_column="Close", period=200, result_column="EMA_200")
 pd_df.tail(10)
 ```
@@ -91,12 +91,12 @@ data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
 pl_df = data_source.get_data()
 pd_df = data_source.get_data(pandas=True)
 
-# Calculate SMA for Polars DataFrame
-pl_df = rsi(pl_df, source_column="Close", period=200, result_column="RSI_14")
+# Calculate RSI for Polars DataFrame
+pl_df = rsi(pl_df, source_column="Close", period=14, result_column="RSI_14")
 pl_df.show(10)
 
-# Calculate SMA for Pandas DataFrame
-pd_df = ema(pd_df, source_column="Close", period=200, result_column="RSI_14")
+# Calculate RSI for Pandas DataFrame
+pd_df = rsi(pd_df, source_column="Close", period=14, result_column="RSI_14")
 pd_df.tail(10)
 ```
 
@@ -116,12 +116,12 @@ data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
 pl_df = data_source.get_data()
 pd_df = data_source.get_data(pandas=True)
 
-# Calculate SMA for Polars DataFrame
-pl_df = wilders_rsi(pl_df, source_column="Close", period=200, result_column="RSI_14")
+# Calculate Wilders RSI for Polars DataFrame
+pl_df = wilders_rsi(pl_df, source_column="Close", period=14, result_column="RSI_14")
 pl_df.show(10)
 
-# Calculate SMA for Pandas DataFrame
-pd_df = wilders_rsi(pd_df, source_column="Close", period=200, result_column="RSI_14")
+# Calculate Wilders RSI for Pandas DataFrame
+pd_df = wilders_rsi(pd_df, source_column="Close", period=14, result_column="RSI_14")
 pd_df.tail(10)
 ```
 
