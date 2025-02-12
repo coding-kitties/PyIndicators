@@ -4,6 +4,7 @@ from polars import DataFrame as PlDataFrame
 
 from pyindicators.exceptions import PyIndicatorException
 
+
 def rsi(
     data: Union[PdDataFrame, PlDataFrame],
     source_column: str,
