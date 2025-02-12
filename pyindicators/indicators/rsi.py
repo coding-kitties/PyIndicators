@@ -1,64 +1,74 @@
-from pandas import Series
+from typing import Union
+from pandas import DataFrame as PdDataFrame
+from polars import DataFrame as PlDataFrame
 
+from pyindicators.exceptions import PyIndicatorException
 
-def rsi(series: Series, timeperiod=14):
+def rsi(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str,
+    period: int,
+    result_column: str = None,
+) -> Union[PdDataFrame, PlDataFrame]:
     """
-    Calculate the Relative Strength Index (RSI) for a given Pandas series.
+    Function to calculate the RSI of a series.
 
-    Parameters:
-    - series: Pandas series instance containing prices
-    - period: Lookback period for RSI calculation (default is 14)
+    Args:
+        data (Union[PdDataFrame, PlDataFrame]): The input data.
+        source_column (str): The name of the series.
+        period (int): The period for the exponential moving average.
+        result_column (str, optional): The name of the column to store the
+            exponential moving average. Defaults to None.
 
     Returns:
-    - series representing the RSI values
+        Union[PdDataFrame, PlDataFrame]: Returns a DataFrame with
+            the RSI of the series.
     """
-    # Calculate daily price changes
-    delta = series.diff()
 
-    # Calculate gains (positive changes) and losses (negative changes)
-    gains = delta.where(delta > 0, 0)
-    losses = -delta.where(delta < 0, 0)
+    if result_column is None:
+        result_column = f"RSI_{period}"
 
-    # Calculate initial smoothed averages
-    avg_gain = gains.rolling(window=timeperiod, min_periods=1).mean()
-    avg_loss = losses.rolling(window=timeperiod, min_periods=1).mean()
+    if source_column not in data.columns:
+        raise PyIndicatorException(
+            f"The column {source_column} does not exist in the DataFrame."
+        )
 
-    # Calculate SMMA for gains and losses
-    for i in range(1, len(series)):
-        avg_gain[i] = (avg_gain[i - 1] * (timeperiod - 1) + gains[
-            i]) / timeperiod
-        avg_loss[i] = (avg_loss[i - 1] * (timeperiod - 1) + losses[
-            i]) / timeperiod
+    if isinstance(data, PdDataFrame):
+        # Compute price changes
+        delta = data[source_column].diff()
 
-    # Calculate relative strength (RS)
-    rs = avg_gain / avg_loss.replace(
-        0, 1
-    )  # Replace 0s with 1 to avoid division by zero
+        # Compute gains and losses
+        gain = delta.where(delta > 0, 0)
+        loss = -delta.where(delta < 0, 0)
 
-    # Calculate RSI
-    rsi_values = 100 - (100 / (1 + rs))
+        # Compute the rolling average of gains and losses
+        avg_gain = gain.rolling(window=period, min_periods=1).mean()
+        avg_loss = loss.rolling(window=period, min_periods=1).mean()
 
-    return rsi_values
-    # df_deep_copy = df.copy(deep=True)
-    # # df_deep_copy['Delta'] = df_deep_copy['Close'].diff()
-    #
-    # # Separate gains and losses
-    # gains = df_deep_copy['Delta'].where(df_deep_copy['Delta'] > 0, 0)
-    # losses = -df_deep_copy['Delta'].where(df_deep_copy['Delta'] < 0, 0)
-    #
-    # # Calculate average gains and average losses over the specified period
-    # avg_gains = gains.rolling(window=period, min_periods=1).mean()
-    # avg_losses = losses.rolling(window=period, min_periods=1).mean()
-    #
-    # # Calculate relative strength (RS)
-    # rs = avg_gains / avg_losses.replace(0, 1)  # Avoid division by zero
-    #
-    # # Calculate RSI
-    # df_deep_copy[f'Rsi_{period}'] = 100 - (100 / (1 + rs))
-    #
-    # # Replace NaN values in 'Rsi' column with 0
-    # df_deep_copy[f'Rsi_{period}'] = df_deep_copy[f'Rsi_{period}'].fillna(0)
-    #
-    # # Drop intermediate columns
-    # df_deep_copy.drop(['Delta'], axis=1, inplace=True)
-    # return df_deep_copy[[f'Rsi_{period}']]
+        # Compute RSI
+        rs = avg_gain / avg_loss
+        data[result_column] = 100 - (100 / (1 + rs))
+
+    elif isinstance(data, PlDataFrame):
+        # Compute price changes
+        delta = data[source_column].diff().fill_null(0)
+
+        # Compute gains and losses
+        gain = delta.clip_min(0)
+        loss = (-delta).clip_min(0)
+
+        # Compute rolling averages of gains and losses
+        avg_gain = gain.rolling_mean(window_size=period)
+        avg_loss = loss.rolling_mean(window_size=period)
+
+        # Compute RSI
+        rs = avg_gain / avg_loss
+        rsi_values = 100 - (100 / (1 + rs))
+
+        # Add column to DataFrame
+        data = data.with_columns(rsi_values.alias(result_column))
+
+    else:
+        raise TypeError("Input data must be a pandas or polars DataFrame.")
+
+    return data

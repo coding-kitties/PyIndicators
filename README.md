@@ -78,24 +78,27 @@ pd_df.tail(10)
 #### Relative Strength Index (RSI)
 
 ```python
-from polars import DataFrame as plDataFrame
-from pandas import DataFrame as pdDataFrame
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
 
 from pyindicators import rsi
 
-# Polars DataFrame
-pl_df = plDataFrame({"close": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]})
-# Pandas DataFrame
-pd_df = pdDataFrame({"close": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]})
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
 
-# Calculate RSI for Polars DataFrame
-pl_df = rsi(pl_df, "close", 14)
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+# Calculate SMA for Polars DataFrame
+pl_df = rsi(pl_df, source_column="Close", period=200, result_column="RSI_14")
 pl_df.show(10)
 
-# Calculate RSI for Pandas DataFrame
-pd_df = rsi(pd_df, "close", 14)
-print(pd_df)
+# Calculate SMA for Pandas DataFrame
+pd_df = ema(pd_df, source_column="Close", period=200, result_column="RSI_14")
+pd_df.tail(10)
 ```
+
+![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/rsi.png)
 
 ### Indicator helpers
 
