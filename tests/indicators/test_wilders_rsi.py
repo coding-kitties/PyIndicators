@@ -4,15 +4,15 @@ import pandas.testing as pdt
 from polars.testing import assert_frame_equal
 
 from tests.resources import TestBaseline
-from pyindicators import rsi
+from pyindicators import wilders_rsi
 
 
 class Test(TestBaseline):
     correct_output_csv_filename = \
-        "RSI_14_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+        "WILDERS_RSI_14_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
 
     def generate_pandas_df(self, polars_source_df):
-        polars_source_df = rsi(
+        polars_source_df = wilders_rsi(
             data=polars_source_df,
             period=14,
             result_column="RSI_14",
@@ -21,7 +21,7 @@ class Test(TestBaseline):
         return polars_source_df
 
     def generate_polars_df(self, pandas_source_df):
-        pandas_source_df = rsi(
+        pandas_source_df = wilders_rsi(
             data=pandas_source_df,
             period=14,
             result_column="RSI_14",
