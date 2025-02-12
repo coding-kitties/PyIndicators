@@ -1,4 +1,4 @@
-from .indicators import sma, rsi, is_crossover, crossunder, ema
+from .indicators import sma, rsi, is_crossover, crossunder, ema, wilders_rsi
 
 __all__ = [
     'sma',
@@ -6,4 +6,5 @@ __all__ = [
     'crossunder',
     'ema',
     'rsi',
+    "wilders_rsi"
 ]

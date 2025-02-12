@@ -1,40 +1,32 @@
 from typing import Union
-from pandas import DataFrame as PdDataFrame
-from polars import DataFrame as PlDataFrame
-
-from pyindicators.exceptions import PyIndicatorException
+import pandas as pd
+import polars as pl
 
 
 def rsi(
-    data: Union[PdDataFrame, PlDataFrame],
+    data: Union[pd.DataFrame, pl.DataFrame],
     source_column: str,
     period: int,
     result_column: str = None,
-) -> Union[PdDataFrame, PlDataFrame]:
+) -> Union[pd.DataFrame, pl.DataFrame]:
     """
-    Function to calculate the RSI of a series.
+    Function to calculate the RSI (Relative Strength Index) of a series.
 
     Args:
-        data (Union[PdDataFrame, PlDataFrame]): The input data.
+        data (Union[pd.DataFrame, pl.DataFrame]): The input data.
         source_column (str): The name of the series.
-        period (int): The period for the exponential moving average.
-        result_column (str, optional): The name of the column to store the
-            exponential moving average. Defaults to None.
+        period (int): The period for the RSI calculation.
+        result_column (str, optional): The name of the column to store the RSI values.
+            Defaults to None, which means it will be named "RSI_{period}".
 
     Returns:
-        Union[PdDataFrame, PlDataFrame]: Returns a DataFrame with
-            the RSI of the series.
+        Union[pd.DataFrame, pl.DataFrame]: The DataFrame with the RSI column added.
     """
 
     if result_column is None:
         result_column = f"RSI_{period}"
 
-    if source_column not in data.columns:
-        raise PyIndicatorException(
-            f"The column {source_column} does not exist in the DataFrame."
-        )
-
-    if isinstance(data, PdDataFrame):
+    if isinstance(data, pd.DataFrame):
         # Compute price changes
         delta = data[source_column].diff()
 
@@ -43,14 +35,20 @@ def rsi(
         loss = -delta.where(delta < 0, 0)
 
         # Compute the rolling average of gains and losses
-        avg_gain = gain.rolling(window=period, min_periods=1).mean()
-        avg_loss = loss.rolling(window=period, min_periods=1).mean()
+        avg_gain = gain.rolling(window=period, min_periods=period).mean()
+        avg_loss = loss.rolling(window=period, min_periods=period).mean()
 
         # Compute RSI
         rs = avg_gain / avg_loss
-        data[result_column] = 100 - (100 / (1 + rs))
+        rsi_values = 100 - (100 / (1 + rs))
 
-    elif isinstance(data, PlDataFrame):
+        # Ensure first `period` rows are NaN
+        rsi_values[:period] = pd.NA
+
+        # Assign to DataFrame
+        data[result_column] = rsi_values
+
+    elif isinstance(data, pl.DataFrame):
         # Compute price changes
         delta = data[source_column].diff().fill_null(0)
 
@@ -59,12 +57,90 @@ def rsi(
         loss = (-delta).clip_min(0)
 
         # Compute rolling averages of gains and losses
-        avg_gain = gain.rolling_mean(window_size=period)
-        avg_loss = loss.rolling_mean(window_size=period)
+        avg_gain = gain.rolling_mean(window_size=period, min_periods=period)
+        avg_loss = loss.rolling_mean(window_size=period, min_periods=period)
 
         # Compute RSI
         rs = avg_gain / avg_loss
         rsi_values = 100 - (100 / (1 + rs))
+
+        # Replace first `period` values with nulls (polars uses `None`)
+        rsi_values = rsi_values.set_at_idx(list(range(period)), None)
+
+        # Add column to DataFrame
+        data = data.with_columns(rsi_values.alias(result_column))
+
+    else:
+        raise TypeError("Input data must be a pandas or polars DataFrame.")
+
+    return data
+
+
+def wilders_rsi(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    source_column: str,
+    period: int,
+    result_column: str = None,
+) -> Union[pd.DataFrame, pl.DataFrame]:
+    """
+    Compute RSI using wilders method (Wilder’s Smoothing).
+
+    Args:
+        data (Union[pd.DataFrame, pl.DataFrame]): Input DataFrame.
+        source_column (str): Name of the column with price data.
+        period (int): RSI period (e.g., 14).
+        result_column (str, optional): Name for the output column.
+
+    Returns:
+        Union[pd.DataFrame, pl.DataFrame]: DataFrame with RSI values.
+    """
+
+    if result_column is None:
+        result_column = f"RSI_{period}"
+
+    if isinstance(data, pd.DataFrame):
+        delta = data[source_column].diff()
+
+        gain = delta.where(delta > 0, 0)
+        loss = -delta.where(delta < 0, 0)
+
+        # Compute the initial SMA (first `period` rows)
+        avg_gain = gain.rolling(window=period, min_periods=period).mean()
+        avg_loss = loss.rolling(window=period, min_periods=period).mean()
+
+        # Apply Wilder's Smoothing for the remaining values
+        for i in range(period, len(data)):
+            avg_gain.iloc[i] = (avg_gain.iloc[i - 1] * (period - 1) + gain.iloc[i]) / period
+            avg_loss.iloc[i] = (avg_loss.iloc[i - 1] * (period - 1) + loss.iloc[i]) / period
+
+        rs = avg_gain / avg_loss
+        data[result_column] = 100 - (100 / (1 + rs))
+
+        # Ensure first `period` rows are NaN
+        data.iloc[:period, data.columns.get_loc(result_column)] = pd.NA
+
+    elif isinstance(data, pl.DataFrame):
+        delta = data[source_column].diff().fill_null(0)
+        gain = delta.clip_min(0)
+        loss = (-delta).clip_min(0)
+
+        # Compute initial SMA (first `period` rows)
+        avg_gain = gain.rolling_mean(window_size=period, min_periods=period)
+        avg_loss = loss.rolling_mean(window_size=period, min_periods=period)
+
+        # Apply Wilder's Smoothing
+        smoothed_gain = [None] * period
+        smoothed_loss = [None] * period
+        for i in range(period, len(data)):
+            smoothed_gain.append((smoothed_gain[-1] * (period - 1) + gain[i]) / period)
+            smoothed_loss.append((smoothed_loss[-1] * (period - 1) + loss[i]) / period)
+
+        # Compute RSI
+        rs = pl.Series(smoothed_gain) / pl.Series(smoothed_loss)
+        rsi_values = 100 - (100 / (1 + rs))
+
+        # Replace first `period` values with None
+        rsi_values = rsi_values.set_at_idx(list(range(period)), None)
 
         # Add column to DataFrame
         data = data.with_columns(rsi_values.alias(result_column))
