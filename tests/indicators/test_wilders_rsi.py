@@ -9,7 +9,7 @@ from pyindicators import wilders_rsi
 
 class Test(TestBaseline):
     correct_output_csv_filename = \
-        "WILDERS_RSI_14_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+        "WILDERS_RSI_14_BTC-EUR_BINANCE_15m_2023-12-01-00-00_2023-12-25-00-00.csv"
 
     def generate_pandas_df(self, polars_source_df):
         polars_source_df = wilders_rsi(
