@@ -2,6 +2,14 @@
 
 PyIndicators is a powerful and user-friendly Python library for technical analysis indicators and metrics. Written entirely in Python, it requires no external dependencies, ensuring seamless integration and ease of use.
 
+## Installation
+
+PyIndicators can be installed using pip:
+
+```bash
+pip install pyindicators
+```
+
 ## Features
 
 * Native Python implementation, no external dependencies needed except for Polars or Pandas
@@ -10,14 +18,6 @@ PyIndicators is a powerful and user-friendly Python library for technical analys
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
 * Momentum indicators
-
-## Installation
-
-PyIndicators can be installed using pip:
-
-```bash
-pip install pyindicators
-```
 
 ## Indicators
 
@@ -46,7 +46,7 @@ pd_df = sma(pd_df, source_column="Close", period=200, result_column="SMA_200")
 pd_df.tail(10)
 ```
 
-![SMA](./static/images/indicators/sma.png)
+![SMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/sma.png)
 
 #### Exponential Moving Average (EMA)
 
@@ -71,7 +71,7 @@ pd_df = ema(pd_df, source_column="Close", period=200, result_column="EMA_200")
 pd_df.tail(10)
 ```
 
-![EMA](./static/images/indicators/ema.png)
+![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema.png)
 
 ### Momentum Indicators
 
