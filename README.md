@@ -11,6 +11,14 @@ PyIndicators is a powerful and user-friendly Python library for technical analys
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
 * Momentum indicators
 
+## Installation
+
+PyIndicators can be installed using pip:
+
+```bash
+pip install pyindicators
+```
+
 ## Indicators
 
 ### Trend Indicators
