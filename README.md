@@ -1,6 +1,6 @@
 # PyIndicators
 
-PyIndicators is a powerful and user-friendly Python library for technical analysis indicators and metrics. Written entirely in Python, it requires no external dependencies, ensuring seamless integration and ease of use.
+PyIndicators is a powerful and user-friendly Python library for technical analysis indicators, metrics and helper functions. Written entirely in Python, it requires no external dependencies, ensuring seamless integration and ease of use.
 
 ## Installation
 
@@ -14,12 +14,13 @@ pip install pyindicators
 
 * Native Python implementation, no external dependencies needed except for Polars or Pandas
 * Dataframe first approach, with support for both pandas dataframes and polars dataframes
+* Supports python version 3.9 and above.
 * [Trend indicators](#trend-indicators)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
 * [Momentum indicators](#momentum-indicators)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
-  * [Relative Strength Index Wilders method (RSI)](#wilders-relative-strength-index-wilders-rsi)
+  * [Relative Strength Index Wilders method (Wilders RSI)](#wilders-relative-strength-index-wilders-rsi)
 * [Indicator helpers](#indicator-helpers)
   * [Crossover](#crossover)
   * [Is Crossover](#is-crossover)
@@ -29,6 +30,10 @@ pip install pyindicators
 ### Trend Indicators
 
 #### Simple Moving Average (SMA)
+
+Smooth out price data to identify trend direction.
+
+>sma(data: DataFrame, source_column: str, period: int, result_column: Optional[str]) - DataFrame
 
 ```python
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
