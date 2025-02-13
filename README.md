@@ -14,12 +14,15 @@ pip install pyindicators
 
 * Native Python implementation, no external dependencies needed except for Polars or Pandas
 * Dataframe first approach, with support for both pandas dataframes and polars dataframes
-* Trend indicators
+* Trend indicators(#trend-indicators)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
-* Momentum indicators
+* Momentum indicators(#momentum-indicators)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
   * [Relative Strength Index Wilders method (RSI)](#wilders-relative-strength-index-wilders-rsi)
+* Indicator helpers(#indicator-helpers)
+  * [Crossover](#crossover)
+  * [Is Crossover](#is-crossover)
 
 ## Indicators
 
@@ -128,6 +131,47 @@ pd_df.tail(10)
 ![RSI](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/wilders_rsi.png)
 
 ### Indicator helpers
+
+#### Crossover
+
+```python
+from polars import DataFrame as plDataFrame
+from pandas import DataFrame as pdDataFrame
+
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from pyindicators import crossover, ema
+
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+# Calculate EMA and crossover for Polars DataFrame
+pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
+pl_df = ema(pl_df, source_column="Close", period=50, result_column="EMA_50")
+pl_df = crossover(
+    pl_df,
+    first_column="EMA_50",
+    second_column="EMA_200",
+    result_column="Crossover_EMA"
+)
+pl_df.show(10)
+
+# Calculate EMA and crossover for Pandas DataFrame
+pd_df = ema(pd_df, source_column="Close", period=200, result_column="EMA_200")
+pl_df = ema(pd_df, source_column="Close", period=50, result_column="EMA_50")
+pd_df = crossover(
+    pd_df,
+    first_column="EMA_50",
+    second_column="EMA_200",
+    result_column="Crossover_EMA"
+)
+pd_df.tail(10)
+```
+
+![CROSSOVER](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/crossover.png)
 
 #### Is Crossover
 

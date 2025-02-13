@@ -1,6 +1,65 @@
 from typing import Union
+
 from pandas import DataFrame as PdDataFrame
 from polars import DataFrame as PlDataFrame
+import polars as pl
+
+
+def crossover(
+    data: Union[PdDataFrame, PlDataFrame],
+    first_column: str,
+    second_column: str,
+    result_column = "crossover",
+    data_points: int = None,
+    strict: bool = True,
+) -> Union[PdDataFrame, PlDataFrame]:
+    """
+    Identifies crossover points where `first_column` crosses above or below `second_column`.
+
+    Args:
+        data: Pandas or Polars DataFrame
+        first_column: Name of the first column
+        second_column: Name of the second column
+        result_column (optional): Name of the column to
+            store the crossover points
+        data_points (optional): Number of recent rows to consider (optional)
+        strict (optional): If True, requires exact crossovers; otherwise,
+            detects when one surpasses the other.
+
+    Returns:
+        A DataFrame with crossover points marked.
+    """
+
+    # Restrict data to the last `data_points` rows if specified
+    if data_points is not None:
+        data = data.tail(data_points) if isinstance(data, PdDataFrame) else data.slice(-data_points)
+
+    # Pandas Implementation
+    if isinstance(data, PdDataFrame):
+        col1, col2 = data[first_column], data[second_column]
+        prev_col1, prev_col2 = col1.shift(1), col2.shift(1)
+
+        if strict:
+            crossover_mask = ((prev_col1 < prev_col2) & (col1 > col2)) | ((prev_col1 > prev_col2) & (col1 < col2))
+        else:
+            crossover_mask = (col1 > col2) | (col1 < col2)
+
+        data[result_column] = crossover_mask.astype(int)
+
+    # Polars Implementation
+    elif isinstance(data, PlDataFrame):
+        col1, col2 = data[first_column], data[second_column]
+        prev_col1, prev_col2 = col1.shift(1), col2.shift(1)
+
+        if strict:
+            crossover_mask = ((prev_col1 < prev_col2) & (col1 > col2)) | ((prev_col1 > prev_col2) & (col1 < col2))
+        else:
+            crossover_mask = (col1 > col2) | (col1 < col2)
+
+        # Convert boolean mask to 1s and 0s
+        data = data.with_columns(pl.when(crossover_mask).then(1).otherwise(0).alias(result_column))
+
+    return data
 
 
 def is_crossover(
