@@ -14,13 +14,13 @@ pip install pyindicators
 
 * Native Python implementation, no external dependencies needed except for Polars or Pandas
 * Dataframe first approach, with support for both pandas dataframes and polars dataframes
-* Trend indicators(#trend-indicators)
+* [Trend indicators](#trend-indicators)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
-* Momentum indicators(#momentum-indicators)
+* [Momentum indicators](#momentum-indicators)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
   * [Relative Strength Index Wilders method (RSI)](#wilders-relative-strength-index-wilders-rsi)
-* Indicator helpers(#indicator-helpers)
+* [Indicator helpers](#indicator-helpers)
   * [Crossover](#crossover)
   * [Is Crossover](#is-crossover)
 
@@ -161,7 +161,7 @@ pl_df.show(10)
 
 # Calculate EMA and crossover for Pandas DataFrame
 pd_df = ema(pd_df, source_column="Close", period=200, result_column="EMA_200")
-pl_df = ema(pd_df, source_column="Close", period=50, result_column="EMA_50")
+pd_df = ema(pd_df, source_column="Close", period=50, result_column="EMA_50")
 pd_df = crossover(
     pd_df,
     first_column="EMA_50",
@@ -179,29 +179,53 @@ pd_df.tail(10)
 from polars import DataFrame as plDataFrame
 from pandas import DataFrame as pdDataFrame
 
-from pyindicators import is_crossover
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from pyindicators import crossover, ema
 
-# Polars DataFrame
-pl_df = plDataFrame({
-    "EMA_50": [200, 201, 202, 203, 204, 205, 206, 208, 208, 210],
-    "EMA_200": [200, 201, 202, 203, 204, 205, 206, 207, 209, 209],
-    "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
-})
-# Pandas DataFrame
-pd_df = pdDataFrame({
-    "EMA_50": [200, 201, 202, 203, 204, 205, 206, 208, 208, 210],
-    "EMA_200": [200, 201, 202, 203, 204, 205, 206, 207, 209, 209],
-    "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
-})
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
 
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+# Calculate EMA and crossover for Polars DataFrame
+pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
+pl_df = ema(pl_df, source_column="Close", period=50, result_column="EMA_50")
+pl_df = crossover(
+    pl_df,
+    first_column="EMA_50",
+    second_column="EMA_200",
+    result_column="Crossover_EMA"
+)
+
+# If you want the function to calculate the crossovors in the function
 if is_crossover(
     pl_df, first_column="EMA_50", second_column="EMA_200", data_points=3
 ):
-    print("Crossover detected in Polars DataFrame")
+    print("Crossover detected in Pandas DataFrame in the last 3 data points")
 
+# If you want to use the result of a previous crossover calculation
+if is_crossover(pl_df, crossover_column="Crossover_EMA", data_points=3):
+    print("Crossover detected in Pandas DataFrame in the last 3 data points")
 
+# Calculate EMA and crossover for Pandas DataFrame
+pd_df = ema(pd_df, source_column="Close", period=200, result_column="EMA_200")
+pd_df = ema(pd_df, source_column="Close", period=50, result_column="EMA_50")
+pd_df = crossover(
+    pd_df,
+    first_column="EMA_50",
+    second_column="EMA_200",
+    result_column="Crossover_EMA"
+)
+
+# If you want the function to calculate the crossovors in the function
 if is_crossover(
     pd_df, first_column="EMA_50", second_column="EMA_200", data_points=3
 ):
-    print("Crossover detected in Pandas DataFrame")
+    print("Crossover detected in Pandas DataFrame in the last 3 data points")
+
+# If you want to use the result of a previous crossover calculation
+if is_crossover(pd_df, crossover_column="Crossover_EMA", data_points=3):
+    print("Crossover detected in Pandas DataFrame in the last 3 data points")
 ```
