@@ -9,7 +9,7 @@ def sma(
     source_column: str,
     period: int,
     result_column: str = None,
-):
+) -> Union[PdDataFrame, PlDataFrame]:
     """
     Function to calculate the simple moving average of a series.
 

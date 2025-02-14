@@ -2,6 +2,16 @@
 
 PyIndicators is a powerful and user-friendly Python library for technical analysis indicators, metrics and helper functions. Written entirely in Python, it requires no external dependencies, ensuring seamless integration and ease of use.
 
+## Sponsors
+
+<a href="https://www.finterion.com/" target="_blank">
+    <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="static/sponsors/finterion-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="static/sponsors/finterion-light.png">
+    <img src="static/sponsors/finterion-light.svg" alt="Finterion Logo" style="height: 70px;">
+    </picture>
+</a>
+
 ## Installation
 
 PyIndicators can be installed using pip:
