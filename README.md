@@ -8,7 +8,7 @@ PyIndicators is a powerful and user-friendly Python library for technical analys
     <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static/sponsors/finterion-dark.png">
     <source media="(prefers-color-scheme: light)" srcset="static/sponsors/finterion-light.png">
-    <img src="static/sponsors/finterion-light.svg" alt="Finterion Logo" style="height: 70px;">
+    <img src="static/sponsors/finterion-light.svg" alt="Finterion Logo" style="height: 55px;">
     </picture>
 </a>
 
