@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 import numpy as np
 from pandas import DataFrame as PdDataFrame
@@ -13,7 +13,7 @@ def wma(
     data: Union[PdDataFrame, PlDataFrame],
     source_column: str,
     period: int,
-    result_column: str = None,
+    result_column: Optional[str] = None,
 ) -> Union[PdDataFrame, PlDataFrame]:
     """
     Function to calculate the weighted moving average of a series.
