@@ -56,6 +56,8 @@ def wma(
 ) -> Union[PandasDataFrame, PolarsDataFrame]
 ```
 
+Example:
+
 ```python
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
 
