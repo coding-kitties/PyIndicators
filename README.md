@@ -41,6 +41,8 @@ pip install pyindicators
 
 ### Trend Indicators
 
+Indicators that help to determine the direction of the market (uptrend, downtrend, or sideways) and confirm if a trend is in place.
+
 #### Weighted Moving Average (WMA)
 
 ```python
@@ -146,8 +148,9 @@ pd_df.tail(10)
 
 ![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/macd.png)
 
-
 ### Momentum Indicators
+
+Indicators that measure the strength and speed of price movements rather than the direction.
 
 #### Relative Strength Index (RSI)
 
