@@ -56,7 +56,7 @@ def wma(
 ) -> Union[PandasDataFrame, PolarsDataFrame]
 ```
 
-Example:
+Example
 
 ```python
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
@@ -71,11 +71,11 @@ pl_df = data_source.get_data()
 pd_df = data_source.get_data(pandas=True)
 
 # Calculate SMA for Polars DataFrame
-pl_df = wma(pl_df, source_column="Close", period=200, result_column="SMA_200")
+pl_df = wma(pl_df, source_column="Close", period=200, result_column="WMA_200")
 pl_df.show(10)
 
 # Calculate SMA for Pandas DataFrame
-pd_df = wma(pd_df, source_column="Close", period=200, result_column="SMA_200")
+pd_df = wma(pd_df, source_column="Close", period=200, result_column="WMA_200")
 pd_df.tail(10)
 ```
 
