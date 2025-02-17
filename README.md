@@ -48,7 +48,7 @@ Indicators that help to determine the direction of the market (uptrend, downtren
 Moving average that gives more weight to recent data points by applying a weighting factor to the data points.
 
 ```python
-def wma(data: Union[PandasDataFrame, PolarsDataFrame], source_column: str, period: int, result_column: Optional[str] = None) -> Union[PdDataFrame, PlDataFrame]
+def wma(data: Union[PandasDataFrame, PolarsDataFrame], source_column: str, period: int, result_column: Optional[str] = None) -> Union[PandasDataFrame, PolarsDataFrame]
 ```
 
 ```python
