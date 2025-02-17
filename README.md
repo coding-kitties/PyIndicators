@@ -8,7 +8,7 @@ PyIndicators is a powerful and user-friendly Python library for technical analys
     <picture>
     <source media="(prefers-color-scheme: dark)" srcset="static/sponsors/finterion-dark.png">
     <source media="(prefers-color-scheme: light)" srcset="static/sponsors/finterion-light.png">
-    <img src="static/sponsors/finterion-light.svg" alt="Finterion Logo" style="height: 55px;">
+    <img src="static/sponsors/finterion-light.svg" alt="Finterion Logo" style="height: 40px;">
     </picture>
 </a>
 
@@ -26,8 +26,10 @@ pip install pyindicators
 * Dataframe first approach, with support for both pandas dataframes and polars dataframes
 * Supports python version 3.9 and above.
 * [Trend indicators](#trend-indicators)
+  * [Weighted Moving Average (WMA)](#weighted-moving-average-wma)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
+  * [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
 * [Momentum indicators](#momentum-indicators)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
   * [Relative Strength Index Wilders method (Wilders RSI)](#wilders-relative-strength-index-wilders-rsi)
@@ -38,6 +40,31 @@ pip install pyindicators
 ## Indicators
 
 ### Trend Indicators
+
+#### Weighted Moving Average (WMA)
+
+```python
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+
+from pyindicators import wma
+
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+# Calculate SMA for Polars DataFrame
+pl_df = wma(pl_df, source_column="Close", period=200, result_column="SMA_200")
+pl_df.show(10)
+
+# Calculate SMA for Pandas DataFrame
+pd_df = wma(pd_df, source_column="Close", period=200, result_column="SMA_200")
+pd_df.tail(10)
+```
+
+![WMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/wma.png)
 
 #### Simple Moving Average (SMA)
 
@@ -92,6 +119,33 @@ pd_df.tail(10)
 ```
 
 ![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema.png)
+
+#### Moving Average Convergence Divergence (MACD)
+
+```python
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+
+from pyindicators import macd
+
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+# Calculate MACD for Polars DataFrame
+pl_df = macd(pl_df, source_column="Close", short_period=12, long_period=26, signal_period=9)
+
+# Calculate MACD for Pandas DataFrame
+pd_df = macd(pd_df, source_column="Close", short_period=12, long_period=26, signal_period=9)
+
+pl_df.show(10)
+pd_df.tail(10)
+```
+
+![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/macd.png)
+
 
 ### Momentum Indicators
 
