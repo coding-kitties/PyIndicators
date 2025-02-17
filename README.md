@@ -46,7 +46,7 @@ Indicators that help to determine the direction of the market (uptrend, downtren
 #### Weighted Moving Average (WMA)
 
 ```python
-def wma(data: Union[PdDataFrame, PlDataFrame], source_column: str, period: int, result_column: Optional[str] = None) -> Union[PdDataFrame, PlDataFrame]
+def wma(data: Union[PandasDataFrame, PolarsDataFrame], source_column: str, period: int, result_column: Optional[str] = None) -> Union[PdDataFrame, PlDataFrame]
 
 ```python
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
