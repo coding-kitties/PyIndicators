@@ -49,8 +49,10 @@ def willr(
         return data.drop(columns=["high_n", "low_n"])
 
     elif isinstance(data, pl.DataFrame):
-        high_n = data.select(pl.col(high_column).rolling_max(period).alias("high_n"))
-        low_n = data.select(pl.col(low_column).rolling_min(period).alias("low_n"))
+        high_n = data.select(pl.col(high_column).rolling_max(period)
+                             .alias("high_n"))
+        low_n = data.select(pl.col(low_column).rolling_min(period)
+                            .alias("low_n"))
 
         data = data.with_columns([
             high_n["high_n"],

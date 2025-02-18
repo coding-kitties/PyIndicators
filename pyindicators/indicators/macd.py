@@ -1,9 +1,7 @@
 from typing import Union
 
-import numpy as np
 from pandas import DataFrame as PdDataFrame
 from polars import DataFrame as PlDataFrame
-import pandas as pd
 import polars as pl
 
 from pyindicators.exceptions import PyIndicatorException
@@ -21,20 +19,27 @@ def macd(
     histogram_column: str = "macd_histogram"
 ) -> Union[PdDataFrame, PlDataFrame]:
     """
-    Calculate the MACD (Moving Average Convergence Divergence) for a given DataFrame.
+    Calculate the MACD (Moving Average Convergence Divergence) for
+    a given DataFrame.
 
     Args:
-        data (Union[pd.DataFrame, pl.DataFrame]): Input data containing the price series.
+        data (Union[pd.DataFrame, pl.DataFrame]): Input data containing
+            the price series.
         source_column (str): Column name for the price series.
-        short_period (int, optional): Period for the short-term EMA (default: 12).
-        long_period (int, optional): Period for the long-term EMA (default: 26).
-        signal_period (int, optional): Period for the Signal Line EMA (default: 9).
+        short_period (int, optional): Period for the short-term EMA
+            (default: 12).
+        long_period (int, optional): Period for the long-term EMA
+            (default: 26).
+        signal_period (int, optional): Period for the Signal Line
+            EMA (default: 9).
         macd_column (str, optional): Column name to store the MACD line.
         signal_column (str, optional): Column name to store the Signal line.
-        histogram_column (str, optional): Column name to store the MACD histogram.
+        histogram_column (str, optional): Column name to store the
+            MACD histogram.
 
     Returns:
-        Union[pd.DataFrame, pl.DataFrame]: DataFrame with MACD, Signal Line, and Histogram.
+        Union[pd.DataFrame, pl.DataFrame]: DataFrame with MACD, Signal
+            Line, and Histogram.
     """
     if source_column not in data.columns:
         raise PyIndicatorException(

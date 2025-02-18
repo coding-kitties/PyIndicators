@@ -9,12 +9,13 @@ def crossover(
     data: Union[PdDataFrame, PlDataFrame],
     first_column: str,
     second_column: str,
-    result_column = "crossover",
+    result_column="crossover",
     data_points: int = None,
     strict: bool = True,
 ) -> Union[PdDataFrame, PlDataFrame]:
     """
-    Identifies crossover points where `first_column` crosses above or below `second_column`.
+    Identifies crossover points where `first_column` crosses above
+    or below `second_column`.
 
     Args:
         data: Pandas or Polars DataFrame
@@ -32,7 +33,8 @@ def crossover(
 
     # Restrict data to the last `data_points` rows if specified
     if data_points is not None:
-        data = data.tail(data_points) if isinstance(data, PdDataFrame) else data.slice(-data_points)
+        data = data.tail(data_points) if isinstance(data, PdDataFrame) \
+            else data.slice(-data_points)
 
     # Pandas Implementation
     if isinstance(data, PdDataFrame):
@@ -40,7 +42,9 @@ def crossover(
         prev_col1, prev_col2 = col1.shift(1), col2.shift(1)
 
         if strict:
-            crossover_mask = ((prev_col1 < prev_col2) & (col1 > col2)) | ((prev_col1 > prev_col2) & (col1 < col2))
+            crossover_mask = (
+                (prev_col1 < prev_col2)
+                & (col1 > col2)) | ((prev_col1 > prev_col2) & (col1 < col2))
         else:
             crossover_mask = (col1 > col2) | (col1 < col2)
 
@@ -52,12 +56,14 @@ def crossover(
         prev_col1, prev_col2 = col1.shift(1), col2.shift(1)
 
         if strict:
-            crossover_mask = ((prev_col1 < prev_col2) & (col1 > col2)) | ((prev_col1 > prev_col2) & (col1 < col2))
+            crossover_mask = ((prev_col1 < prev_col2) & (col1 > col2)) | \
+                ((prev_col1 > prev_col2) & (col1 < col2))
         else:
             crossover_mask = (col1 > col2) | (col1 < col2)
 
         # Convert boolean mask to 1s and 0s
-        data = data.with_columns(pl.when(crossover_mask).then(1).otherwise(0).alias(result_column))
+        data = data.with_columns(pl.when(crossover_mask).then(1)
+                                 .otherwise(0).alias(result_column))
 
     return data
 
