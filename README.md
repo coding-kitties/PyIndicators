@@ -33,6 +33,7 @@ pip install pyindicators
 * [Momentum indicators](#momentum-indicators)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
   * [Relative Strength Index Wilders method (Wilders RSI)](#wilders-relative-strength-index-wilders-rsi)
+  * [Williams %R](#williams-r)
 * [Indicator helpers](#indicator-helpers)
   * [Crossover](#crossover)
   * [Is Crossover](#is-crossover)
@@ -213,7 +214,48 @@ pd_df = wilders_rsi(pd_df, source_column="Close", period=14, result_column="RSI_
 pd_df.tail(10)
 ```
 
-![RSI](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/wilders_rsi.png)
+![wilders_RSI](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/wilers_rsi.png)
+
+#### Williams %R
+
+Williams %R (Williams Percent Range) is a momentum indicator used in technical analysis to measure overbought and oversold conditions in a market. It moves between 0 and -100 and helps traders identify potential reversal points.
+
+
+```python
+def willr(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    period: int = 14,
+    result_column: str = None,
+    high_column: str = "High",
+    low_column: str = "Low",
+    close_column: str = "Close"
+) -> Union[pd.DataFrame, pl.DataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+
+from pyindicators import willr
+
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+# Calculate Williams%R for Polars DataFrame
+pl_df = willr(pl_df, result_column="WILLR")
+pl_df.show(10)
+
+# Calculate Williams%R for Pandas DataFrame
+pd_df = willr(pd_df, result_column="WILLR")
+pd_df.tail(10)
+```
+
+![williams %R](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/willr.png)
 
 ### Indicator helpers
 

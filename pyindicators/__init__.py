@@ -1,5 +1,5 @@
 from .indicators import sma, rsi, is_crossover, crossunder, ema, wilders_rsi, \
-    crossover, is_crossover, wma, macd
+    crossover, is_crossover, wma, macd, willr
 
 __all__ = [
     'sma',
@@ -11,5 +11,6 @@ __all__ = [
     'ema',
     'rsi',
     "wilders_rsi",
-    'macd'
+    'macd',
+    'willr'
 ]

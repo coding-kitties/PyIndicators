@@ -6,7 +6,7 @@ import polars as pl
 def rsi(
     data: Union[pd.DataFrame, pl.DataFrame],
     source_column: str,
-    period: int,
+    period: int = 14,
     result_column: str = None,
 ) -> Union[pd.DataFrame, pl.DataFrame]:
     """
@@ -81,7 +81,7 @@ def rsi(
 def wilders_rsi(
     data: Union[pd.DataFrame, pl.DataFrame],
     source_column: str,
-    period: int,
+    period: int = 14,
     result_column: str = None,
 ) -> Union[pd.DataFrame, pl.DataFrame]:
     """

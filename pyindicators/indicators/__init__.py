@@ -5,6 +5,7 @@ from .crossunder import crossunder
 from .exponential_moving_average import ema
 from .rsi import rsi, wilders_rsi
 from .macd import macd
+from .williams_percent_range import willr
 
 __all__ = [
     'sma',
@@ -15,5 +16,6 @@ __all__ = [
     'ema',
     'rsi',
     'wilders_rsi',
-    'macd'
+    'macd',
+    'willr'
 ]
