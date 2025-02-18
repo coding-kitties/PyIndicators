@@ -10,7 +10,7 @@ def ema(
     source_column: str,
     period: int,
     result_column: str = None,
-):
+) -> Union[PdDataFrame, PlDataFrame]:
     """
     Function to calculate the Exponential Moving Average (EMA) of a series.
 

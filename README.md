@@ -29,8 +29,8 @@ pip install pyindicators
   * [Weighted Moving Average (WMA)](#weighted-moving-average-wma)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
-  * [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
 * [Momentum indicators](#momentum-indicators)
+  * [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
   * [Relative Strength Index Wilders method (Wilders RSI)](#wilders-relative-strength-index-wilders-rsi)
   * [Williams %R](#williams-r)
@@ -46,7 +46,7 @@ Indicators that help to determine the direction of the market (uptrend, downtren
 
 #### Weighted Moving Average (WMA)
 
-Moving average that gives more weight to recent data points by applying a weighting factor to the data points.
+A Weighted Moving Average (WMA) is a type of moving average that assigns greater importance to recent data points compared to older ones. This makes it more responsive to recent price changes compared to a Simple Moving Average (SMA), which treats all data points equally. The WMA does this by using linear weighting, where the most recent prices get the highest weight, and weights decrease linearly for older data points.
 
 ```python
 def wma(
@@ -54,7 +54,7 @@ def wma(
     source_column: str,
     period: int,
     result_column: Optional[str] = None
-) -> Union[PandasDataFrame, PolarsDataFrame]
+) -> Union[PandasDataFrame, PolarsDataFrame]:
 ```
 
 Example
@@ -84,9 +84,18 @@ pd_df.tail(10)
 
 #### Simple Moving Average (SMA)
 
-Smooth out price data to identify trend direction.
+A Simple Moving Average (SMA) is the average of the last N data points, recalculated as new data comes in. Unlike the Weighted Moving Average (WMA), SMA treats all values equally, giving them the same weight.
 
->sma(data: DataFrame, source_column: str, period: int, result_column: Optional[str]) - DataFrame
+```python
+def sma(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str,
+    period: int,
+    result_column: str = None,
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
 
 ```python
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
@@ -113,6 +122,19 @@ pd_df.tail(10)
 
 #### Exponential Moving Average (EMA)
 
+The Exponential Moving Average (EMA) is a type of moving average that gives more weight to recent prices, making it more responsive to price changes than a Simple Moving Average (SMA). It does this by using an exponential decay where the most recent prices get exponentially more weight.
+
+```python
+def ema(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str,
+    period: int,
+    result_column: str = None,
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
 ```python
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
 
@@ -136,7 +158,28 @@ pd_df.tail(10)
 
 ![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema.png)
 
+### Momentum Indicators
+
+Indicators that measure the strength and speed of price movements rather than the direction.
+
 #### Moving Average Convergence Divergence (MACD)
+
+The Moving Average Convergence Divergence (MACD) is used to identify trend direction, strength, and potential reversals. It is based on the relationship between two Exponential Moving Averages (EMAs) and includes a histogram to visualize momentum.
+
+```python
+def macd(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str,
+    short_period: int = 12,
+    long_period: int = 26,
+    signal_period: int = 9,
+    macd_column: str = "macd",
+    signal_column: str = "macd_signal",
+    histogram_column: str = "macd_histogram"
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
 
 ```python
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
@@ -160,11 +203,7 @@ pl_df.show(10)
 pd_df.tail(10)
 ```
 
-![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/macd.png)
-
-### Momentum Indicators
-
-Indicators that measure the strength and speed of price movements rather than the direction.
+![MACD](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/macd.png)
 
 #### Relative Strength Index (RSI)
 
