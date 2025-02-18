@@ -8,7 +8,7 @@ PyIndicators is a powerful and user-friendly Python library for technical analys
     <picture style="height: 30px;">
     <source media="(prefers-color-scheme: dark)" srcset="static/sponsors/finterion-dark.png">
     <source media="(prefers-color-scheme: light)" srcset="static/sponsors/finterion-light.png">
-    <img src="static/sponsors/finterion-light.svg" alt="Finterion Logo" style="height: 30px;">
+    <img src="static/sponsors/finterion-light.svg" alt="Finterion Logo" width="200px" height="50px">
     </picture>
 </a>
 
@@ -214,7 +214,7 @@ pd_df = wilders_rsi(pd_df, source_column="Close", period=14, result_column="RSI_
 pd_df.tail(10)
 ```
 
-![wilders_RSI](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/wilers_rsi.png)
+![wilders_RSI](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/wilders_rsi.png)
 
 #### Williams %R
 
