@@ -39,7 +39,7 @@ def macd(
 
     Returns:
         Union[pd.DataFrame, pl.DataFrame]: DataFrame with MACD, Signal
-            Line, and Histogram.
+        Line, and Histogram.
     """
     if source_column not in data.columns:
         raise PyIndicatorException(
@@ -60,9 +60,47 @@ def macd(
 
         # Calculate the MACD Histogram
         data[histogram_column] = data[macd_column] - data[signal_column]
+
+        # Delete the temporary EMA columns
+        data = data.drop(columns=[f"EMA_{short_period}", f"EMA_{long_period}"])
         return data
     elif isinstance(data, pl.DataFrame):
-        return None
+        # Polars implementation
+        data = data.with_columns([
+            ema(
+                data,
+                source_column,
+                short_period,
+                f"EMA_{short_period}"
+            )[f"EMA_{short_period}"],
+            ema(
+                data,
+                source_column,
+                long_period,
+                f"EMA_{long_period}"
+            )[f"EMA_{long_period}"]
+        ])
+
+        data = data.with_columns(
+            (
+                pl.col(f"EMA_{short_period}") - pl.col(f"EMA_{long_period}")
+            ).alias(macd_column)
+        )
+
+        data = data.with_columns(
+            ema(data, macd_column, signal_period, signal_column)[signal_column]
+        )
+
+        data = data.with_columns(
+            (
+                pl.col(macd_column) - pl.col(signal_column)
+            ).alias(histogram_column)
+        )
+
+        # Delete the temporary EMA columns
+        data = data.drop([f"EMA_{short_period}", f"EMA_{long_period}"])
+
+        return data
     else:
         raise PyIndicatorException(
             "Unsupported DataFrame type. Use Pandas or Polars."
