@@ -18,7 +18,7 @@ class TestCrossover(TestCase):
         df.set_index("DateTime", inplace=True)
 
         self.assertTrue(is_crossover(df, first_column="EMA_50", second_column="EMA_200"))
-        self.assertTrue(is_crossover(df, first_column="EMA_50", second_column="EMA_200", data_points=3))
+        self.assertTrue(is_crossover(df, first_column="EMA_50", second_column="EMA_200", number_of_data_points=3))
 
         df = pd.DataFrame({
             "EMA_50": [200, 201, 202, 203, 204, 205, 206, 208, 210, 210],
@@ -37,7 +37,7 @@ class TestCrossover(TestCase):
                 df,
                 first_column="EMA_50",
                 second_column="EMA_200",
-                data_points=3
+                number_of_data_points=3
             )
         )
 
@@ -57,7 +57,7 @@ class TestCrossover(TestCase):
                 df,
                 first_column="EMA_50",
                 second_column="EMA_200",
-                data_points=3
+                number_of_data_points=3
             )
         )
 
@@ -69,7 +69,7 @@ class TestCrossover(TestCase):
         })
 
         self.assertTrue(is_crossover(df, first_column="EMA_50", second_column="EMA_200"))
-        self.assertTrue(is_crossover(df, first_column="EMA_50", second_column="EMA_200", data_points=3))
+        self.assertTrue(is_crossover(df, first_column="EMA_50", second_column="EMA_200", number_of_data_points=3))
 
         df = pl.DataFrame({
             "EMA_50": [200, 201, 202, 203, 204, 205, 206, 208, 210, 210],
@@ -85,7 +85,7 @@ class TestCrossover(TestCase):
                 df,
                 first_column="EMA_50",
                 second_column="EMA_200",
-                data_points=3
+                number_of_data_points=3
             )
         )
 
@@ -103,6 +103,6 @@ class TestCrossover(TestCase):
                 df,
                 first_column="EMA_50",
                 second_column="EMA_200",
-                data_points=3
+                number_of_data_points=3
             )
         )

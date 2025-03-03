@@ -108,8 +108,11 @@ def is_crossover(
             second_column=second_column,
             result_column=crossover_column,
             number_of_data_points=number_of_data_points,
-            strics=strict
+            strict=strict
         )
+
+    if number_of_data_points is None:
+        number_of_data_points = len(data)
 
     # If crossunder_column is set, check for a value of 1
     # in the last data points
