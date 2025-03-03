@@ -86,9 +86,12 @@ def is_crossunder(
         data (Union[pd.DataFrame, pl.DataFrame]): The input data.
         first_column (str): The name of the first series.
         second_column (str): The name of the second series.
-        crossunder_column (str) (optional): The name of the column to store the crossunder points.
-        number_of_data_points (int) (optional): The number of data points to consider. Defaults to None.
-        strict (bool) (optional): If True, requires a strict crossunder. Defaults to True.
+        crossunder_column (str) (optional):
+            The name of the column to store the crossunder points.
+        number_of_data_points (int) (optional):
+            The number of data points to consider. Defaults to None.
+        strict (bool) (optional): If True, requires a strict
+            crossunder. Defaults to True.
 
     Returns:
         bool: True if a crossunder occurs, False otherwise.

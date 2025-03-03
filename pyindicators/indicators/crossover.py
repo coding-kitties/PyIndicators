@@ -24,7 +24,8 @@ def crossover(
         second_column: Name of the second column
         result_column (optional): Name of the column to
             store the crossover points
-        number_of_data_points (optional): Number of recent rows to consider (optional)
+        number_of_data_points (optional):
+            Number of recent rows to consider (optional)
         strict (optional): If True, requires exact crossovers; otherwise,
             detects when one surpasses the other.
 
