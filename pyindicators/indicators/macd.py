@@ -99,7 +99,6 @@ def macd(
 
         # Delete the temporary EMA columns
         data = data.drop([f"EMA_{short_period}", f"EMA_{long_period}"])
-
         return data
     else:
         raise PyIndicatorException(

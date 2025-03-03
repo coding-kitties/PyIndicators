@@ -37,6 +37,8 @@ pip install pyindicators
 * [Indicator helpers](#indicator-helpers)
   * [Crossover](#crossover)
   * [Is Crossover](#is-crossover)
+  * [Crossunder](#crossunder)
+  * [Is Crossunder](#is-crossunder)
 
 ## Indicators
 
@@ -207,6 +209,19 @@ pd_df.tail(10)
 
 #### Relative Strength Index (RSI)
 
+The Relative Strength Index (RSI) is a momentum oscillator that measures the speed and change of price movements. It moves between 0 and 100 and is used to identify overbought or oversold conditions in a market.
+
+```python
+def rsi(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    source_column: str,
+    period: int = 14,
+    result_column: str = None,
+) -> Union[pd.DataFrame, pl.DataFrame]:
+```
+
+Example
+
 ```python
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
 
@@ -231,6 +246,19 @@ pd_df.tail(10)
 ![RSI](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/rsi.png)
 
 #### Wilders Relative Strength Index (Wilders RSI)
+
+The Wilders Relative Strength Index (RSI) is a momentum oscillator that measures the speed and change of price movements. It moves between 0 and 100 and is used to identify overbought or oversold conditions in a market. The Wilders RSI uses a different calculation method than the standard RSI.
+
+```python
+def wilders_rsi(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    source_column: str,
+    period: int = 14,
+    result_column: str = None,
+) -> Union[pd.DataFrame, pl.DataFrame]:
+```
+
+Example
 
 ```python
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
@@ -258,7 +286,6 @@ pd_df.tail(10)
 #### Williams %R
 
 Williams %R (Williams Percent Range) is a momentum indicator used in technical analysis to measure overbought and oversold conditions in a market. It moves between 0 and -100 and helps traders identify potential reversal points.
-
 
 ```python
 def willr(
@@ -300,6 +327,21 @@ pd_df.tail(10)
 
 #### Crossover
 
+The crossover function is used to calculate the crossover between two columns in a DataFrame. It returns a new DataFrame with an additional column that contains the crossover values. A crossover occurs when the first column crosses above or below the second column. This can happen in two ways, a strict crossover or a non-strict crossover. In a strict crossover, the first column must cross above or below the second column. In a non-strict crossover, the first column must cross above or below the second column, but the values can be equal.
+
+```python
+def crossover(
+    data: Union[PdDataFrame, PlDataFrame],
+    first_column: str,
+    second_column: str,
+    result_column="crossover",
+    data_points: int = None,
+    strict: bool = True,
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
 ```python
 from polars import DataFrame as plDataFrame
 from pandas import DataFrame as pdDataFrame
@@ -340,6 +382,21 @@ pd_df.tail(10)
 ![CROSSOVER](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/crossover.png)
 
 #### Is Crossover
+
+The is_crossover function is used to determine if a crossover occurred in the last N data points. It returns a boolean value indicating if a crossover occurred in the last N data points. The function can be used to check for crossovers in a DataFrame that was previously calculated using the crossover function.
+
+```python
+def is_crossover(
+    data: Union[PdDataFrame, PlDataFrame],
+    first_column: str = None,
+    second_column: str = None,
+    crossover_column: str = None,
+    number_of_data_points: int = None,
+    strict=True,
+) -> bool:
+```
+
+Example
 
 ```python
 from polars import DataFrame as plDataFrame
@@ -394,4 +451,126 @@ if is_crossover(
 # If you want to use the result of a previous crossover calculation
 if is_crossover(pd_df, crossover_column="Crossover_EMA", data_points=3):
     print("Crossover detected in Pandas DataFrame in the last 3 data points")
+```
+
+#### Crossunder
+
+The crossunder function is used to calculate the crossunder between two columns in a DataFrame. It returns a new DataFrame with an additional column that contains the crossunder values. A crossunder occurs when the first column crosses below the second column. This can happen in two ways, a strict crossunder or a non-strict crossunder. In a strict crossunder, the first column must cross below the second column. In a non-strict crossunder, the first column must cross below the second column, but the values can be equal.
+
+```python
+def crossunder(
+    data: Union[PdDataFrame, PlDataFrame],
+    first_column: str,
+    second_column: str,
+    result_column="crossunder",
+    data_points: int = None,
+    strict: bool = True,
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from polars import DataFrame as plDataFrame
+from pandas import DataFrame as pdDataFrame
+
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from pyindicators import crossunder, ema
+
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+# Calculate EMA and crossunder for Polars DataFrame
+pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
+pl_df = ema(pl_df, source_column="Close", period=50, result_column="EMA_50")
+pl_df = crossunder(
+    pl_df,
+    first_column="EMA_50",
+    second_column="EMA_200",
+    result_column="Crossunder_EMA"
+)
+pl_df.show(10)
+
+# Calculate EMA and crossunder for Pandas DataFrame
+pd_df = ema(pd_df, source_column="Close", period=200, result_column="EMA_200")
+pd_df = ema(pd_df, source_column="Close", period=50, result_column="EMA_50")
+pd_df = crossunder(
+    pd_df,
+    first_column="EMA_50",
+    second_column="EMA_200",
+    result_column="Crossunder_EMA"
+)
+pd_df.tail(10)
+```
+
+![CROSSUNDER](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/crossunder.png)
+
+#### Is Crossunder
+
+The is_crossunder function is used to determine if a crossunder occurred in the last N data points. It returns a boolean value indicating if a crossunder occurred in the last N data points. The function can be used to check for crossunders in a DataFrame that was previously calculated using the crossunder function.
+
+```python
+def is_crossunder(
+    data: Union[PdDataFrame, PlDataFrame],
+    first_column: str = None,
+    second_column: str = None,
+    crossunder_column: str = None,
+    number_of_data_points: int = None,
+    strict: bool = True,
+) -> bool:
+```
+
+Example
+
+```python
+from polars import DataFrame as plDataFrame
+from pandas import DataFrame as pdDataFrame
+
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from pyindicators import crossunder, ema, is_crossunder
+
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+# Calculate EMA and crossunders for Polars DataFrame
+pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
+pl_df = ema(pl_df, source_column="Close", period=50, result_column="EMA_50")
+pl_df = crossunder(
+    pl_df,
+    first_column="EMA_50",
+    second_column="EMA_200",
+    result_column="Crossunder_EMA"
+)
+
+# If you want the function to calculate the crossunders in the function
+if is_crossunder(
+    pl_df, first_column="EMA_50", second_column="EMA_200", data_points=3
+):
+    print("Crossunder detected in Pandas DataFrame in the last 3 data points")
+
+# If you want to use the result of a previous crossunders calculation
+if is_crossunder(pl_df, crossunder_column="Crossunder_EMA", data_points=3):
+    print("Crossunder detected in Pandas DataFrame in the last 3 data points")
+
+# Calculate EMA and crossunders for Pandas DataFrame
+pd_df = ema(pd_df, source_column="Close", period=200, result_column="EMA_200")
+pd_df = ema(pd_df, source_column="Close", period=50, result_column="EMA_50")
+
+# If you want the function to calculate the crossunders in the function
+if is_crossunder(
+    pd_df, first_column="EMA_50", second_column="EMA_200", data_points=3
+):
+    print("Crossunders detected in Pandas DataFrame in the last 3 data points")
+
+# If you want to use the result of a previous crossover calculation
+if is_crossunder(pd_df, crossover_column="Crossunder_EMA", data_points=3):
+    print("Crossunder detected in Pandas DataFrame in the last 3 data points")
 ```

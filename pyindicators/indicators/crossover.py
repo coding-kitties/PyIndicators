@@ -3,6 +3,7 @@ from typing import Union
 from pandas import DataFrame as PdDataFrame
 from polars import DataFrame as PlDataFrame
 import polars as pl
+from pyindicators.exceptions import PyIndicatorException
 
 
 def crossover(
@@ -10,7 +11,7 @@ def crossover(
     first_column: str,
     second_column: str,
     result_column="crossover",
-    data_points: int = None,
+    number_of_data_points: int = None,
     strict: bool = True,
 ) -> Union[PdDataFrame, PlDataFrame]:
     """
@@ -23,7 +24,7 @@ def crossover(
         second_column: Name of the second column
         result_column (optional): Name of the column to
             store the crossover points
-        data_points (optional): Number of recent rows to consider (optional)
+        number_of_data_points (optional): Number of recent rows to consider (optional)
         strict (optional): If True, requires exact crossovers; otherwise,
             detects when one surpasses the other.
 
@@ -32,9 +33,10 @@ def crossover(
     """
 
     # Restrict data to the last `data_points` rows if specified
-    if data_points is not None:
-        data = data.tail(data_points) if isinstance(data, PdDataFrame) \
-            else data.slice(-data_points)
+    if number_of_data_points is not None:
+        data = data.tail(number_of_data_points) \
+            if isinstance(data, PdDataFrame) \
+            else data.slice(-number_of_data_points)
 
     # Pandas Implementation
     if isinstance(data, PdDataFrame):
@@ -42,11 +44,9 @@ def crossover(
         prev_col1, prev_col2 = col1.shift(1), col2.shift(1)
 
         if strict:
-            crossover_mask = (
-                (prev_col1 < prev_col2)
-                & (col1 > col2)) | ((prev_col1 > prev_col2) & (col1 < col2))
+            crossover_mask = ((prev_col1 < prev_col2) & (col1 > col2))
         else:
-            crossover_mask = (col1 > col2) | (col1 < col2)
+            crossover_mask = (col1 > col2) & (prev_col1 <= prev_col2)
 
         data[result_column] = crossover_mask.astype(int)
 
@@ -56,10 +56,9 @@ def crossover(
         prev_col1, prev_col2 = col1.shift(1), col2.shift(1)
 
         if strict:
-            crossover_mask = ((prev_col1 < prev_col2) & (col1 > col2)) | \
-                ((prev_col1 > prev_col2) & (col1 < col2))
+            crossover_mask = ((prev_col1 < prev_col2) & (col1 > col2))
         else:
-            crossover_mask = (col1 > col2) | (col1 < col2)
+            crossover_mask = (col1 > col2) & (prev_col1 <= prev_col2)
 
         # Convert boolean mask to 1s and 0s
         data = data.with_columns(pl.when(crossover_mask).then(1)
@@ -70,9 +69,10 @@ def crossover(
 
 def is_crossover(
     data: Union[PdDataFrame, PlDataFrame],
-    first_column: str,
-    second_column: str,
-    data_points: int = None,
+    first_column: str = None,
+    second_column: str = None,
+    crossover_column: str = None,
+    number_of_data_points: int = None,
     strict=True,
 ) -> bool:
     """
@@ -83,7 +83,9 @@ def is_crossover(
         data (Union[PdDataFrame, PlDataFrame]): The input data.
         first_column (str): The name of the first series.
         second_column (str): The name of the second series.
-        data_points (int, optional): The number of data points
+        crossover_column (str, optional): The name of the column to store
+            the crossover points. Defaults to None.
+        number_of_data_points (int, optional): The number of data points
             to consider. Defaults to None.
         strict (bool, optional): If True, the first series must
             be strictly greater than the second series. If False,
@@ -94,48 +96,28 @@ def is_crossover(
         bool: Returns True if the first series crosses above the
             second series at any point or within the last n data points.
     """
-
     if len(data) < 2:
         return False
 
-    if data_points is None:
-        data_points = len(data) - 1
+    if crossover_column is None:
+        crossover_column = f"{first_column}_crossover_{second_column}"
+        data = crossover(
+            data=data,
+            first_column=first_column,
+            second_column=second_column,
+            result_column=crossover_column,
+            number_of_data_points=number_of_data_points,
+            strics=strict
+        )
 
+    # If crossunder_column is set, check for a value of 1
+    # in the last data points
     if isinstance(data, PdDataFrame):
+        return data[crossover_column].tail(number_of_data_points).eq(1).any()
+    elif isinstance(data, pl.DataFrame):
+        return data[crossover_column][-number_of_data_points:]\
+            .to_list().count(1) > 0
 
-        # Loop through the data points and check if the first key
-        # is greater than the second key
-        for i in range(data_points, 0, -1):
-
-            if strict:
-                if data[first_column].iloc[-(i + 1)] \
-                        < data[second_column].iloc[-(i + 1)] \
-                        and data[first_column].iloc[-i] \
-                        > data[second_column].iloc[-i]:
-                    return True
-            else:
-                if data[first_column].iloc[-(i + 1)] \
-                        <= data[second_column].iloc[-(i + 1)]  \
-                        and data[first_column].iloc[-i] >= \
-                        data[second_column].iloc[-i]:
-                    return True
-
-    else:
-        # Loop through the data points and check if the first key
-        # is greater than the second key
-        for i in range(data_points, 0, -1):
-
-            if strict:
-                if data[first_column][-i - 1] \
-                        < data[second_column][-i - 1] \
-                        and data[first_column][-i] \
-                        > data[second_column][-i]:
-                    return True
-            else:
-                if data[first_column][-i - 1] \
-                        <= data[second_column][-i - 1]  \
-                        and data[first_column][-i] >= \
-                        data[second_column][-i]:
-                    return True
-
-    return False
+    raise PyIndicatorException(
+        "Data type not supported. Please provide a Pandas or Polars DataFrame."
+    )
