@@ -16,7 +16,11 @@ def crossunder(
 ) -> Union[PdDataFrame, PlDataFrame]:
 
     if number_of_data_points is not None:
-        data = data.tail(number_of_data_points).copy() if isinstance(data, PdDataFrame) else data.slice(-number_of_data_points)
+
+        if isinstance(data, PdDataFrame):
+            data = data.tail(number_of_data_points).copy()
+        else:
+            data = data.slice(-number_of_data_points)
 
     if isinstance(data, PdDataFrame):
         col1, col2 = data[first_column], data[second_column]
@@ -25,7 +29,8 @@ def crossunder(
         if strict:
             crossunder_mask = (prev_col1 > prev_col2) & (col1 < col2)
         else:
-            crossunder_mask = (col1 > col2) & (prev_col1 <= prev_col2) | (col1 >= col2) & (prev_col1 < prev_col2)
+            crossunder_mask = (col1 > col2) & (prev_col1 <= prev_col2) \
+                | (col1 >= col2) & (prev_col1 < prev_col2)
 
         data.loc[:, result_column] = crossunder_mask.astype(int)
 
@@ -36,9 +41,12 @@ def crossunder(
         if strict:
             crossunder_mask = (prev_col1 > prev_col2) & (col1 < col2)
         else:
-            crossunder_mask = (col1 > col2) & (prev_col1 <= prev_col2) | (col1 >= col2) & (prev_col1 < prev_col2)
+            crossunder_mask = (col1 > col2) & (prev_col1 <= prev_col2) \
+                | (col1 >= col2) & (prev_col1 < prev_col2)
 
-        data = data.with_columns(pl.when(crossunder_mask).then(1).otherwise(0).alias(result_column))
+        data = data.with_columns(
+            pl.when(crossunder_mask).then(1).otherwise(0).alias(result_column)
+        )
 
     return data
 
@@ -70,9 +78,11 @@ def is_crossunder(
         number_of_data_points = len(data)
 
     if isinstance(data, PdDataFrame):
-        return data[crossunder_column].tail(number_of_data_points).eq(1).any()
+        return data[crossunder_column].tail(number_of_data_points)\
+            .eq(1).any()
     elif isinstance(data, pl.DataFrame):
-        return data[crossunder_column][-number_of_data_points:].to_list().count(1) > 0
+        return data[crossunder_column][-number_of_data_points:]\
+            .to_list().count(1) > 0
 
     raise PyIndicatorException(
         "Data type not supported. Please provide a Pandas or Polars DataFrame."

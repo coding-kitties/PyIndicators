@@ -1,4 +1,4 @@
-from .indicators import sma, rsi, crossunder, ema, wilders_rsi, \
+from .indicators import sma, rsi, ema, wilders_rsi, \
     crossover, is_crossover, wma, macd, willr, is_crossunder, crossunder
 
 __all__ = [
