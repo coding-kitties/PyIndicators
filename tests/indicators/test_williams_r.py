@@ -9,7 +9,7 @@ from pyindicators import willr
 
 class Test(TestBaseline):
     correct_output_csv_filename = \
-        "WILLR_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+        "WILLR_BTC-EUR_BINANCE_15m_2023-12-01-00-00_2023-12-25-00-00.csv"
 
     def generate_pandas_df(self, polars_source_df):
         polars_source_df = willr(data=polars_source_df)
