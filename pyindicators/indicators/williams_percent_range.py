@@ -14,17 +14,25 @@ def willr(
 ) -> Union[pd.DataFrame, pl.DataFrame]:
 
     if high_column not in data.columns:
-        raise PyIndicatorException(f"Column '{high_column}' not found in DataFrame")
+        raise PyIndicatorException(
+            f"Column '{high_column}' not found in DataFrame"
+        )
 
     if low_column not in data.columns:
-        raise PyIndicatorException(f"Column '{low_column}' not found in DataFrame")
+        raise PyIndicatorException(
+            f"Column '{low_column}' not found in DataFrame"
+        )
 
     if isinstance(data, pd.DataFrame):
-        data["high_n"] = data[high_column].rolling(window=period, min_periods=1).max()
-        data["low_n"] = data[low_column].rolling(window=period, min_periods=1).min()
+        data["high_n"] = data[high_column]\
+            .rolling(window=period, min_periods=1).max()
+        data["low_n"] = data[low_column]\
+            .rolling(window=period, min_periods=1).min()
 
-        data[result_column] = ((data["high_n"] - data[close_column]) /
-                               (data["high_n"] - data["low_n"])) * -100
+        data[result_column] = (
+            (data["high_n"] - data[close_column]) /
+            (data["high_n"] - data["low_n"])
+        ) * -100
 
         # Set the first `period` rows to 0 using .iloc
         if not data.empty:
@@ -33,8 +41,12 @@ def willr(
         return data.drop(columns=["high_n", "low_n"])
 
     elif isinstance(data, pl.DataFrame):
-        high_n = data.select(pl.col(high_column).rolling_max(period).alias("high_n"))
-        low_n = data.select(pl.col(low_column).rolling_min(period).alias("low_n"))
+        high_n = data.select(
+            pl.col(high_column).rolling_max(period).alias("high_n")
+        )
+        low_n = data.select(
+            pl.col(low_column).rolling_min(period).alias("low_n")
+        )
 
         data = data.with_columns([
             high_n["high_n"],
@@ -42,13 +54,15 @@ def willr(
         ])
 
         data = data.with_columns(
-            ((pl.col("high_n") - pl.col(close_column)) / (pl.col("high_n") - pl.col("low_n")) * -100)
+            ((pl.col("high_n") - pl.col(close_column))
+                / (pl.col("high_n") - pl.col("low_n")) * -100)
             .alias(result_column)
         )
 
         # Set the first `period` rows of result_column to 0 directly in Polars
         if data.height > 0:
-            zero_values = [0] * (period - 1)+ data[result_column].to_list()[period - 1:]
+            zero_values = [0] * (period - 1) \
+                + data[result_column].to_list()[period - 1:]
             data = data.with_columns(pl.Series(result_column, zero_values))
 
         return data.drop(["high_n", "low_n"])
