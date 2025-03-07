@@ -63,7 +63,9 @@ def willr(
         if data.height > 0:
             zero_values = [0] * (period - 1) \
                 + data[result_column].to_list()[period - 1:]
-            data = data.with_columns(pl.Series(result_column, zero_values))
+            data = data.with_columns(
+                pl.Series(result_column, zero_values, dtype=pl.Float64)
+            )
 
         return data.drop(["high_n", "low_n"])
     else:
