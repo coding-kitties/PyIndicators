@@ -30,9 +30,9 @@ def willr(
             .rolling(window=period, min_periods=1).min()
 
         data[result_column] = (
-            (data["high_n"] - data[close_column]) /
-            (data["high_n"] - data["low_n"])
-        ) * -100
+            (data["high_n"].squeeze() - data[close_column].squeeze()) /
+            (data["high_n"].squeeze() - data["low_n"].squeeze())
+        ).squeeze() * -100
 
         # Set the first `period` rows to 0 using .iloc
         if not data.empty:
