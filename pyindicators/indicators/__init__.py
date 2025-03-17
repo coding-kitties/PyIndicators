@@ -6,6 +6,9 @@ from .exponential_moving_average import ema
 from .rsi import rsi, wilders_rsi
 from .macd import macd
 from .williams_percent_range import willr
+from .adx import adx
+from .utils import get_peaks, is_divergence, is_lower_low_detected
+
 
 __all__ = [
     'sma',
@@ -18,5 +21,9 @@ __all__ = [
     'rsi',
     'wilders_rsi',
     'macd',
-    'willr'
+    'willr',
+    'adx',
+    'get_peaks',
+    'is_divergence',
+    'is_lower_low_detected'
 ]
