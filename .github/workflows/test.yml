@@ -61,11 +61,11 @@ jobs:
       #  -----  install distutils if needed  -----
       #----------------------------------------------
       - name: Install distutils on Ubuntu
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-latest' && (matrix.python-version == '3.10' || matrix.python-version == '3.11')
         run: |
-          sudo add-apt-repository ppa:deadsnakes/ppa
+          sudo add-apt-repository ppa:deadsnakes/ppa -y
           sudo apt-get update
-          sudo apt install python${{ matrix.python-version }}-distutils
+          sudo apt install python${{ matrix.python-version }}-distutils -y
       #----------------------------------------------
       #  -----  install & configure poetry  -----
       #----------------------------------------------
