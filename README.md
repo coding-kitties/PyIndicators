@@ -335,7 +335,7 @@ def crossover(
     first_column: str,
     second_column: str,
     result_column="crossover",
-    data_points: int = None,
+    number_of_data_points: int = None,
     strict: bool = True,
 ) -> Union[PdDataFrame, PlDataFrame]:
 ```
@@ -424,12 +424,12 @@ pl_df = crossover(
 
 # If you want the function to calculate the crossovors in the function
 if is_crossover(
-    pl_df, first_column="EMA_50", second_column="EMA_200", data_points=3
+    pl_df, first_column="EMA_50", second_column="EMA_200", number_of_data_points=3
 ):
     print("Crossover detected in Pandas DataFrame in the last 3 data points")
 
 # If you want to use the result of a previous crossover calculation
-if is_crossover(pl_df, crossover_column="Crossover_EMA", data_points=3):
+if is_crossover(pl_df, crossover_column="Crossover_EMA", number_of_data_points=3):
     print("Crossover detected in Pandas DataFrame in the last 3 data points")
 
 # Calculate EMA and crossover for Pandas DataFrame
@@ -444,12 +444,12 @@ pd_df = crossover(
 
 # If you want the function to calculate the crossovors in the function
 if is_crossover(
-    pd_df, first_column="EMA_50", second_column="EMA_200", data_points=3
+    pd_df, first_column="EMA_50", second_column="EMA_200", number_of_data_points=3
 ):
     print("Crossover detected in Pandas DataFrame in the last 3 data points")
 
 # If you want to use the result of a previous crossover calculation
-if is_crossover(pd_df, crossover_column="Crossover_EMA", data_points=3):
+if is_crossover(pd_df, crossover_column="Crossover_EMA", number_of_data_points=3):
     print("Crossover detected in Pandas DataFrame in the last 3 data points")
 ```
 
@@ -463,7 +463,7 @@ def crossunder(
     first_column: str,
     second_column: str,
     result_column="crossunder",
-    data_points: int = None,
+    number_of_data_points: int = None,
     strict: bool = True,
 ) -> Union[PdDataFrame, PlDataFrame]:
 ```
@@ -552,12 +552,12 @@ pl_df = crossunder(
 
 # If you want the function to calculate the crossunders in the function
 if is_crossunder(
-    pl_df, first_column="EMA_50", second_column="EMA_200", data_points=3
+    pl_df, first_column="EMA_50", second_column="EMA_200", number_of_data_points=3
 ):
     print("Crossunder detected in Pandas DataFrame in the last 3 data points")
 
 # If you want to use the result of a previous crossunders calculation
-if is_crossunder(pl_df, crossunder_column="Crossunder_EMA", data_points=3):
+if is_crossunder(pl_df, crossunder_column="Crossunder_EMA", number_of_data_points=3):
     print("Crossunder detected in Pandas DataFrame in the last 3 data points")
 
 # Calculate EMA and crossunders for Pandas DataFrame
@@ -566,11 +566,11 @@ pd_df = ema(pd_df, source_column="Close", period=50, result_column="EMA_50")
 
 # If you want the function to calculate the crossunders in the function
 if is_crossunder(
-    pd_df, first_column="EMA_50", second_column="EMA_200", data_points=3
+    pd_df, first_column="EMA_50", second_column="EMA_200", number_of_data_points=3
 ):
     print("Crossunders detected in Pandas DataFrame in the last 3 data points")
 
 # If you want to use the result of a previous crossover calculation
-if is_crossunder(pd_df, crossover_column="Crossunder_EMA", data_points=3):
+if is_crossunder(pd_df, crossover_column="Crossunder_EMA", number_of_data_points=3):
     print("Crossunder detected in Pandas DataFrame in the last 3 data points")
 ```
