@@ -4,6 +4,7 @@ from .indicators import sma, rsi, ema, wilders_rsi, adx, \
     is_below, is_above, get_slope, has_any_higher_then_threshold, \
     has_slope_above_threshold, has_any_lower_then_threshold, \
     has_values_above_threshold, has_values_below_threshold
+from .exceptions import PyIndicatorException
 
 __all__ = [
     'sma',
@@ -30,4 +31,5 @@ __all__ = [
     'has_any_lower_then_threshold',
     'has_values_above_threshold',
     'has_values_below_threshold',
+    'PyIndicatorException',
 ]

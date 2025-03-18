@@ -17,6 +17,12 @@ def crossunder(
 
     if number_of_data_points is not None:
 
+        if number_of_data_points < 2:
+            raise PyIndicatorException(
+                "The number of data points must be greater or equal than 2 for"
+                " crossunder detection."
+            )
+
         if isinstance(data, PdDataFrame):
             data = data.tail(number_of_data_points).copy()
         else:
@@ -63,6 +69,14 @@ def is_crossunder(
     if len(data) < 2:
         return False
 
+    if number_of_data_points is None:
+        number_of_data_points = len(data)
+    elif number_of_data_points < 2:
+        raise PyIndicatorException(
+            "The number of data points must be greater or equal than 2 for"
+            " crossover detection."
+        )
+
     if crossunder_column is None:
         crossunder_column = f"{first_column}_crossunder_{second_column}"
         data = crossunder(
@@ -73,9 +87,6 @@ def is_crossunder(
             number_of_data_points=number_of_data_points,
             strict=strict
         )
-
-    if number_of_data_points is None:
-        number_of_data_points = len(data)
 
     if isinstance(data, PdDataFrame):
         return data[crossunder_column].tail(number_of_data_points)\

@@ -35,6 +35,13 @@ def crossover(
 
     # Restrict data to the last `data_points` rows if specified
     if number_of_data_points is not None:
+
+        if number_of_data_points < 2:
+            raise PyIndicatorException(
+                "The number of data points must be greater or equal than 2 for"
+                " crossover detection."
+            )
+
         data = data.tail(number_of_data_points) \
             if isinstance(data, PdDataFrame) \
             else data.slice(-number_of_data_points)
@@ -100,6 +107,14 @@ def is_crossover(
     if len(data) < 2:
         return False
 
+    if number_of_data_points is None:
+        number_of_data_points = len(data)
+    elif number_of_data_points < 2:
+        raise PyIndicatorException(
+            "The number of data points must be greater or equal than 2 for"
+            " crossover detection."
+        )
+
     if crossover_column is None:
         crossover_column = f"{first_column}_crossover_{second_column}"
         data = crossover(
@@ -110,9 +125,6 @@ def is_crossover(
             number_of_data_points=number_of_data_points,
             strict=strict
         )
-
-    if number_of_data_points is None:
-        number_of_data_points = len(data)
 
     # If crossunder_column is set, check for a value of 1
     # in the last data points
