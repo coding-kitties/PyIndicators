@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyindicators"
-version = "v0.5.3"
+version = "v0.5.4"
 description = "PyIndicators is a powerful and user-friendly Python library for technical analysis indicators and metrics. Written entirely in Python, it requires no external dependencies, ensuring seamless integration and ease of use."
 authors = ["Marc van Duyn"]
 readme = "README.md"
