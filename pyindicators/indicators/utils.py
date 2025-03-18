@@ -1,3 +1,4 @@
+from typing import Union
 import polars as pl
 from scipy.signal import argrelextrema
 from collections import deque
@@ -405,7 +406,7 @@ def is_divergence(
 
 
 def is_lower_low_detected(
-        data: pd.DataFrame, column: str, number_of_data_points=1
+    data: pd.DataFrame, column: str, number_of_data_points=1
 ) -> bool:
     """
     Function to check if a lower low is detected in the data. A lower
@@ -431,6 +432,423 @@ def is_lower_low_detected(
 
     for item in selected_column:
         if item == -1:
+            return True
+
+    return False
+
+
+def is_below(
+    data: Union[pl.DataFrame, pd.DataFrame],
+    first_column: str,
+    second_column: str
+) -> bool:
+    """
+    Check if the first key is below the second key.
+
+    Parameters:
+        data: Union[pl.DataFrame, pd.DataFrame] - The data to check.
+        first_column: str - The first key.
+        second_column: str - The second key.
+
+    Returns:
+        bool - True if the first key is below the second key.
+    """
+
+    if isinstance(data, pl.DataFrame):
+        return data[first_column].to_numpy()[-1] < \
+            data[second_column].to_numpy()[-1]
+    else:
+        return data[first_column].iloc[-1] < data[second_column].iloc[-1]
+
+
+def is_above(
+    data: Union[pl.DataFrame, pd.DataFrame],
+    first_column: str,
+    second_column: str
+) -> bool:
+    """
+    Check if the first key is above the second key.
+
+    Parameters:
+        data: Union[pl.DataFrame, pd.DataFrame] - The data to check.
+        first_column: str - The first key.
+        second_column: str - The second key.
+
+    Returns:
+        bool - True if the first key is above the second key.
+    """
+
+    if isinstance(data, pl.DataFrame):
+        return data[first_column].to_numpy()[-1] > \
+            data[second_column].to_numpy()[-1]
+    else:
+        return data[first_column].iloc[-1] > data[second_column].iloc[-1]
+
+
+def has_any_lower_then_threshold(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    column,
+    threshold,
+    strict=True,
+    number_of_data_points=1
+) -> bool:
+    """
+    Check if the given column has reached the threshold with a given
+    number of data points.
+
+    Parameters:
+        data: DataFrame - The data to check.
+        column: str - The column to check.
+        threshold: float - The threshold to check.
+        strict: bool - Whether to check for a strict crossover downward.
+        number_of_data_points: int - The number of data points to consider
+            for the threshold. Default is 1.
+
+    Returns:
+        bool - True if the column has reached the threshold by having a
+            value lower then the threshold.
+    """
+    if len(data) < number_of_data_points:
+        return False
+
+    selected_data = data[-number_of_data_points:]
+
+    # Check if any of the values in the column are lower or
+    # equal than the threshold
+    if strict:
+        return (selected_data[column] < threshold).any()
+
+    return (selected_data[column] <= threshold).any()
+
+
+def has_any_higher_then_threshold(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    column,
+    threshold,
+    strict=True,
+    number_of_data_points=1
+) -> bool:
+    """
+    Check if the given column has reached the threshold with a given
+    number of data points.
+
+    Parameters:
+        data: DataFrame - The data to check.
+        column: str - The column to check.
+        threshold: float - The threshold to check.
+        strict: bool - Whether to check for a strict crossover upward.
+        number_of_data_points: int - The number of data points to consider
+            for the threshold. Default is 1.
+
+    Returns:
+        bool - True if the column has reached the threshold by
+          having a value higher then the threshold.
+    """
+    if len(data) < number_of_data_points:
+        return False
+
+    selected_data = data[-number_of_data_points:]
+
+    # Check if any of the values in the column are
+    # higher or equal than the threshold
+    if strict:
+        return (selected_data[column] > threshold).any()
+
+    return (selected_data[column] >= threshold).any()
+
+
+def get_slope(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    column,
+    number_of_data_points=10
+) -> float:
+    """
+    Function to get the slope of the given column for
+      the last n data points using linear regression.
+
+    Parameters:
+        data: DataFrame - The data to check.
+        column: str - The column to check.
+        number_of_data_points: int - The number of data points
+            to consider for the slope. Default is 10.
+
+    Returns:
+        float - The slope of the given column for the last n data points.
+    """
+
+    if len(data) < number_of_data_points or number_of_data_points < 2:
+        return 0.0
+
+    index = -(number_of_data_points)
+
+    # Select the first n data points from the column
+    selected_data = data[column].iloc[index:].values
+
+    # Create an array of x-values (0, 1, 2, ..., number_of_data_points-1)
+    x_values = np.arange(number_of_data_points)
+
+    # Use numpy's polyfit to get the slope of the best-fit
+    # line (degree 1 for linear fit)
+    slope, _ = np.polyfit(x_values, selected_data, 1)
+
+    return slope
+
+
+def has_slope_above_threshold(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    column: str,
+    threshold,
+    number_of_data_points=10,
+    window_size=10
+) -> bool:
+    """
+    Check if the slope of the given column is greater than the
+      threshold for the last n data points. If the
+    slope is not greater than the threshold for the last n
+      data points, then the function will check the slope
+    for the last n-1 data points and so on until
+      we reach the window size.
+
+    Parameters:
+        data: DataFrame - The data to check.
+        column: str - The column to check.
+        threshold: float - The threshold to check.
+        number_of_data_points: int - The number of data points
+          to consider for the slope. Default is 10.
+        window_size: int - The window size to consider
+          for the slope. Default is 10.
+
+    Returns:
+        bool - True if the slope of the given column is greater
+          than the threshold for the last n data points.
+    """
+
+    if len(data) < number_of_data_points:
+        return False
+
+    if number_of_data_points < window_size:
+        raise ValueError(
+            "The number of data points should be larger or equal" +
+            " to the window size."
+        )
+
+    if window_size < number_of_data_points:
+        difference = number_of_data_points - window_size
+    else:
+        slope = get_slope(data, column, number_of_data_points)
+        return slope > threshold
+
+    index = -(window_size)
+    count = 0
+
+    # Loop over sliding windows that shrink from the beginning
+    while count <= difference:
+
+        if count == 0:
+            selected_window = data.iloc[index:]
+        else:
+            selected_window = data.iloc[index:-count]
+
+        count += 1
+        index -= 1
+
+        # Calculate the slope of the window with the given number of points
+        slope = get_slope(selected_window, column, window_size)
+
+        if slope > threshold:
+            return True
+
+    return False
+
+
+def has_slope_below_threshold(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    column: str,
+    threshold,
+    number_of_data_points=10,
+    window_size=10
+) -> bool:
+    """
+    Check if the slope of the given column is lower than the
+      threshold for the last n data points. If the
+    slope is not lower than the threshold for the
+      last n data points, then the function will check the slope
+    for the last n-1 data points and
+      so on until we reach the window size.
+
+    Parameters:
+        data: Union[pd.DataFrame, pl.DataFrame] - The data to check.
+        column: str - The column to check.
+        threshold: float - The threshold to check.
+        number_of_data_points: int - The number of data points
+          to consider for the slope. Default is 10.
+        window_size: int - The window size to consider
+          for the slope. Default is 10.
+
+    Returns:
+        bool - True if the slope of the given column is
+          lower than the threshold for the last n data points.
+    """
+
+    if len(data) < number_of_data_points:
+        return False
+
+    if number_of_data_points > window_size:
+        raise ValueError(
+            "The number of data points should be less than the window size."
+        )
+
+    if window_size > number_of_data_points:
+        difference = window_size - number_of_data_points
+    else:
+        slope = get_slope(data, column, number_of_data_points)
+        return slope < threshold
+
+    index = -(number_of_data_points)
+    count = 0
+
+    # Loop over sliding windows that shrink from the beginning
+    while count <= difference:
+
+        if count == 0:
+            selected_window = data.iloc[index:]
+        else:
+            selected_window = data.iloc[index:-count]
+
+        count += 1
+        index -= 1
+
+        # Calculate the slope of the window with the given number of points
+        slope = get_slope(selected_window, column, number_of_data_points)
+
+        if slope < threshold:
+            return True
+
+    return False
+
+
+def has_values_above_threshold(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    column,
+    threshold,
+    number_of_data_points,
+    proportion=100,
+    window_size=None,
+    strict=True
+) -> bool:
+    """
+    Detect if the last N data points in a column are above a certain threshold.
+
+    Parameters:
+        data: Union[pd.DataFrame, pl.DataFrame] - The data to check.
+        column: str, the column containing the values to analyze
+        threshold: float, the threshold for values
+        number_of_data_points: int, the number of recent data points to analyze
+        proportion: float, the required proportion of values
+            below the  threshold
+        window_size: int, the number of data points to consider
+            for the threshold
+        strict: bool, whether to check for a strict comparison
+
+    Returns:
+        bool: True if the last N data points are above
+            the threshold, False otherwise
+    """
+    if window_size is not None and window_size < number_of_data_points:
+        difference = number_of_data_points - window_size
+        count = 0
+    else:
+        difference = 1
+        window_size = number_of_data_points
+        count = 1
+
+    index = -(window_size)
+    proportion = proportion / 100
+
+    # Loop over sliding windows that shrink from the beginning
+    while count <= difference:
+
+        if count == 0:
+            selected_window = data[column].iloc[index:]
+        else:
+            selected_window = data[column].iloc[index:-count]
+
+        count += 1
+        index -= 1
+
+        # Calculate the proportion of values below the threshold
+        if strict:
+            above_threshold = selected_window > threshold
+        else:
+            above_threshold = selected_window >= threshold
+
+        proportion_above = above_threshold.mean()
+
+        if proportion_above >= proportion:
+            return True
+
+    return False
+
+
+def has_values_below_threshold(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    column,
+    threshold,
+    number_of_data_points,
+    proportion=100,
+    window_size=None,
+    strict=True
+) -> bool:
+    """
+    Detect if the last N data points in a column are below a certain threshold.
+
+    Parameters:
+        data: Union[pd.DataFrame, pl.DataFrame], the data to check
+        column: str, the column containing the values to analyze
+        threshold: float, the threshold for "low" values
+        number_of_data_points: int, the number of recent
+            data points to analyze
+        proportion: float, the required proportion of values
+            below the threshold
+        window_size: int, the number of data points to
+            consider for the threshold
+        strict: bool, whether to check for a strict comparison
+
+    Returns:
+        bool: True if the last N data points are below
+            the threshold, False otherwise
+    """
+    if window_size is not None and window_size < number_of_data_points:
+        difference = number_of_data_points - window_size
+        count = 0
+    else:
+        difference = 1
+        window_size = number_of_data_points
+
+    count = 0
+    index = -(window_size)
+    proportion = proportion / 100
+
+    # Loop over sliding windows that shrink from the beginning
+    while count <= difference:
+
+        if count == 0:
+            selected_window = data[column].iloc[index:]
+        else:
+            selected_window = data[column].iloc[index:-count]
+
+        count += 1
+        index -= 1
+
+        # Calculate the proportion of values below the threshold
+        if strict:
+            below_threshold = selected_window < threshold
+        else:
+            below_threshold = selected_window <= threshold
+
+        proportion_below = below_threshold.mean()
+
+        if proportion_below >= proportion:
             return True
 
     return False

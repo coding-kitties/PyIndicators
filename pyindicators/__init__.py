@@ -1,5 +1,9 @@
 from .indicators import sma, rsi, ema, wilders_rsi, adx, \
-    crossover, is_crossover, wma, macd, willr, is_crossunder, crossunder
+    crossover, is_crossover, wma, macd, willr, is_crossunder, crossunder, \
+    get_peaks, is_divergence, is_lower_low_detected, \
+    is_below, is_above, get_slope, has_any_higher_then_threshold, \
+    has_slope_above_threshold, has_any_lower_then_threshold, \
+    has_values_above_threshold, has_values_below_threshold
 
 __all__ = [
     'sma',
@@ -15,4 +19,15 @@ __all__ = [
     'macd',
     'willr',
     'adx',
+    'get_peaks',
+    'is_divergence',
+    'is_lower_low_detected',
+    'is_below',
+    'is_above',
+    'get_slope',
+    'has_any_higher_then_threshold',
+    'has_slope_above_threshold',
+    'has_any_lower_then_threshold',
+    'has_values_above_threshold',
+    'has_values_below_threshold',
 ]
