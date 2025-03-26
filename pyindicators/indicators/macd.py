@@ -57,8 +57,9 @@ def macd(
 
         # Calculate the MACD line
         data[macd_column] = \
-            data[f"EMA_MACD_TEMP_{short_period}"] \
-                - data[f"EMA_MACD_TEMP_{long_period}"]
+            data[
+                f"EMA_MACD_TEMP_{short_period}"
+            ] - data[f"EMA_MACD_TEMP_{long_period}"]
 
         # Calculate the Signal Line
         data = ema(data, macd_column, signal_period, signal_column)
@@ -94,9 +95,8 @@ def macd(
         data = data.with_columns(
             (
                 pl.col(
-                    f"EMA_MACD_TEMP_{short_period}")
-                    - pl.col(f"EMA_MACD_TEMP_{long_period}"
-                )
+                    f"EMA_MACD_TEMP_{short_period}"
+                ) - pl.col(f"EMA_MACD_TEMP_{long_period}")
             ).alias(macd_column)
         )
 
