@@ -12,9 +12,9 @@ def adx(
     high_column="High",
     low_column="Low",
     close_column="Close",
-    result_adx_column="ADX",
-    result_pdi_column="+DI",
-    result_ndi_column="-DI",
+    result_adx_column="adx",
+    result_pdi_column="+di",
+    result_ndi_column="-di",
 ) -> Union[pd.DataFrame, pl.DataFrame]:
     """
     Calculate the Average Directional Index (ADX) for a given DataFrame.

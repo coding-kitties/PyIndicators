@@ -26,7 +26,7 @@ def rsi(
     """
 
     if result_column is None:
-        result_column = f"RSI_{period}"
+        result_column = f"rsi_{period}"
 
     if isinstance(data, pd.DataFrame):
         # Compute price changes
@@ -98,7 +98,7 @@ def wilders_rsi(
     """
 
     if result_column is None:
-        result_column = f"RSI_{period}"
+        result_column = f"rsi_{period}"
 
     if isinstance(data, pd.DataFrame):
         delta = data[source_column].diff()

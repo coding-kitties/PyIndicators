@@ -7,7 +7,7 @@ from pyindicators.exceptions import PyIndicatorException
 def willr(
     data: Union[pd.DataFrame, pl.DataFrame],
     period: int = 14,
-    result_column: str = "WILLR",
+    result_column: str = "willr",
     high_column: str = "High",
     low_column: str = "Low",
     close_column: str = "Close"

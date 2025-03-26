@@ -48,12 +48,17 @@ def macd(
 
     if isinstance(data, PdDataFrame):
         # Calculate the short-term and long-term EMAs
-        data = ema(data, source_column, short_period, f"EMA_{short_period}")
-        data = ema(data, source_column, long_period, f"EMA_{long_period}")
+        data = ema(
+            data, source_column, short_period, f"EMA_MACD_TEMP_{short_period}"
+        )
+        data = ema(
+            data, source_column, long_period, f"EMA_MACD_TEMP_{long_period}"
+        )
 
         # Calculate the MACD line
         data[macd_column] = \
-            data[f"EMA_{short_period}"] - data[f"EMA_{long_period}"]
+            data[f"EMA_MACD_TEMP_{short_period}"] \
+                - data[f"EMA_MACD_TEMP_{long_period}"]
 
         # Calculate the Signal Line
         data = ema(data, macd_column, signal_period, signal_column)
@@ -62,7 +67,12 @@ def macd(
         data[histogram_column] = data[macd_column] - data[signal_column]
 
         # Delete the temporary EMA columns
-        data = data.drop(columns=[f"EMA_{short_period}", f"EMA_{long_period}"])
+        data = data.drop(
+            columns=[
+                f"EMA_MACD_TEMP_{short_period}",
+                f"EMA_MACD_TEMP_{long_period}"
+            ]
+        )
         return data
     elif isinstance(data, pl.DataFrame):
         # Polars implementation
@@ -71,19 +81,22 @@ def macd(
                 data,
                 source_column,
                 short_period,
-                f"EMA_{short_period}"
-            )[f"EMA_{short_period}"],
+                f"EMA_MACD_TEMP_{short_period}"
+            )[f"EMA_MACD_TEMP_{short_period}"],
             ema(
                 data,
                 source_column,
                 long_period,
-                f"EMA_{long_period}"
-            )[f"EMA_{long_period}"]
+                f"EMA_MACD_TEMP_{long_period}"
+            )[f"EMA_MACD_TEMP_{long_period}"]
         ])
 
         data = data.with_columns(
             (
-                pl.col(f"EMA_{short_period}") - pl.col(f"EMA_{long_period}")
+                pl.col(
+                    f"EMA_MACD_TEMP_{short_period}")
+                    - pl.col(f"EMA_MACD_TEMP_{long_period}"
+                )
             ).alias(macd_column)
         )
 
@@ -98,7 +111,12 @@ def macd(
         )
 
         # Delete the temporary EMA columns
-        data = data.drop([f"EMA_{short_period}", f"EMA_{long_period}"])
+        data = data.drop(
+            [
+                f"EMA_MACD_TEMP_{short_period}",
+                f"EMA_MACD_TEMP_{long_period}"
+            ]
+        )
         return data
     else:
         raise PyIndicatorException(

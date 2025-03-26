@@ -15,7 +15,7 @@ class Test(TestBaseline):
         polars_source_df = rsi(
             data=polars_source_df,
             period=14,
-            result_column="RSI_14",
+            result_column="rsi_14",
             source_column="Close"
         )
         return polars_source_df
@@ -24,7 +24,7 @@ class Test(TestBaseline):
         pandas_source_df = rsi(
             data=pandas_source_df,
             period=14,
-            result_column="RSI_14",
+            result_column="rsi_14",
             source_column="Close"
         )
         return pandas_source_df

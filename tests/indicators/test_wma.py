@@ -15,7 +15,6 @@ class Test(TestBaseline):
         polars_source_df = wma(
             data=polars_source_df,
             period=200,
-            result_column="WMA_200",
             source_column="Close"
         )
         return polars_source_df
@@ -24,7 +23,6 @@ class Test(TestBaseline):
         pandas_source_df = wma(
             data=pandas_source_df,
             period=200,
-            result_column="WMA_200",
             source_column="Close"
         )
         return pandas_source_df
@@ -52,7 +50,7 @@ class Test(TestBaseline):
         # Load the correct output in a polars dataframe
         correct_output_pl = pl.read_csv(
             self.get_correct_output_csv_path(),
-            schema_overrides={"WMA_200": pl.Float64}
+            schema_overrides={"wma_200": pl.Float64}
         )
 
         # Load the source in a polars dataframe

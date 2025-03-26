@@ -34,7 +34,7 @@ def ema(
         )
 
     if result_column is None:
-        result_column = f"EMA_{source_column}_{period}"
+        result_column = f"ema_{source_column}_{period}"
 
     if isinstance(data, PdDataFrame):
         data[result_column] = data[source_column]\

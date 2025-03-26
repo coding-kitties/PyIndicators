@@ -15,7 +15,7 @@ class Test(TestBaseline):
         polars_source_df = ema(
             data=polars_source_df,
             period=200,
-            result_column="EMA_200",
+            result_column="ema_200",
             source_column="Close"
         )
         return polars_source_df
@@ -24,7 +24,7 @@ class Test(TestBaseline):
         pandas_source_df = ema(
             data=pandas_source_df,
             period=200,
-            result_column="EMA_200",
+            result_column="ema_200",
             source_column="Close"
         )
         return pandas_source_df

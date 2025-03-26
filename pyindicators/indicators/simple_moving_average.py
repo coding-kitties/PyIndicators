@@ -33,7 +33,7 @@ def sma(
         )
 
     if result_column is None:
-        result_column = f"SMA_{source_column}_{period}"
+        result_column = f"sma_{source_column}_{period}"
 
     if isinstance(data, PdDataFrame):
         data[result_column] = data[source_column].rolling(window=period).mean()

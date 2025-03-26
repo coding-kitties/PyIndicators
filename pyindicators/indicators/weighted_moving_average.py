@@ -36,7 +36,7 @@ def wma(
             f"only contains {len(data)} data points."
         )
     if result_column is None:
-        result_column = f"WMA_{period}"
+        result_column = f"wma_{period}"
 
     weights = np.arange(1, period + 1)
 
