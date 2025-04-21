@@ -1,387 +1,249 @@
-import pandas as pd
-import polars as pl
 from typing import Union
+import numpy as np
+
+from pandas import DataFrame as PdDataFrame
+from polars import DataFrame as PlDataFrame
+import polars as pl
+import pandas as pd
+
 from pyindicators.exceptions import PyIndicatorException
 
 from .utils import pad_zero_values_pandas, pad_zero_values_polars
 
 
+def polars_ewm_mean_via_pandas(column: pl.Series, alpha: float) -> pl.Series:
+    pd_series = pd.Series(column.to_numpy())
+    ewm_result = pd_series.ewm(alpha=alpha, adjust=False).mean()
+    return pl.Series(name=column.name, values=ewm_result.to_numpy())
+
+
+def calculate_adx_pandas(
+    data: PdDataFrame,
+    period: int,
+    adx_result_column: str = "ADX",
+    di_plus_result_column: str = "+DI",
+    di_minus_result_column: str = "-DI",
+) -> PdDataFrame:
+    alpha = 1/period
+    copy_df = data.copy()
+
+    # TR
+    copy_df['H-L'] = copy_df['High'] - copy_df['Low']
+    copy_df['H-C'] = np.abs(copy_df['High'] - copy_df['Close'].shift(1))
+    copy_df['L-C'] = np.abs(copy_df['Low'] - copy_df['Close'].shift(1))
+    copy_df['TR'] = copy_df[['H-L', 'H-C', 'L-C']].max(axis=1)
+    del copy_df['H-L'], copy_df['H-C'], copy_df['L-C']
+
+    # Average True Range (ATR)
+    copy_df['ATR'] = copy_df['TR'].ewm(alpha=alpha, adjust=False).mean()
+
+    # +-DX calculation
+    copy_df['H-pH'] = copy_df['High'] - copy_df['High'].shift(1)
+    copy_df['pL-L'] = copy_df['Low'].shift(1) - copy_df['Low']
+    copy_df['+DI'] = np.where(
+        (copy_df['H-pH'] > copy_df['pL-L']) & (copy_df['H-pH']>0),
+        copy_df['H-pH'],
+        0.0
+    )
+    copy_df['-DI'] = np.where(
+        (copy_df['H-pH'] < copy_df['pL-L']) & (copy_df['pL-L']>0),
+        copy_df['pL-L'],
+        0.0
+    )
+    del copy_df['H-pH'], copy_df['pL-L']
+
+    # +- DMI
+    copy_df['S+DM'] = copy_df['+DI'].ewm(alpha=alpha, adjust=False).mean()
+    copy_df['S-DM'] = copy_df['-DI'].ewm(alpha=alpha, adjust=False).mean()
+    copy_df['+DMI'] = (copy_df['S+DM']/copy_df['ATR'])*100
+    copy_df['-DMI'] = (copy_df['S-DM']/copy_df['ATR'])*100
+    del copy_df['S+DM'], copy_df['S-DM']
+
+    # ADX
+    copy_df['DX'] = (np.abs(copy_df['+DMI'] - copy_df['-DMI'])/(copy_df['+DMI'] + copy_df['-DMI']))*100
+    copy_df['ADX'] = copy_df['DX'].ewm(alpha=alpha, adjust=False).mean()
+    del copy_df['DX'], copy_df['ATR'], copy_df['TR']
+    copy_df = pad_zero_values_pandas(
+        data=copy_df,
+        column="+DMI",
+        period=period,
+    )
+
+    copy_df = pad_zero_values_pandas(
+        data=copy_df,
+        column="-DMI",
+        period=period,
+    )
+    copy_df = pad_zero_values_pandas(
+        data=copy_df,
+        column="ADX",
+        period=period,
+    )
+
+    # Add the ADX column to the original DataFrame
+    data[adx_result_column] = copy_df['ADX']
+    data[di_plus_result_column] = copy_df['+DMI']
+    data[di_minus_result_column] = copy_df['-DMI']
+    return data
+
+
 def adx(
-    data: Union[pd.DataFrame, pl.DataFrame],
+    data: Union[PdDataFrame, PlDataFrame],
     period=14,
-    high_column="High",
-    low_column="Low",
-    close_column="Close",
-    result_adx_column="adx",
-    result_pdi_column="+di",
-    result_ndi_column="-di",
-) -> Union[pd.DataFrame, pl.DataFrame]:
+    adx_result_column="ADX",
+    di_plus_result_column="+DI",
+    di_minus_result_column="-DI",
+) -> Union[PdDataFrame, PlDataFrame]:
     """
-    Calculate the Average Directional Index (ADX) for a given DataFrame.
+    Calculate the Average Directional Index (ADX) along with the
+    +DI and -DI indicators.
+    The ADX is a trend strength indicator that ranges from 0 to 100.
+    The +DI and -DI indicators are used to identify the direction
+    of the trend.
+
+    The following columns are required in the input DataFrame:
+    - 'High': High prices
+    - 'Low': Low prices
+    - 'Close': Close prices
+    The output DataFrame will contain the following columns:
+    - 'ADX': Average Directional Index
+    - '+DI': Positive Directional Indicator
+    - '-DI': Negative Directional Indicator
 
     Args:
-        data (Union[pd.DataFrame, pl.DataFrame]): Input data containing
-            the price series.
+        data: Pandas or Polars DataFrame
         period (int, optional): Period for the ADX calculation (default: 14).
-        high_column (str, optional): Column name for the high price series.
-        low_column (str, optional): Column name for the low price series.
-        close_column (str, optional): Column name for the close price series.
-        result_adx_column (str, optional): Column name to store the ADX.
-        result_pdi_column (str, optional): Column name to store the +DI.
-        result_ndi_column (str, optional): Column name to store the -DI.
+        adx_result_column (str, optional): Name of the column to store
+            the ADX values (default: "ADX").
+        di_plus_result_column (str, optional): Name of the column to
+            store the +DI values (default: "+DI").
+        di_minus_result_column (str, optional): Name of the column to
+            store the -DI values (default: "-DI").
 
     Returns:
-        Union[pd.DataFrame, pl.DataFrame]: DataFrame with ADX, +DI, and -DI.
+        Union[Pandas Dataframe, Polars Dataframe]: DataFrame with ADX,
+        +DI, and -DI columns.
     """
 
-    # Check if the high, low, and close columns are in the DataFrame
-    if high_column not in data.columns:
+    # Check if the input DataFrame has the required columns
+    required_columns = ['High', 'Low', 'Close']
+
+    if not all(col in data.columns for col in required_columns):
         raise PyIndicatorException(
-            f"Column '{high_column}' not found in DataFrame"
+            f"Input DataFrame must contain the following columns: {required_columns}"
         )
 
-    if low_column not in data.columns:
+    if len(data) < period:
         raise PyIndicatorException(
-            f"Column '{low_column}' not found in DataFrame"
+            "The data must be larger than the period " +
+            f"{period} to calculate the EMA. The data " +
+            f"only contains {len(data)} data points."
         )
 
-    if close_column not in data.columns:
-        raise PyIndicatorException(
-            f"Column '{close_column}' not found in DataFrame"
+    # Pandas implementation
+    if isinstance(data, PdDataFrame):
+        data = calculate_adx_pandas(
+            data=data,
+            period=period,
+            adx_result_column=adx_result_column,
+            di_plus_result_column=di_plus_result_column,
+            di_minus_result_column=di_minus_result_column
         )
-
-    if isinstance(data, pd.DataFrame):
-        # Pandas version of the ADX calculation
-        high = data[high_column]
-        low = data[low_column]
-        close = data[close_column]
-
-        # Calculate True Range (TR)
-        tr = pd.DataFrame({
-            'TR': pd.concat([
-                high - low,
-                (high - close.shift(1)).abs(),
-                (low - close.shift(1)).abs()
-            ], axis=1).max(axis=1)
-        })
-
-        # Calculate Directional Movement (+DM and -DM)
-        plus_dm = pd.DataFrame(
-            {'+DM': (high.diff() > low.diff()).astype(int)
-                * (high.diff().clip(lower=0))}
-        )
-        minus_dm = pd.DataFrame(
-            {'-DM': (low.diff() > high.diff()).astype(int)
-                * (-low.diff().clip(upper=0))}
-        )
-
-        # Smooth the TR, +DM, and -DM over the period
-        tr_smooth = tr['TR'].rolling(window=period).mean()
-        plus_dm_smooth = plus_dm['+DM'].rolling(window=period).mean()
-        minus_dm_smooth = minus_dm['-DM'].rolling(window=period).mean()
-
-        # Calculate +DI and -DI
-        pdi = 100 * (plus_dm_smooth / tr_smooth)
-        ndi = 100 * (minus_dm_smooth / tr_smooth)
-
-        # Smooth the difference to get ADX
-        adx = pd.DataFrame({
-            result_adx_column: (pdi - ndi).abs().rolling(window=period).mean()
-        })
-
-        # Add columns to the original dataframe
-        data[result_adx_column] = adx
-        data[result_pdi_column] = pdi
-        data[result_ndi_column] = ndi
-
-        pad_zero_values_pandas(data, result_adx_column, period)
-        pad_zero_values_pandas(data, result_pdi_column, period - 1)
-        pad_zero_values_pandas(data, result_ndi_column, period - 1)
-        return data
-
-    elif isinstance(data, pl.DataFrame):
-        # Polars version of the ADX calculation
-        high = data[high_column]
-        low = data[low_column]
-        close = data[close_column]
-
-        # Calculate True Range (TR)
-        tr = pl.max_horizontal([
-            high - low,
-            (high - close.shift(1)).abs(),
-            (low - close.shift(1)).abs()
-        ])
-
-        # Calculate Directional Movement (+DM and -DM)
-        plus_dm = high.diff().clip_min(0)
-        minus_dm = (-low.diff()).clip_min(0).abs()
-
-        # Smooth the TR, +DM, and -DM over the period
-        # (use rolling sum, not mean)
-        tr_smooth = tr.rolling_sum(window_size=period, min_periods=1)
-        plus_dm_smooth = plus_dm.rolling_sum(window_size=period, min_periods=1)
-        minus_dm_smooth = minus_dm.rolling_sum(
-            window_size=period, min_periods=1
-        )
-
-        # Calculate +DI and -DI
-        pdi = 100 * (plus_dm_smooth / tr_smooth)
-        ndi = 100 * (minus_dm_smooth / tr_smooth)
-
-        # Calculate ADX (average of the absolute difference
-        # between +DI and -DI)
-
-        di_diff = (pdi - ndi).abs()
-        # Smooth the difference to get ADX
-        adx = di_diff.rolling_mean(window_size=period)
-
-        # Add columns to the original dataframe
-        data = data.with_columns([
-            adx.alias(result_adx_column),
-            pdi.alias(result_pdi_column),
-            ndi.alias(result_ndi_column)
-        ])
-
-        # Pad the first `period` rows with zero values
-        data = pad_zero_values_polars(data, result_adx_column, period)
-        data = pad_zero_values_polars(data, result_pdi_column, period - 1)
-        data = pad_zero_values_polars(data, result_ndi_column, period - 1)
-
         return data
     else:
-        raise PyIndicatorException(
-            "Input data must be either a pandas or polars DataFrame."
+
+        # The following code is commented out because it is does
+        # not give the same result as the Pandas implementation.
+        # Therefore for now we only use the Pandas implementation.
+
+        # convert the Polars DataFrame to a Pandas DataFrame
+        data = data.to_pandas()
+        data = calculate_adx_pandas(
+            data=data,
+            period=period,
+            adx_result_column=adx_result_column,
+            di_plus_result_column=di_plus_result_column,
+            di_minus_result_column=di_minus_result_column
         )
 
-
-def adx_v2(
-    data: Union[pd.DataFrame, pl.DataFrame],
-    period=14,
-    high_column="High",
-    low_column="Low",
-    close_column="Close",
-    result_adx_column="ADX",
-    result_pdi_column="+DI",
-    result_ndi_column="-DI",
-) -> Union[pd.DataFrame, pl.DataFrame]:
-    """
-    Calculate the Average Directional Index (ADX) using Wilder's smoothing.
-    Matches Tulipy's ADX calculation.
-
-    Args:
-        data: Input DataFrame (Pandas or Polars).
-        period: Period for the ADX calculation (default: 14).
-        high_column, low_column, close_column: Column names for price data.
-            result_adx_column, result_pdi_column,
-            result_ndi_column: Output column names.
-
-    Returns:
-        DataFrame with ADX, +DI, and -DI.
-    """
-    if high_column not in data.columns \
-            or low_column not in data.columns \
-            or close_column not in data.columns:
-        raise PyIndicatorException(
-            "High, Low, or Close column not found in DataFrame."
-        )
-
-    if isinstance(data, pd.DataFrame):
-        # Pandas version
-        high, low, close = data[high_column], data[low_column], \
-            data[close_column]
-
-        tr = pd.concat([
-            high - low,
-            (high - close.shift(1)).abs(),
-            (low - close.shift(1)).abs()
-        ], axis=1).max(axis=1)
-
-        plus_dm = high.diff().clip(lower=0)
-        minus_dm = -low.diff().clip(upper=0)
-
-        # Wilder’s smoothing with EMA
-        tr_smooth = tr.ewm(span=period, adjust=False).mean()
-        plus_dm_smooth = plus_dm.ewm(span=period, adjust=False).mean()
-        minus_dm_smooth = minus_dm.ewm(span=period, adjust=False).mean()
-
-        pdi = 100 * (plus_dm_smooth / tr_smooth)
-        ndi = 100 * (minus_dm_smooth / tr_smooth)
-        adx = (100 * (pdi - ndi).abs().ewm(span=period, adjust=False).mean())
-
-        # Add results to DataFrame
-        data[result_adx_column] = adx
-        data[result_pdi_column] = pdi
-        data[result_ndi_column] = ndi
-
-        # Pad with zeros
-        pad_zero_values_pandas(data, result_adx_column, period)
-        pad_zero_values_pandas(data, result_pdi_column, period - 1)
-        pad_zero_values_pandas(data, result_ndi_column, period - 1)
-
+        # Convert the Pandas DataFrame back to a Polars DataFrame
+        data = pl.from_pandas(data)
         return data
 
-    elif isinstance(data, pl.DataFrame):
-        # Polars version
-        high, low, close = data[high_column], data[low_column], \
-            data[close_column]
+        # copy_df = data.clone()
 
-        tr = pl.max_horizontal([
-            high - low,
-            (high - close.shift(1)).abs(),
-            (low - close.shift(1)).abs()
-        ])
+        # # True Range (TR)
+        # copy_df = copy_df.with_columns([
+        #     (pl.col("High") - pl.col("Low")).alias("H-L"),
+        #     (pl.col("High") - pl.col("Close").shift(1).fill_null(0)).abs().alias("H-C"),
+        #     (pl.col("Low") - pl.col("Close").shift(1).fill_null(0)).abs().alias("L-C")
+        # ])
 
-        plus_dm = high.diff().clip_min(0)
-        minus_dm = (-low.diff()).clip_min(0).abs()
+        # copy_df = copy_df.with_columns([
+        #     pl.col("H-L").fill_null(0).alias("H-L"),
+        #     pl.col("H-C").fill_null(0).alias("H-C"),
+        #     pl.col("L-C").fill_null(0).alias("L-C")
+        # ])
 
-        # Wilder’s smoothing (manual EMA for Polars)
-        def wilder_ema(series, period):
-            alpha = 1 / period
-            return series.cumsum() * alpha
+        # copy_df = copy_df.with_columns(
+        #     pl.max_horizontal(["H-L", "H-C", "L-C"]).alias("TR")
+        # ).drop(["H-L", "H-C", "L-C"])
 
-        tr_smooth = wilder_ema(tr, period)
-        plus_dm_smooth = wilder_ema(plus_dm, period)
-        minus_dm_smooth = wilder_ema(minus_dm, period)
+        # # ATR using Pandas
+        # copy_df = copy_df.with_columns(
+        #     polars_ewm_mean_via_pandas(copy_df["TR"].fill_nan(0), alpha).alias("ATR")
+        # )
 
-        pdi = 100 * (plus_dm_smooth / tr_smooth)
-        ndi = 100 * (minus_dm_smooth / tr_smooth)
-        adx = (100 * (pdi - ndi).abs()).cumsum() / period
+        # # +-DX calculation
+        # copy_df = copy_df.with_columns([
+        #     (pl.col("High") - pl.col("High").shift(1).fill_null(0)).alias("H-pH"),
+        #     (pl.col("Low").shift(1).fill_null(0) - pl.col("Low")).alias("pL-L")
+        # ])
 
-        # Add results to DataFrame
-        data = data.with_columns([
-            adx.alias(result_adx_column),
-            pdi.alias(result_pdi_column),
-            ndi.alias(result_ndi_column)
-        ])
+        # copy_df = copy_df.with_columns([
+        #     pl.when((pl.col("H-pH") > pl.col("pL-L")) & (pl.col("H-pH") > 0))
+        #     .then(pl.col("H-pH")).otherwise(0.0).alias("+DI"),
+        #     pl.when((pl.col("H-pH") < pl.col("pL-L")) & (pl.col("pL-L") > 0))
+        #     .then(pl.col("pL-L")).otherwise(0.0).alias("-DI")
+        # ]).drop(["H-pH", "pL-L"])
 
-        # Pad with zeros
-        data = pad_zero_values_polars(data, result_adx_column, period)
-        data = pad_zero_values_polars(data, result_pdi_column, period - 1)
-        data = pad_zero_values_polars(data, result_ndi_column, period - 1)
+        # # Smooth DI using Pandas
+        # copy_df = copy_df.with_columns([
+        #     polars_ewm_mean_via_pandas(copy_df["+DI"].fill_nan(0), alpha).alias("S+DM"),
+        #     polars_ewm_mean_via_pandas(copy_df["-DI"].fill_nan(0), alpha).alias("S-DM")
+        # ])
 
-        return data
+        # copy_df = copy_df.with_columns([
+        #     ((pl.col("S+DM") / pl.col("ATR")) * 100).alias("+DMI"),
+        #     ((pl.col("S-DM") / pl.col("ATR")) * 100).alias("-DMI")
+        # ]).drop(["S+DM", "S-DM"])
 
-    else:
-        raise PyIndicatorException(
-            "Input data must be either a pandas or polars DataFrame."
-        )
+        # # ADX
+        # copy_df = copy_df.with_columns(
+        #     pl.when((pl.col("+DMI") + pl.col("-DMI")) > 0)
+        #     .then(((pl.col("+DMI") - pl.col("-DMI")).abs()) / (pl.col("+DMI") + pl.col("-DMI")) * 100)
+        #     .otherwise(0.0).alias("DX")
+        # )
 
+        # copy_df = copy_df.with_columns(
+        #     polars_ewm_mean_via_pandas(copy_df["DX"].fill_nan(0), alpha).alias("ADX")
+        # ).drop(["DX", "ATR", "TR"])
 
-def di(
-    data: Union[pd.DataFrame, pl.DataFrame],
-    period=14,
-    high_column="High",
-    low_column="Low",
-    close_column="Close",
-    result_pdi_column="+DI",
-    result_ndi_column="-DI",
-) -> Union[pd.DataFrame, pl.DataFrame]:
-    """
-    Calculate the +DI and -DI indicators exactly like Tulipy,
-        supporting both Pandas and Polars.
+        # # Fill NaNs
+        # copy_df = copy_df.with_columns([
+        #     pl.col("ADX").fill_nan(0).alias("ADX"),
+        #     pl.col("+DMI").fill_nan(0).alias("+DMI"),
+        #     pl.col("-DMI").fill_nan(0).alias("-DMI")
+        # ])
 
-    Args:
-        data (Union[pd.DataFrame, pl.DataFrame]): Input data
-            containing the price series.
-        period (int, optional): Period for the DI calculation (default: 14).
-        high_column (str, optional): Column name for the high price series.
-        low_column (str, optional): Column name for the low price series.
-        close_column (str, optional): Column name for the close price series.
-        result_pdi_column (str, optional): Column name to store the +DI.
-        result_ndi_column (str, optional): Column name to store the -DI.
+        # # Copy to original
+        # data = data.with_columns([
+        #     copy_df["ADX"].alias(adx_result_column),
+        #     copy_df["+DMI"].alias(di_plus_result_column),
+        #     copy_df["-DMI"].alias(di_minus_result_column)
+        # ])
 
-    Returns:
-        Union[pd.DataFrame, pl.DataFrame]: DataFrame with +DI and -DI.
-    """
-
-    if isinstance(data, pd.DataFrame):
-        high = data[high_column]
-        low = data[low_column]
-        close = data[close_column]
-
-        # True Range
-        tr = pd.concat([
-            high - low,
-            (high - close.shift(1)).abs(),
-            (low - close.shift(1)).abs()
-        ], axis=1).max(axis=1)
-
-        # Directional Movement
-        plus_dm = (
-            (high.diff() > low.shift(1) - low) & (high.diff() > 0)
-        ) * high.diff()
-        minus_dm = (
-            (low.shift(1) - low > high.diff()) & (low.shift(1) - low > 0)
-        ) * (low.shift(1) - low)
-
-        # Smoothed values
-        tr_smooth = tr.rolling(window=period).sum()
-        plus_dm_smooth = plus_dm.rolling(window=period).sum()
-        minus_dm_smooth = minus_dm.rolling(window=period).sum()
-
-        # Calculate +DI and -DI
-        pdi = 100 * (plus_dm_smooth / tr_smooth)
-        ndi = 100 * (minus_dm_smooth / tr_smooth)
-
-        # Add to DataFrame
-        data[result_pdi_column] = pdi
-        data[result_ndi_column] = ndi
-
-        # Pad initial values with zero
-        # (replace NaN values for first `period-1` rows)
-        data[result_pdi_column].iloc[:period-1] = 0
-        data[result_ndi_column].iloc[:period-1] = 0
-
-        return data
-
-    elif isinstance(data, pl.DataFrame):
-        high = data[high_column]
-        low = data[low_column]
-        close = data[close_column]
-
-        # True Range
-        tr = pl.max_horizontal([
-            high - low,
-            (high - close.shift(1)).abs(),
-            (low - close.shift(1)).abs()
-        ])
-
-        # Directional Movement
-        plus_dm = (high.diff() > low.shift(1) - low) & (high.diff() > 0)
-        plus_dm = plus_dm * high.diff()
-
-        minus_dm = (
-            low.shift(1) - low > high.diff()
-        ) & (low.shift(1) - low > 0)
-        minus_dm = minus_dm * (low.shift(1) - low)
-
-        # Smoothed values
-        tr_smooth = tr.rolling_sum(window_size=period)
-        plus_dm_smooth = plus_dm.rolling_sum(window_size=period)
-        minus_dm_smooth = minus_dm.rolling_sum(window_size=period)
-
-        # Calculate +DI and -DI
-        pdi = 100 * (plus_dm_smooth / tr_smooth)
-        ndi = 100 * (minus_dm_smooth / tr_smooth)
-
-        # Add to DataFrame
-        data = data.with_columns([
-            pdi.alias(result_pdi_column),
-            ndi.alias(result_ndi_column)
-        ])
-
-        # Pad initial values with zero
-        # (replace NaN values for first `period-1` rows)
-        data = data.with_columns([
-            pl.when(pl.col(result_pdi_column).is_null()).then(0)
-            .otherwise(pl.col(result_pdi_column)).alias(result_pdi_column),
-            pl.when(pl.col(result_ndi_column).is_null()).then(0)
-            .otherwise(pl.col(result_ndi_column)).alias(result_ndi_column)
-        ])
-
-        return data
-
-    else:
-        raise ValueError(
-            "Input data must be either a pandas or polars DataFrame."
-        )
+        # # Padding zeros
+        # data = pad_zero_values_polars(data, column=di_plus_result_column, period=period)
+        # data = pad_zero_values_polars(data, column=di_minus_result_column, period=period)
+        # data = pad_zero_values_polars(data, column=adx_result_column, period=period)
