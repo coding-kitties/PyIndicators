@@ -40,7 +40,6 @@ def ema(
             "exist in the DataFrame."
         )
 
-
     if result_column is None:
         result_column = f"ema_{source_column}_{period}"
 
