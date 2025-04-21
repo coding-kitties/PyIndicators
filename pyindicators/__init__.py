@@ -6,6 +6,7 @@ from .indicators import sma, rsi, ema, wilders_rsi, adx, \
     has_values_above_threshold, has_values_below_threshold, is_down_trend, \
     is_up_trend
 from .exceptions import PyIndicatorException
+from .date_range import DateRange
 
 __all__ = [
     'sma',
@@ -35,4 +36,5 @@ __all__ = [
     'PyIndicatorException',
     'is_down_trend',
     'is_up_trend',
+    'DateRange',
 ]
