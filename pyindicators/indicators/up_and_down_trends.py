@@ -66,8 +66,8 @@ def up_and_downtrends(
 
         if is_above(
             selected_rows,
-            fast_column="SMA_Close_50",
-            slow_column="SMA_Close_200"
+            first_column="SMA_Close_50",
+            second_column="SMA_Close_200"
         ):
             if current_trend != 'Up':
 
