@@ -7,8 +7,7 @@ import polars as pl
 import pandas as pd
 
 from pyindicators.exceptions import PyIndicatorException
-
-from .utils import pad_zero_values_pandas, pad_zero_values_polars
+from pyindicators.utils import pad_zero_values_pandas
 
 
 def polars_ewm_mean_via_pandas(column: pl.Series, alpha: float) -> pl.Series:
@@ -41,12 +40,12 @@ def calculate_adx_pandas(
     copy_df['H-pH'] = copy_df['High'] - copy_df['High'].shift(1)
     copy_df['pL-L'] = copy_df['Low'].shift(1) - copy_df['Low']
     copy_df['+DI'] = np.where(
-        (copy_df['H-pH'] > copy_df['pL-L']) & (copy_df['H-pH']>0),
+        (copy_df['H-pH'] > copy_df['pL-L']) & (copy_df['H-pH'] > 0),
         copy_df['H-pH'],
         0.0
     )
     copy_df['-DI'] = np.where(
-        (copy_df['H-pH'] < copy_df['pL-L']) & (copy_df['pL-L']>0),
+        (copy_df['H-pH'] < copy_df['pL-L']) & (copy_df['pL-L'] > 0),
         copy_df['pL-L'],
         0.0
     )
@@ -60,7 +59,10 @@ def calculate_adx_pandas(
     del copy_df['S+DM'], copy_df['S-DM']
 
     # ADX
-    copy_df['DX'] = (np.abs(copy_df['+DMI'] - copy_df['-DMI'])/(copy_df['+DMI'] + copy_df['-DMI']))*100
+    copy_df['DX'] = (
+        np.abs(copy_df['+DMI'] - copy_df['-DMI'])/(copy_df['+DMI']
+                                                   + copy_df['-DMI'])
+    )*100
     copy_df['ADX'] = copy_df['DX'].ewm(alpha=alpha, adjust=False).mean()
     del copy_df['DX'], copy_df['ATR'], copy_df['TR']
     copy_df = pad_zero_values_pandas(
@@ -130,7 +132,8 @@ def adx(
 
     if not all(col in data.columns for col in required_columns):
         raise PyIndicatorException(
-            f"Input DataFrame must contain the following columns: {required_columns}"
+            "Input DataFrame must contain the " +
+            f"following columns: {required_columns}"
         )
 
     if len(data) < period:
@@ -172,78 +175,89 @@ def adx(
 
         # copy_df = data.clone()
 
-        # # True Range (TR)
-        # copy_df = copy_df.with_columns([
-        #     (pl.col("High") - pl.col("Low")).alias("H-L"),
-        #     (pl.col("High") - pl.col("Close").shift(1).fill_null(0)).abs().alias("H-C"),
-        #     (pl.col("Low") - pl.col("Close").shift(1).fill_null(0)).abs().alias("L-C")
-        # ])
+    # # True Range (TR)
+    # copy_df = copy_df.with_columns([
+    #     (pl.col("High") - pl.col("Low")).alias("H-L"),
+    #     (pl.col("High") - pl.col("Close").shift(1)
+    # .fill_null(0)).abs().alias("H-C"),
+    #     (pl.col("Low") - pl.col("Close").shift(1)
+    # .fill_null(0)).abs().alias("L-C")
+    # ])
 
-        # copy_df = copy_df.with_columns([
-        #     pl.col("H-L").fill_null(0).alias("H-L"),
-        #     pl.col("H-C").fill_null(0).alias("H-C"),
-        #     pl.col("L-C").fill_null(0).alias("L-C")
-        # ])
+    # copy_df = copy_df.with_columns([
+    #     pl.col("H-L").fill_null(0).alias("H-L"),
+    #     pl.col("H-C").fill_null(0).alias("H-C"),
+    #     pl.col("L-C").fill_null(0).alias("L-C")
+    # ])
 
-        # copy_df = copy_df.with_columns(
-        #     pl.max_horizontal(["H-L", "H-C", "L-C"]).alias("TR")
-        # ).drop(["H-L", "H-C", "L-C"])
+    # copy_df = copy_df.with_columns(
+    #     pl.max_horizontal(["H-L", "H-C", "L-C"]).alias("TR")
+    # ).drop(["H-L", "H-C", "L-C"])
 
-        # # ATR using Pandas
-        # copy_df = copy_df.with_columns(
-        #     polars_ewm_mean_via_pandas(copy_df["TR"].fill_nan(0), alpha).alias("ATR")
-        # )
+    # # ATR using Pandas
+    # copy_df = copy_df.with_columns(
+    #     polars_ewm_mean_via_pandas(copy_df["TR"]
+    # .fill_nan(0), alpha).alias("ATR")
+    # )
 
-        # # +-DX calculation
-        # copy_df = copy_df.with_columns([
-        #     (pl.col("High") - pl.col("High").shift(1).fill_null(0)).alias("H-pH"),
-        #     (pl.col("Low").shift(1).fill_null(0) - pl.col("Low")).alias("pL-L")
-        # ])
+    # # +-DX calculation
+    # copy_df = copy_df.with_columns([
+    #     (pl.col("High") - pl.col("High").shift(1)
+    # .fill_null(0)).alias("H-pH"),
+    #     (pl.col("Low").shift(1).fill_null(0) - pl.col("Low")).alias("pL-L")
+    # ])
 
-        # copy_df = copy_df.with_columns([
-        #     pl.when((pl.col("H-pH") > pl.col("pL-L")) & (pl.col("H-pH") > 0))
-        #     .then(pl.col("H-pH")).otherwise(0.0).alias("+DI"),
-        #     pl.when((pl.col("H-pH") < pl.col("pL-L")) & (pl.col("pL-L") > 0))
-        #     .then(pl.col("pL-L")).otherwise(0.0).alias("-DI")
-        # ]).drop(["H-pH", "pL-L"])
+    # copy_df = copy_df.with_columns([
+    #     pl.when((pl.col("H-pH") > pl.col("pL-L")) & (pl.col("H-pH") > 0))
+    #     .then(pl.col("H-pH")).otherwise(0.0).alias("+DI"),
+    #     pl.when((pl.col("H-pH") < pl.col("pL-L")) & (pl.col("pL-L") > 0))
+    #     .then(pl.col("pL-L")).otherwise(0.0).alias("-DI")
+    # ]).drop(["H-pH", "pL-L"])
 
-        # # Smooth DI using Pandas
-        # copy_df = copy_df.with_columns([
-        #     polars_ewm_mean_via_pandas(copy_df["+DI"].fill_nan(0), alpha).alias("S+DM"),
-        #     polars_ewm_mean_via_pandas(copy_df["-DI"].fill_nan(0), alpha).alias("S-DM")
-        # ])
+    # # Smooth DI using Pandas
+    # copy_df = copy_df.with_columns([
+    #     polars_ewm_mean_via_pandas(copy_df["+DI"]
+    # .fill_nan(0), alpha).alias("S+DM"),
+    #     polars_ewm_mean_via_pandas(copy_df["-DI"]
+    # .fill_nan(0), alpha).alias("S-DM")
+    # ])
 
-        # copy_df = copy_df.with_columns([
-        #     ((pl.col("S+DM") / pl.col("ATR")) * 100).alias("+DMI"),
-        #     ((pl.col("S-DM") / pl.col("ATR")) * 100).alias("-DMI")
-        # ]).drop(["S+DM", "S-DM"])
+    # copy_df = copy_df.with_columns([
+    #     ((pl.col("S+DM") / pl.col("ATR")) * 100).alias("+DMI"),
+    #     ((pl.col("S-DM") / pl.col("ATR")) * 100).alias("-DMI")
+    # ]).drop(["S+DM", "S-DM"])
 
-        # # ADX
-        # copy_df = copy_df.with_columns(
-        #     pl.when((pl.col("+DMI") + pl.col("-DMI")) > 0)
-        #     .then(((pl.col("+DMI") - pl.col("-DMI")).abs()) / (pl.col("+DMI") + pl.col("-DMI")) * 100)
-        #     .otherwise(0.0).alias("DX")
-        # )
+    # # ADX
+    # copy_df = copy_df.with_columns(
+    #     pl.when((pl.col("+DMI") + pl.col("-DMI")) > 0)
+    #     .then(((pl.col("+DMI") - pl.col("-DMI"))
+    # .abs()) / (pl.col("+DMI") + pl.col("-DMI")) * 100)
+    #     .otherwise(0.0).alias("DX")
+    # )
 
-        # copy_df = copy_df.with_columns(
-        #     polars_ewm_mean_via_pandas(copy_df["DX"].fill_nan(0), alpha).alias("ADX")
-        # ).drop(["DX", "ATR", "TR"])
+    # copy_df = copy_df.with_columns(
+    #     polars_ewm_mean_via_pandas(copy_df["DX"]
+    # .fill_nan(0), alpha).alias("ADX")
+    # ).drop(["DX", "ATR", "TR"])
 
-        # # Fill NaNs
-        # copy_df = copy_df.with_columns([
-        #     pl.col("ADX").fill_nan(0).alias("ADX"),
-        #     pl.col("+DMI").fill_nan(0).alias("+DMI"),
-        #     pl.col("-DMI").fill_nan(0).alias("-DMI")
-        # ])
+    # # Fill NaNs
+    # copy_df = copy_df.with_columns([
+    #     pl.col("ADX").fill_nan(0).alias("ADX"),
+    #     pl.col("+DMI").fill_nan(0).alias("+DMI"),
+    #     pl.col("-DMI").fill_nan(0).alias("-DMI")
+    # ])
 
-        # # Copy to original
-        # data = data.with_columns([
-        #     copy_df["ADX"].alias(adx_result_column),
-        #     copy_df["+DMI"].alias(di_plus_result_column),
-        #     copy_df["-DMI"].alias(di_minus_result_column)
-        # ])
+    # # Copy to original
+    # data = data.with_columns([
+    #     copy_df["ADX"].alias(adx_result_column),
+    #     copy_df["+DMI"].alias(di_plus_result_column),
+    #     copy_df["-DMI"].alias(di_minus_result_column)
+    # ])
 
-        # # Padding zeros
-        # data = pad_zero_values_polars(data, column=di_plus_result_column, period=period)
-        # data = pad_zero_values_polars(data, column=di_minus_result_column, period=period)
-        # data = pad_zero_values_polars(data, column=adx_result_column, period=period)
+    # # Padding zeros
+    # data = pad_zero_values_polars(
+    # data, column=di_plus_result_column, period=period)
+    # data = pad_zero_values_polars(
+    # data, column=di_minus_result_column, period=period)
+    # data = pad_zero_values_polars
+    # (data, column=adx_result_column, period=period)
