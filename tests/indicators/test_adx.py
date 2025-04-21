@@ -9,7 +9,7 @@ from pyindicators import adx
 
 class Test(TestBaseline):
     correct_output_csv_filename = \
-        "ADX_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+        "ADX_BTC-EUR_BINANCE_15m_2023-12-01-00-00_2023-12-25-00-00.csv"
 
     def generate_pandas_df(self, pandas_source_df):
         pandas_source_df = adx(
