@@ -56,7 +56,8 @@ def crossover(
         else:
             crossover_mask = (col1 > col2) & (prev_col1 <= prev_col2)
 
-        data[result_column] = crossover_mask.astype(int)
+        data = data.copy()
+        data.loc[:, result_column] = crossover_mask.astype(int)
 
     # Polars Implementation
     elif isinstance(data, PlDataFrame):
@@ -69,6 +70,7 @@ def crossover(
             crossover_mask = (col1 > col2) & (prev_col1 <= prev_col2)
 
         # Convert boolean mask to 1s and 0s
+        data = data.clone()
         data = data.with_columns(pl.when(crossover_mask).then(1)
                                  .otherwise(0).alias(result_column))
 

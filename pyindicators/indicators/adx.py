@@ -7,7 +7,7 @@ import polars as pl
 import pandas as pd
 
 from pyindicators.exceptions import PyIndicatorException
-from pyindicators.utils import pad_zero_values_pandas
+from pyindicators.indicators.utils import pad_zero_values_pandas
 
 
 def polars_ewm_mean_via_pandas(column: pl.Series, alpha: float) -> pl.Series:
