@@ -33,6 +33,14 @@ def ema(
             f"only contains {len(data)} data points."
         )
 
+    # Check if source_column exists in the DataFrame
+    if source_column not in data.columns:
+        raise PyIndicatorException(
+            f"The source column '{source_column}' does not "
+            "exist in the DataFrame."
+        )
+
+
     if result_column is None:
         result_column = f"ema_{source_column}_{period}"
 

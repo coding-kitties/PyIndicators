@@ -24,7 +24,7 @@ pip install pyindicators
 
 * Native Python implementation, no external dependencies needed except for Polars or Pandas
 * Dataframe first approach, with support for both pandas dataframes and polars dataframes
-* Supports python version 3.9 and above.
+* Supports python version 3.10 and above.
 * [Trend indicators](#trend-indicators)
   * [Weighted Moving Average (WMA)](#weighted-moving-average-wma)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
@@ -40,6 +40,8 @@ pip install pyindicators
   * [Is Crossover](#is-crossover)
   * [Crossunder](#crossunder)
   * [Is Crossunder](#is-crossunder)
+  * [Is Downtrend](#is-downtrend)
+  * [Is Uptrend](#is-uptrend)
 
 ## Indicators
 
@@ -614,4 +616,67 @@ if is_crossunder(
 # If you want to use the result of a previous crossover calculation
 if is_crossunder(pd_df, crossover_column="Crossunder_EMA", number_of_data_points=3):
     print("Crossunder detected in Pandas DataFrame in the last 3 data points")
+```
+
+#### Is Downtrend
+
+The is_downtrend function is used to determine if a downtrend occurred in the last N data points. It returns a boolean value indicating if a downtrend occurred in the last N data points. The function can be used to check for downtrends in a DataFrame that was previously calculated using the crossover function.
+
+```python
+
+def is_down_trend(
+    data: Union[PdDataFrame, PlDataFrame],
+    use_death_cross: bool = True,
+) -> bool:
+```
+
+Example
+
+```python
+from polars import DataFrame as plDataFrame
+from pandas import DataFrame as pdDataFrame
+
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from pyindicators import is_down_trend
+
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+print(is_down_trend(pl_df))
+print(is_down_trend(pd_df))
+```
+
+#### Is Uptrend
+
+The is_up_trend function is used to determine if an uptrend occurred in the last N data points. It returns a boolean value indicating if an uptrend occurred in the last N data points. The function can be used to check for uptrends in a DataFrame that was previously calculated using the crossover function.
+
+```python
+def is_up_trend(
+    data: Union[PdDataFrame, PlDataFrame],
+    use_golden_cross: bool = True,
+) -> bool:
+```
+
+Example
+
+```python
+from polars import DataFrame as plDataFrame
+from pandas import DataFrame as pdDataFrame
+
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from pyindicators import is_up_trend
+
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+print(is_up_trend(pl_df))
+print(is_up_trend(pd_df))
 ```
