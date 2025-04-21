@@ -14,6 +14,7 @@ from .utils import get_peaks, is_divergence, is_lower_low_detected, \
     has_values_below_threshold
 from .is_down_trend import is_down_trend
 from .is_up_trend import is_up_trend
+from .up_and_down_trends import up_and_downtrends
 
 __all__ = [
     'sma',
@@ -42,4 +43,5 @@ __all__ = [
     'has_values_below_threshold',
     'is_down_trend',
     'is_up_trend',
+    'up_and_downtrends'
 ]
