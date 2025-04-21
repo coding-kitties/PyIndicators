@@ -34,6 +34,7 @@ pip install pyindicators
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
   * [Relative Strength Index Wilders method (Wilders RSI)](#wilders-relative-strength-index-wilders-rsi)
   * [Williams %R](#williams-r)
+  * [Average Directional Index (ADX)](#average-directional-index-adx)
 * [Indicator helpers](#indicator-helpers)
   * [Crossover](#crossover)
   * [Is Crossover](#is-crossover)
@@ -322,6 +323,46 @@ pd_df.tail(10)
 ```
 
 ![williams %R](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/willr.png)
+
+#### Average Directional Index (ADX)
+
+The Average Directional Index (ADX) is a trend strength indicator that helps traders identify the strength of a trend, regardless of its direction. It is derived from the Positive Directional Indicator (+DI) and Negative Directional Indicator (-DI) and moves between 0 and 100.
+
+```python
+def adx(
+    data: Union[PdDataFrame, PlDataFrame],
+    period=14,
+    adx_result_column="ADX",
+    di_plus_result_column="+DI",
+    di_minus_result_column="-DI",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import CSVOHLCVMarketDataSource
+
+from pyindicators import adx
+
+# For this example the investing algorithm framework is used for dataframe creation,
+csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
+data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
+# Calculate ADX for Polars DataFrame
+pl_df = adx(pl_df)
+pl_df.show(10)
+
+# Calculate ADX for Pandas DataFrame
+pd_df = adx(pd_df)
+pd_df.tail(10)
+```
+
+![ADX](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/adx.png)
+
 
 ### Indicator helpers
 
