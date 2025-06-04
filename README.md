@@ -65,16 +65,29 @@ def wma(
 Example
 
 ```python
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import download
 
 from pyindicators import wma
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate SMA for Polars DataFrame
 pl_df = wma(pl_df, source_column="Close", period=200, result_column="WMA_200")
@@ -103,16 +116,29 @@ def sma(
 Example
 
 ```python
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import donwload
 
 from pyindicators import sma
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate SMA for Polars DataFrame
 pl_df = sma(pl_df, source_column="Close", period=200, result_column="SMA_200")
@@ -141,16 +167,29 @@ def ema(
 Example
 
 ```python
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import download
 
 from pyindicators import ema
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate EMA for Polars DataFrame
 pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
@@ -187,16 +226,29 @@ def macd(
 Example
 
 ```python
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import download
 
 from pyindicators import macd
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate MACD for Polars DataFrame
 pl_df = macd(pl_df, source_column="Close", short_period=12, long_period=26, signal_period=9)
@@ -226,16 +278,29 @@ def rsi(
 Example
 
 ```python
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import download
 
 from pyindicators import rsi
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate RSI for Polars DataFrame
 pl_df = rsi(pl_df, source_column="Close", period=14, result_column="RSI_14")
@@ -264,16 +329,29 @@ def wilders_rsi(
 Example
 
 ```python
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import download
 
 from pyindicators import wilders_rsi
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate Wilders RSI for Polars DataFrame
 pl_df = wilders_rsi(pl_df, source_column="Close", period=14, result_column="RSI_14")
@@ -304,16 +382,29 @@ def willr(
 Example
 
 ```python
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import download
 
 from pyindicators import willr
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate Williams%R for Polars DataFrame
 pl_df = willr(pl_df, result_column="WILLR")
@@ -343,16 +434,29 @@ def adx(
 Example
 
 ```python
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import download
 
 from pyindicators import adx
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate ADX for Polars DataFrame
 pl_df = adx(pl_df)
@@ -386,18 +490,29 @@ def crossover(
 Example
 
 ```python
-from polars import DataFrame as plDataFrame
-from pandas import DataFrame as pdDataFrame
+from investing_algorithm_framework import download
 
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
 from pyindicators import crossover, ema
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate EMA and crossover for Polars DataFrame
 pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
@@ -442,18 +557,30 @@ def is_crossover(
 Example
 
 ```python
-from polars import DataFrame as plDataFrame
-from pandas import DataFrame as pdDataFrame
-
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
+
 from pyindicators import crossover, ema
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
 
 # Calculate EMA and crossover for Polars DataFrame
 pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
@@ -514,18 +641,28 @@ def crossunder(
 Example
 
 ```python
-from polars import DataFrame as plDataFrame
-from pandas import DataFrame as pdDataFrame
-
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import download
 from pyindicators import crossunder, ema
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate EMA and crossunder for Polars DataFrame
 pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
@@ -570,18 +707,29 @@ def is_crossunder(
 Example
 
 ```python
-from polars import DataFrame as plDataFrame
-from pandas import DataFrame as pdDataFrame
+from investing_algorithm_framework import download
 
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
 from pyindicators import crossunder, ema, is_crossunder
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 # Calculate EMA and crossunders for Polars DataFrame
 pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
@@ -633,18 +781,29 @@ def is_down_trend(
 Example
 
 ```python
-from polars import DataFrame as plDataFrame
-from pandas import DataFrame as pdDataFrame
-
 from investing_algorithm_framework import CSVOHLCVMarketDataSource
+
 from pyindicators import is_down_trend
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 print(is_down_trend(pl_df))
 print(is_down_trend(pd_df))
@@ -664,18 +823,29 @@ def is_up_trend(
 Example
 
 ```python
-from polars import DataFrame as plDataFrame
-from pandas import DataFrame as pdDataFrame
+from investing_algorithm_framework import download
 
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
 from pyindicators import is_up_trend
 
-# For this example the investing algorithm framework is used for dataframe creation,
-csv_path = "./tests/test_data/OHLCV_BTC-EUR_BINANCE_15m_2023-12-01:00:00_2023-12-25:00:00.csv"
-data_source = CSVOHLCVMarketDataSource(csv_file_path=csv_path)
-
-pl_df = data_source.get_data()
-pd_df = data_source.get_data(pandas=True)
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
 
 print(is_up_trend(pl_df))
 print(is_up_trend(pd_df))
