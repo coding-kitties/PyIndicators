@@ -406,6 +406,9 @@ pd_df = download(
     storage_path="./data"
 )
 
+pl_df = data_source.get_data()
+pd_df = data_source.get_data(pandas=True)
+
 # Calculate Williams%R for Polars DataFrame
 pl_df = willr(pl_df, result_column="WILLR")
 pl_df.show(10)
@@ -580,7 +583,6 @@ pd_df = download(
     save=True,
     storage_path="./data"
 )
-
 
 # Calculate EMA and crossover for Polars DataFrame
 pl_df = ema(pl_df, source_column="Close", period=200, result_column="EMA_200")
@@ -771,7 +773,6 @@ if is_crossunder(pd_df, crossover_column="Crossunder_EMA", number_of_data_points
 The is_downtrend function is used to determine if a downtrend occurred in the last N data points. It returns a boolean value indicating if a downtrend occurred in the last N data points. The function can be used to check for downtrends in a DataFrame that was previously calculated using the crossover function.
 
 ```python
-
 def is_down_trend(
     data: Union[PdDataFrame, PlDataFrame],
     use_death_cross: bool = True,
