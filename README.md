@@ -116,7 +116,7 @@ def sma(
 Example
 
 ```python
-from investing_algorithm_framework import donwload
+from investing_algorithm_framework import download
 
 from pyindicators import sma
 
@@ -560,7 +560,7 @@ def is_crossover(
 Example
 
 ```python
-from investing_algorithm_framework import CSVOHLCVMarketDataSource
+from investing_algorithm_framework import download
 
 from pyindicators import crossover, ema
 
