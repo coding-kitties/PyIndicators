@@ -42,6 +42,7 @@ pip install pyindicators
   * [Is Crossunder](#is-crossunder)
   * [Is Downtrend](#is-downtrend)
   * [Is Uptrend](#is-uptrend)
+  * [has_any_lower_then_threshold](#has_any_lower_then_threshold)
 
 ## Indicators
 
@@ -764,7 +765,7 @@ if is_crossunder(
     print("Crossunders detected in Pandas DataFrame in the last 3 data points")
 
 # If you want to use the result of a previous crossover calculation
-if is_crossunder(pd_df, crossover_column="Crossunder_EMA", number_of_data_points=3):
+if is_crossunder(pd_df, crossunder_column="Crossunder_EMA", number_of_data_points=3):
     print("Crossunder detected in Pandas DataFrame in the last 3 data points")
 ```
 
@@ -851,3 +852,40 @@ pd_df = download(
 print(is_up_trend(pl_df))
 print(is_up_trend(pd_df))
 ```
+
+#### has_any_lower_then_threshold
+
+The `has_any_lower_then_threshold` function checks if any value in a given column is lower than a specified threshold within the last N data points. This is useful for detecting when an indicator or price falls below a critical level.
+
+```python
+def has_any_lower_then_threshold(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    column,
+    threshold,
+    strict=True,
+    number_of_data_points=1
+) -> bool:
+    ...
+```
+
+Example
+
+```python
+import pandas as pd
+from pyindicators.indicators.utils import has_any_lower_then_threshold
+
+# Example DataFrame
+prices = pd.DataFrame({
+    'Close': [100, 98, 97, 99, 96, 95, 97, 98, 99, 100]
+})
+
+# Check if any of the last 5 closes are below 97
+result = has_any_lower_then_threshold(prices, column='Close', threshold=97, number_of_data_points=5)
+print(result)  # Output: True
+```
+
+Below is a chart showing the threshold and the points where the condition is met:
+
+![has_any_lower_then_threshold](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/has_any_lower_then_threshold.png)
+
+In this chart, the red line represents the threshold, and the highlighted points are where the `Close` value is below the threshold in the last N data points.
