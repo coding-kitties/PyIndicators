@@ -642,6 +642,7 @@ pd_df = bearish_divergence(pd_df, first_column="Close", second_column="RSI_14", 
 pd_df.tail(10)
 ```
 
+![BEARISH_DIVERGENCE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/bearish_divergence.png)
 
 ### Indicator helpers
 
