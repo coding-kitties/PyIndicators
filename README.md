@@ -523,11 +523,11 @@ pd_df = download(
 )
 
 # Calculate peaks and lows for Polars DataFrame, with a neighbour comparison of 4 and minimum of 2 consecutive peaks
-pl_df = detect_peaks(pl_df, column="Close", number_of_neighbors_to_compare=4, min_consecutive=2)
+pl_df = detect_peaks(pl_df, source_column="Close", number_of_neighbors_to_compare=4, min_consecutive=2)
 pl_df.show(10)
 
 # Calculate peaks and lows for Pandas DataFrame, with a neighbour comparison of 4 and minimum of 2 consecutive peaks
-pd_df = detect_peaks(pd_df, column="Close", number_of_neighbors_to_compare=4, min_consecutive=2)
+pd_df = detect_peaks(pd_df, source_column="Close", number_of_neighbors_to_compare=4, min_consecutive=2)
 pd_df.tail(10)
 ```
 
