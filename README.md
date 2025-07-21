@@ -29,6 +29,7 @@ pip install pyindicators
   * [Weighted Moving Average (WMA)](#weighted-moving-average-wma)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
+  * [Stochastic Oscillator (STO)](#stochastic-oscillator-sto)
 * [Momentum indicators](#momentum-indicators)
   * [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
@@ -206,6 +207,56 @@ pd_df.tail(10)
 ```
 
 ![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema.png)
+
+#### Stochastic Oscillator (STO)
+The Stochastic Oscillator (STO) is a momentum indicator that compares a particular closing price of an asset to a range of its prices over a certain period. It is used to identify overbought or oversold conditions in a market. The STO consists of two lines: %K and %D, where %K is the main line and %D is the signal line.
+
+```python
+def stochastic_oscillator(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    high_column: str = "High",
+    low_column: str = "Low",
+    close_column: str = "Close",
+    k_period: int = 14,
+    k_slowing: int = 3,
+    d_period: int = 3,
+    result_column: Optional[str] = None
+) -> Union[pd.DataFrame, pl.DataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+from pyindicators import stochastic_oscillator
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+# Calculate Stochastic Oscillator for Polars DataFrame
+pl_df = stochastic_oscillator(pl_df, high_column="High", low_column="Low", close_column="Close", k_period=14, k_slowing=3, d_period=3, result_column="STO")
+pl_df.show(10)
+# Calculate Stochastic Oscillator for Pandas DataFrame
+pd_df = stochastic_oscillator(pd_df, high_column="High", low_column="Low", close_column="Close", k_period=14, k_slowing=3, d_period=3, result_column="STO")
+pd_df.tail(10)
+```
+
+![STO](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/sto.png)
 
 ### Momentum Indicators
 
