@@ -35,6 +35,10 @@ pip install pyindicators
   * [Relative Strength Index Wilders method (Wilders RSI)](#wilders-relative-strength-index-wilders-rsi)
   * [Williams %R](#williams-r)
   * [Average Directional Index (ADX)](#average-directional-index-adx)
+* [Pattern recognition](#pattern-recognition)
+  * [Detect Peaks](#detect-peaks)
+  * [Detect Bullish Divergence](#detect-bullish-divergence)
+  * [Detect Bearish Divergence](#detect-bearish-divergence)
 * [Indicator helpers](#indicator-helpers)
   * [Crossover](#crossover)
   * [Is Crossover](#is-crossover)
@@ -472,6 +476,171 @@ pd_df.tail(10)
 ```
 
 ![ADX](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/adx.png)
+
+### Pattern Recognition
+
+#### Detect Peaks
+
+The detect_peaks function is used to identify peaks and lows in a given column of a DataFrame. It returns a DataFrame with two additional columns: one for higher highs and another for lower lows. The function can be used to detect peaks and lows in a DataFrame. It identifies local maxima and minima based on the specified order of neighboring points. The function can also filter out peaks and lows based on a minimum number of consecutive occurrences. This allows you to focus on significant peaks and lows that are more likely to be relevant for analysis.
+
+> There is always a delay between an actual peak and the detection of that peak. This is determined by the `number_of_neighbors_to_compare` parameter. For example
+> if for a given column you set `number_of_neighbors_to_compare=5`, the function will look at the 5 previous and 5 next data points to determine if the current point is a peak or a low. This means that the peak or low will only be detected after the 5th data point has been processed. So say you have OHLCV data of 15 minute intervals, and you set `number_of_neighbors_to_compare=5`, the function will only detect the peak or low after the 5th data point has been processed, which means that there will be a delay of 75 minutes (5 * 15 minutes) before the peak or low is detected.
+
+```python
+def detect_peaks(
+    data: Union[PdDataFrame, PlDataFrame],
+    column: str,
+    number_of_neighbors_to_compare: int = 5,
+    min_consecutive: int = 2
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+from pyindicators import detect_peaks
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate peaks and lows for Polars DataFrame, with a neighbour comparison of 4 and minimum of 2 consecutive peaks
+pl_df = detect_peaks(pl_df, column="Close", number_of_neighbors_to_compare=4, min_consecutive=2)
+pl_df.show(10)
+
+# Calculate peaks and lows for Pandas DataFrame, with a neighbour comparison of 4 and minimum of 2 consecutive peaks
+pd_df = detect_peaks(pd_df, column="Close", number_of_neighbors_to_compare=4, min_consecutive=2)
+pd_df.tail(10)
+```
+
+![PEAKS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/detect_peaks.png)
+
+#### Detect Bullish Divergence
+
+The detect_bullish_divergence function is used to identify bullish divergences between two columns in a DataFrame. It checks for bullish divergences based on the peaks and lows detected in the specified columns. The function returns a DataFrame with additional columns indicating the presence of bullish divergences.
+
+A bullish divergence occurs when the price makes a lower low while the indicator makes a higher low. This suggests that the downward momentum is weakening, and a potential reversal to the upside may occur.
+
+> !Important: This function expects that for two given columns there will be corresponding peaks and lows columns. This means that before you can use this function, you must first call the detect_peaks function on both columns. For example: if you want to detect bullish divergence between the "Close" column and the "RSI_14" column, you must first call detect_peaks on both columns.
+> If no corresponding {column}_peaks and {column}_lows columns are found, the function will raise a PyIndicatorException.
+
+```python
+def bullish_divergence(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    first_column: str,
+    second_column: str,
+    window_size=1,
+    result_column: str = "bullish_divergence",
+    number_of_neighbors_to_compare: int = 5,
+    min_consecutive: int = 2
+) -> Union[pd.DataFrame, pl.DataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+from pyindicators import bullish_divergence
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate bullish divergence for Polars DataFrame
+pl_df = bullish_divergence(pl_df, first_column="Close", second_column="RSI_14", window_size=8)
+pl_df.show(10)
+
+# Calculate bullish divergence for Pandas DataFrame
+pd_df = bullish_divergence(pd_df, first_column="Close", second_column="RSI_14", window_size=8)
+pd_df.tail(10)
+```
+
+![BULLISH_DIVERGENCE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/bullish_divergence.png)
+
+#### Detect Bearish Divergence
+
+The detect_bearish_divergence function is used to identify bearish divergences between two columns in a DataFrame. It checks for bearish divergences based on the peaks and lows detected in the specified columns. The function returns a DataFrame with additional columns indicating the presence of bearish divergences.
+
+A bearish divergence occurs when the price makes a higher high while the indicator makes a lower high. This suggests that the upward momentum is weakening, and a potential reversal to the downside may occur.
+
+```python
+def bearish_divergence(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    first_column: str,
+    second_column: str,
+    window_size=1,
+    result_column: str = "bearish_divergence",
+    number_of_neighbors_to_compare: int = 5,
+    min_consecutive: int = 2
+) -> Union[pd.DataFrame, pl.DataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+from pyindicators import bearish_divergence
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate bearish divergence for Polars DataFrame
+pl_df = bearish_divergence(pl_df, first_column="Close", second_column="RSI_14", window_size=8)
+pl_df.show(10)
+
+# Calculate bearish divergence for Pandas DataFrame
+pd_df = bearish_divergence(pd_df, first_column="Close", second_column="RSI_14", window_size=8)
+pd_df.tail(10)
+```
 
 
 ### Indicator helpers

@@ -15,7 +15,9 @@ class TestDetectDivergence(TestCase):
         # Set index to DateTime
         df.set_index("DateTime", inplace=True)
 
-        self.assertFalse(is_divergence(df, window_size=2, number_of_data_points=2, column_one="RSI_highs", column_two="Close_highs"))
+        self.assertFalse(
+            is_divergence(df, window_size=2, number_of_data_points=2, column_one="RSI_highs", column_two="Close_highs")
+        )
         self.assertTrue(is_divergence(df, window_size=2, number_of_data_points=10, column_one="RSI_highs", column_two="Close_highs"))
 
         df = pd.DataFrame({

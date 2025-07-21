@@ -7,14 +7,16 @@ from .rsi import rsi, wilders_rsi
 from .macd import macd
 from .williams_percent_range import willr
 from .adx import adx
-from .utils import get_peaks, is_divergence, is_lower_low_detected, \
+from .utils import is_lower_low_detected, \
     is_below, is_above, get_slope, has_any_higher_then_threshold, \
     has_slope_above_threshold, has_any_lower_then_threshold, \
     has_slope_below_threshold, has_values_above_threshold, \
-    has_values_below_threshold
+    has_values_below_threshold, is_divergence
 from .is_down_trend import is_down_trend
 from .is_up_trend import is_up_trend
 from .up_and_down_trends import up_and_downtrends
+from .divergence import detect_peaks, bearish_divergence, \
+    bullish_divergence
 
 __all__ = [
     'sma',
@@ -29,8 +31,6 @@ __all__ = [
     'macd',
     'willr',
     'adx',
-    'get_peaks',
-    'is_divergence',
     'is_lower_low_detected',
     'is_below',
     'is_above',
@@ -43,5 +43,9 @@ __all__ = [
     'has_values_below_threshold',
     'is_down_trend',
     'is_up_trend',
-    'up_and_downtrends'
+    'up_and_downtrends',
+    'detect_peaks',
+    'bearish_divergence',
+    'bullish_divergence',
+    'is_divergence',
 ]
