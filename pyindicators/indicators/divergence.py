@@ -318,14 +318,16 @@ def bullish_divergence(
     price_lows = df[f"{second_column}_lows"].values
     result = [False] * len(df)
 
-    for i in range(window_size - 1, len(df)):
+    i = window_size - 1
+    while i < len(df):
         window_a = indicator_lows[i - window_size + 1:i + 1]
         window_b = price_lows[i - window_size + 1:i + 1]
 
-        if check_divergence_pattern(
-            window_a, window_b, target_a=-1, target_b=1
-        ):
+        if check_divergence_pattern(window_a, window_b, target_a=-1, target_b=1):
             result[i] = True
+            i += window_size  # Skip forward to avoid repeated triggers in same window
+        else:
+            i += 1
 
     df[result_column] = result
     return pl.DataFrame(df) if is_polars else df
@@ -444,12 +446,16 @@ def bearish_divergence(
     price_highs = df[f"{second_column}_highs"].values
     result = [False] * len(df)
 
-    for i in range(window_size - 1, len(df)):
+    i = window_size - 1
+    while i < len(df):
         window_a = indicator_highs[i - window_size + 1:i + 1]
         window_b = price_highs[i - window_size + 1:i + 1]
 
         if check_divergence_pattern(window_a, window_b):
             result[i] = True
+            i += window_size
+        else:
+            i += 1
 
     df[result_column] = result
     return pl.DataFrame(df) if is_polars else df
