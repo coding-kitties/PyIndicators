@@ -318,14 +318,17 @@ def bullish_divergence(
     price_lows = df[f"{second_column}_lows"].values
     result = [False] * len(df)
 
+    # Skip forward to avoid repeated triggers in same window
     i = window_size - 1
     while i < len(df):
         window_a = indicator_lows[i - window_size + 1:i + 1]
         window_b = price_lows[i - window_size + 1:i + 1]
 
-        if check_divergence_pattern(window_a, window_b, target_a=-1, target_b=1):
+        if check_divergence_pattern(
+            window_a, window_b, target_a=-1, target_b=1
+        ):
             result[i] = True
-            i += window_size  # Skip forward to avoid repeated triggers in same window
+            i += window_size
         else:
             i += 1
 
