@@ -630,12 +630,12 @@ pd_df = download(
     storage_path="./data"
 )
 
-# Calculate bullish divergence for Polars DataFrame
-pl_df = bullish_divergence(pl_df, first_column="Close", second_column="RSI_14", window_size=8)
+# Calculate bearish divergence for Polars DataFrame, treat first_column always as the indicator column
+pl_df = bearish_divergence(pl_df, first_column="RSI_14", second_column="Close", window_size=8)
 pl_df.show(10)
 
-# Calculate bullish divergence for Pandas DataFrame
-pd_df = bullish_divergence(pd_df, first_column="Close", second_column="RSI_14", window_size=8)
+# Calculate bearish divergence for Pandas DataFrame
+pd_df = bearish_divergence(pd_df, first_column="RSI_14", second_column="Close", window_size=8)
 pd_df.tail(10)
 ```
 
@@ -684,12 +684,12 @@ pd_df = download(
     storage_path="./data"
 )
 
-# Calculate bearish divergence for Polars DataFrame
-pl_df = bearish_divergence(pl_df, first_column="Close", second_column="RSI_14", window_size=8)
+# Calculate bearish divergence for Polars DataFrame, treat first_column always as the indicator column
+pl_df = bearish_divergence(pl_df, first_column="RSI_14", second_column="Close", window_size=8)
 pl_df.show(10)
 
-# Calculate bearish divergence for Pandas DataFrame
-pd_df = bearish_divergence(pd_df, first_column="Close", second_column="RSI_14", window_size=8)
+# Calculate bearish divergence for Pandas DataFrame, treat first_column always as the indicator column
+pd_df = bearish_divergence(pd_df, first_column="RSI_14", second_column="Close", window_size=8)
 pd_df.tail(10)
 ```
 
