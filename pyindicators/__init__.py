@@ -5,7 +5,8 @@ from .indicators import sma, rsi, ema, wilders_rsi, adx, \
     has_slope_above_threshold, has_any_lower_then_threshold, \
     has_values_above_threshold, has_values_below_threshold, is_down_trend, \
     is_up_trend, up_and_downtrends, detect_peaks, \
-    bearish_divergence, bullish_divergence, stochastic_oscillator
+    bearish_divergence, bullish_divergence, stochastic_oscillator, \
+    bearish_divergence_multi_dataframe
 from .exceptions import PyIndicatorException
 from .date_range import DateRange
 
@@ -42,4 +43,5 @@ __all__ = [
     'bullish_divergence',
     'is_divergence',
     'stochastic_oscillator',
+    'bearish_divergence_multi_dataframe'
 ]

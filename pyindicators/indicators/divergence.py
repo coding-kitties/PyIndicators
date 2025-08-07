@@ -462,3 +462,122 @@ def bearish_divergence(
 
     df[result_column] = result
     return pl.DataFrame(df) if is_polars else df
+
+
+def bearish_divergence_multi_dataframe(
+    first_df: Union[pd.DataFrame, pl.DataFrame],
+    second_df: Union[pd.DataFrame, pl.DataFrame],
+    result_df: Union[pd.DataFrame, pl.DataFrame],
+    first_column: str,
+    second_column: str,
+    window_size: int = 1,
+    result_column: str = "bearish_divergence",
+    number_of_neighbors_to_compare: int = 5,
+    min_consecutive: int = 2
+) -> Union[pd.DataFrame, pl.DataFrame]:
+    """
+    Detect bearish divergence between two different DataFrames.
+
+    Args:
+        first_df: DataFrame containing the indicator data (e.g., RSI).
+        second_df: DataFrame containing the price data.
+        result_df: DataFrame used to store results. Must be aligned in time.
+        first_column: Column in first_df (e.g., RSI).
+        second_column: Column in second_df (e.g., price).
+        window_size: Number of bars to consider for pattern.
+        result_column: Output column name.
+        number_of_neighbors_to_compare: For peak detection.
+        min_consecutive: Minimum consecutive peaks required.
+
+    Returns:
+        A DataFrame with a new column indicating bearish divergence.
+    """
+    is_polars = isinstance(first_df, pl.DataFrame)
+
+    if is_polars:
+        first_df = first_df.to_pandas()
+        second_df = second_df.to_pandas()
+        result_df = result_df.to_pandas()
+
+    # Validate columns
+    for df, col, label in [
+        (first_df, first_column, "first_df"),
+        (second_df, second_column, "second_df")
+    ]:
+        if col not in df.columns:
+            raise PyIndicatorException(f"{col} column is missing in {label}")
+
+    # Determine which df has more granular datetime index
+    first_freq = first_df.index.to_series().diff().median()
+    second_freq = second_df.index.to_series().diff().median()
+
+    if first_freq < second_freq:
+        align_index = first_df.index
+    else:
+        align_index = second_df.index
+
+    if len(result_df) != len(align_index):
+        raise PyIndicatorException(
+            "result_df must have the same length as the aligned index"
+        )
+
+    # Reindex all DataFrames to the most granular one
+    first_df = first_df.reindex(align_index)
+    second_df = second_df.reindex(align_index)
+
+    # Peak detection
+    first_highs_col = f"{first_column}_highs"
+    second_highs_col = f"{second_column}_highs"
+
+    if first_highs_col not in first_df.columns:
+        first_df = detect_peaks(
+            first_df,
+            source_column=first_column,
+            number_of_neighbors_to_compare=number_of_neighbors_to_compare,
+            min_consecutive=min_consecutive
+        )
+
+    if second_highs_col not in second_df.columns:
+        second_df = detect_peaks(
+            second_df,
+            source_column=second_column,
+            number_of_neighbors_to_compare=number_of_neighbors_to_compare,
+            min_consecutive=min_consecutive
+        )
+
+    # Now align and merge
+    merged_df = pd.concat([
+        first_df[[first_highs_col]],
+        second_df[[second_highs_col]],
+        result_df.copy()
+    ], axis=1, join='inner')
+
+    # Validate enough data
+    if len(merged_df) < window_size:
+        raise PyIndicatorException(
+            f"Not enough data points (need at least {window_size}, "
+            f"got {len(merged_df)})"
+        )
+
+    # Apply divergence detection
+    indicator_highs = merged_df[first_highs_col].values
+    price_highs = merged_df[second_highs_col].values
+    result = [False] * len(merged_df)
+
+    i = window_size - 1
+    while i < len(merged_df):
+        win_a = indicator_highs[i - window_size + 1:i + 1]
+        win_b = price_highs[i - window_size + 1:i + 1]
+
+        if check_divergence_pattern(win_a, win_b):
+            result[i] = True
+            i += window_size  # Skip forward to avoid overlap
+        else:
+            i += 1
+
+    merged_df[result_column] = result
+
+    # Merge back result column to result_df using the original index
+    result_df[result_column] = merged_df[result_column]
+
+    return pl.DataFrame(result_df) if is_polars else result_df
