@@ -1,9 +1,191 @@
 import numpy as np
 from unittest import TestCase
 from pyindicators import is_divergence, bearish_divergence_multi_dataframe, \
-    PyIndicatorException, bullish_divergence_multi_dataframe
+    PyIndicatorException, bullish_divergence_multi_dataframe, \
+    bearish_divergence, bullish_divergence
 
 import pandas as pd
+
+class TestBearishDivergence(TestCase):
+
+    def test_detect_bearish_divergence_pandas(self):
+        df = pd.DataFrame({
+            "RSI_highs": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+            "Close_highs": [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
+        })
+
+        # Set index to DateTime
+        df.set_index("DateTime", inplace=True)
+        df = bearish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+
+        # Check that at least one true value in the df
+        self.assertTrue(any(df["bearish_divergence"]))
+
+        df = pd.DataFrame({
+            "RSI_highs": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+            "Close_highs": [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+            "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
+        })
+
+        # Set index to DateTime
+        df.set_index("DateTime", inplace=True)
+        df = bearish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+
+        # Check that at least one true value in the df
+        self.assertFalse(any(df["bearish_divergence"]))
+
+        df = bearish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertTrue(any(df["bearish_divergence"]))
+
+        df = pd.DataFrame({
+            "RSI_highs": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+            "Close_highs": [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
+        })
+        df.set_index("DateTime", inplace=True)
+        df = bearish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+        self.assertFalse(any(df["bearish_divergence"]))
+        df = bearish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertFalse(any(df["bearish_divergence"]))
+
+        df = pd.DataFrame({
+            "RSI_highs": [0, 1, 0, -1, 0, 0, 0, 0, 0, 0],
+            "Close_highs": [0, 0, -1, 0, 0, 0, 0, 0, 0, 1],
+            "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
+        })
+
+        df = bearish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertFalse(any(df["bearish_divergence"]))
+
+        df = bearish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=7
+        )
+        self.assertTrue(any(df["bearish_divergence"]))
+
+
+class TestBullishDivergence(TestCase):
+
+    def test_detect_bullish_divergence_pandas(self):
+        df = pd.DataFrame({
+            "RSI_lows": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+            "Close_lows": [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
+        })
+
+        # Set index to DateTime
+        df.set_index("DateTime", inplace=True)
+        df = bullish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+
+        # Check that at least one true value in the df
+        self.assertTrue(any(df["bullish_divergence"]))
+
+        df = pd.DataFrame({
+            "RSI_lows": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+            "Close_lows": [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+            "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
+        })
+
+        # Set index to DateTime
+        df.set_index("DateTime", inplace=True)
+        df = bullish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+
+        # Check that at least one true value in the df
+        self.assertFalse(any(df["bullish_divergence"]))
+
+        df = bullish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertTrue(any(df["bullish_divergence"]))
+
+        df = pd.DataFrame({
+            "RSI_lows": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+            "Close_lows": [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
+        })
+        df.set_index("DateTime", inplace=True)
+        df = bullish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+        self.assertFalse(any(df["bullish_divergence"]))
+        df = bullish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertFalse(any(df["bullish_divergence"]))
+
+        df = pd.DataFrame({
+            "RSI_lows": [0, 1, 0, -1, 0, 0, 0, 0, 0, 0],
+            "Close_lows": [0, 0, -1, 0, 0, 0, 0, 0, 0, 1],
+            "DateTime": pd.date_range("2021-01-01", periods=10, freq="D")
+        })
+
+        df = bullish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertFalse(any(df["bullish_divergence"]))
+
+        df = bullish_divergence(
+            data=df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=7
+        )
+        self.assertTrue(any(df["bullish_divergence"]))
 
 class TestDetectDivergence(TestCase):
 
@@ -262,6 +444,120 @@ class TestBearishDivergenceMultiDataFrame(TestCase):
         self.assertIn("bearish_divergence", result.columns)
         self.assertTrue(any(result["bearish_divergence"]))
 
+    def test_standard_situations(self):
+        two_hour_index = pd.date_range("2022-01-01", periods=10, freq="2h")
+        indicator_df = pd.DataFrame({
+            "RSI_highs": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+        }, index=two_hour_index)
+
+        # 2-hour close prices — only some times will match the daily timestamps
+        price_df = pd.DataFrame({
+            "Close_highs": [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+        }, index=two_hour_index)
+
+        df = bearish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+
+        # Check that at least one true value in the df
+        self.assertTrue(any(df["bearish_divergence"]))
+
+        two_hour_index = pd.date_range("2022-01-01", periods=10, freq="2h")
+        indicator_df = pd.DataFrame({
+            "RSI_highs": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+        }, index=two_hour_index)
+
+        # 2-hour close prices — only some times will match the daily timestamps
+        price_df = pd.DataFrame({
+            "Close_highs": [0, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+        }, index=two_hour_index)
+
+        df = bearish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+
+        self.assertFalse(any(df["bearish_divergence"]))
+
+        df = bearish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+
+        self.assertTrue(any(df["bearish_divergence"]))
+
+        two_hour_index = pd.date_range("2022-01-01", periods=10, freq="2h")
+
+        indicator_df = pd.DataFrame({
+            "RSI_highs": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+        }, index=two_hour_index)
+
+        # 2-hour close prices — only some times will match the daily timestamps
+        price_df = pd.DataFrame({
+            "Close_highs": [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        }, index=two_hour_index)
+
+        df = bearish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+        self.assertFalse(any(df["bearish_divergence"]))
+        df = bearish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertFalse(any(df["bearish_divergence"]))
+
+        indicator_df = pd.DataFrame({
+            "RSI_highs": [0, 1, 0, -1, 0, 0, 0, 0, 0, 0],
+        }, index=two_hour_index)
+
+        # 2-hour close prices — only some times will match the daily timestamps
+        price_df = pd.DataFrame({
+            "Close_highs": [0, 0, -1, 0, 0, 0, 0, 0, 0, 1],
+        }, index=two_hour_index)
+
+        df = bearish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertFalse(any(df["bearish_divergence"]))
+
+        df = bearish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=7
+        )
+        self.assertTrue(any(df["bearish_divergence"]))
+
 
 class TestBullishDivergenceMultiDataFrame(TestCase):
 
@@ -420,3 +716,117 @@ class TestBullishDivergenceMultiDataFrame(TestCase):
         )
         self.assertIn("bullish_divergence", result.columns)
         self.assertTrue(any(result["bullish_divergence"]))
+
+    def test_standard_situations(self):
+        two_hour_index = pd.date_range("2022-01-01", periods=10, freq="2h")
+        indicator_df = pd.DataFrame({
+            "RSI_lows": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+        }, index=two_hour_index)
+
+        # 2-hour close prices — only some times will match the daily timestamps
+        price_df = pd.DataFrame({
+            "Close_lows": [0, 0, 0, 0, 0, 0, 0, 1, 0, 0]
+        }, index=two_hour_index)
+
+        df = bullish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+
+        # Check that at least one true value in the df
+        self.assertTrue(any(df["bearish_divergence"]))
+
+        two_hour_index = pd.date_range("2022-01-01", periods=10, freq="2h")
+        indicator_df = pd.DataFrame({
+            "RSI_lows": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+        }, index=two_hour_index)
+
+        # 2-hour close prices — only some times will match the daily timestamps
+        price_df = pd.DataFrame({
+            "Close_lows": [0, 0, 0, 0, 0, 0, 0, 0, 1, 0]
+        }, index=two_hour_index)
+
+        df = bullish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+
+        self.assertFalse(any(df["bearish_divergence"]))
+
+        df = bullish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+
+        self.assertTrue(any(df["bearish_divergence"]))
+
+        two_hour_index = pd.date_range("2022-01-01", periods=10, freq="2h")
+
+        indicator_df = pd.DataFrame({
+            "RSI_lows": [0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+        }, index=two_hour_index)
+
+        # 2-hour close prices — only some times will match the daily timestamps
+        price_df = pd.DataFrame({
+            "Close_lows": [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        }, index=two_hour_index)
+
+        df = bullish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=1
+        )
+        self.assertFalse(any(df["bearish_divergence"]))
+        df = bullish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertFalse(any(df["bearish_divergence"]))
+
+        indicator_df = pd.DataFrame({
+            "RSI_lows": [0, 1, 0, -1, 0, 0, 0, 0, 0, 0],
+        }, index=two_hour_index)
+
+        # 2-hour close prices — only some times will match the daily timestamps
+        price_df = pd.DataFrame({
+            "Close_lows": [0, 0, -1, 0, 0, 0, 0, 0, 0, 1],
+        }, index=two_hour_index)
+
+        df = bullish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=2
+        )
+        self.assertFalse(any(df["bearish_divergence"]))
+
+        df = bullish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=pd.DataFrame(index=indicator_df.index),
+            first_column="RSI",
+            second_column="Close",
+            window_size=7
+        )
+        self.assertTrue(any(df["bearish_divergence"]))

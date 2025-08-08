@@ -278,12 +278,19 @@ def bullish_divergence(
     is_polars = isinstance(data, pl.DataFrame)
     df = data.to_pandas() if is_polars else data.copy()
 
-    # Check if the two columns are in the data
-    if first_column not in data.columns or second_column not in data.columns:
-        raise PyIndicatorException(
-            f"{first_column} and {second_column} columns "
-            "are required in the data"
-        )
+    # Check if the highs and lows columns are present
+    first_column_lows = f"{first_column}_lows"
+    second_column_lows = f"{second_column}_lows"
+
+    if first_column_lows not in data.columns \
+            or second_column_lows not in data.columns:
+
+        # Check if the two columns are in the data
+        if first_column not in data.columns or second_column not in data.columns:
+            raise PyIndicatorException(
+                f"{first_column} and {second_column} columns "
+                "are required in the data"
+            )
 
     if window_size < 1:
         raise PyIndicatorException("Window size must be greater than 0")
@@ -293,10 +300,6 @@ def bullish_divergence(
             f"Data must have at least {window_size} data points." +
             f"It currently has {len(data)} data points"
         )
-
-    # Check if the highs and lows columns are present
-    first_column_lows = f"{first_column}_lows"
-    second_column_lows = f"{second_column}_lows"
 
     if first_column_lows not in data.columns:
         data = detect_peaks(
@@ -380,15 +383,6 @@ def bearish_divergence(
             the function will consider the current and previous data point,
             e.g. this will be true [1, 0] and [0, -1]
             and false [0, 0] and [0, -1].
-        number_of_data_points (int): The number of data points
-            to consider when using a sliding windows size when checking for
-          divergence. For example, if the number_of_data_points
-          is 1, the function will consider only the current two data points.
-          If the number_of_data_points is 4 and the window size is 2,
-          the function will consider the current and previous 3 data
-          points when checking for divergence. Then the function will
-          slide the window by 1 and check the next 2 data points until
-          the end of the data.
         result_column (str): The name of the column to store
             the bearish divergence results. Defaults to "bearish_divergence".
         number_of_neighbors_to_compare (int): The number of neighboring
@@ -410,12 +404,19 @@ def bearish_divergence(
     is_polars = isinstance(data, pl.DataFrame)
     df = data.to_pandas() if is_polars else data.copy()
 
-    # Check if the two columns are in the data
-    if first_column not in data.columns or second_column not in data.columns:
-        raise PyIndicatorException(
-            f"{first_column} and {second_column} columns "
-            "are required in the data"
-        )
+    # Check if the highs and lows columns are present
+    first_column_highs = f"{first_column}_highs"
+    second_column_highs = f"{second_column}_highs"
+
+    if first_column_highs not in data.columns \
+            or second_column_highs not in data.columns:
+
+        # Check if the two columns are in the data
+        if first_column not in data.columns or second_column not in data.columns:
+            raise PyIndicatorException(
+                f"{first_column} and {second_column} columns "
+                "are required in the data"
+            )
 
     if window_size < 1:
         raise PyIndicatorException("Window size must be greater than 0")
@@ -462,7 +463,6 @@ def bearish_divergence(
 
     df[result_column] = result
     return pl.DataFrame(df) if is_polars else df
-
 
 def bearish_divergence_multi_dataframe(
     first_df: Union[pd.DataFrame, pl.DataFrame],
@@ -511,7 +511,9 @@ def bearish_divergence_multi_dataframe(
         (first_df, first_column, "first_df"),
         (second_df, second_column, "second_df")
     ]:
-        if col not in df.columns:
+        high_column = f"{col}_highs"
+
+        if high_column not in df.columns and col not in df.columns:
             raise PyIndicatorException(f"{col} column is missing in {label}")
 
     # Determine which df has more granular datetime index
@@ -635,7 +637,9 @@ def bullish_divergence_multi_dataframe(
         (first_df, first_column, "first_df"),
         (second_df, second_column, "second_df")
     ]:
-        if col not in df.columns:
+        lows_column = f"{col}_lows"
+
+        if lows_column not in df.columns and col not in df.columns:
             raise PyIndicatorException(f"{col} column is missing in {label}")
 
     # Determine which df has more granular datetime index
