@@ -16,7 +16,8 @@ from .is_down_trend import is_down_trend
 from .is_up_trend import is_up_trend
 from .up_and_down_trends import up_and_downtrends
 from .divergence import detect_peaks, bearish_divergence, \
-    bullish_divergence, bearish_divergence_multi_dataframe
+    bullish_divergence, bearish_divergence_multi_dataframe, \
+    bullish_divergence_multi_dataframe
 from .stochastic_oscillator import stochastic_oscillator
 
 __all__ = [
@@ -50,5 +51,6 @@ __all__ = [
     'bullish_divergence',
     'is_divergence',
     'stochastic_oscillator',
-    'bearish_divergence_multi_dataframe'
+    'bearish_divergence_multi_dataframe',
+    'bullish_divergence_multi_dataframe'
 ]

@@ -1,7 +1,7 @@
 import numpy as np
 from unittest import TestCase
 from pyindicators import is_divergence, bearish_divergence_multi_dataframe, \
-    PyIndicatorException
+    PyIndicatorException, bullish_divergence_multi_dataframe
 
 import pandas as pd
 
@@ -261,3 +261,162 @@ class TestBearishDivergenceMultiDataFrame(TestCase):
         )
         self.assertIn("bearish_divergence", result.columns)
         self.assertTrue(any(result["bearish_divergence"]))
+
+
+class TestBullishDivergenceMultiDataFrame(TestCase):
+
+    def test_bullish_divergence_detected(self):
+        # Setup indicator (e.g., RSI) and price (e.g., Close) with divergence
+        indicator = pd.DataFrame({
+            "RSI": [50, 60, 70, 65, 60, 58, 55],
+        }, index=pd.date_range("2022-01-01", periods=7))
+        price = pd.DataFrame({
+            "Close": [100, 102, 105, 108, 110, 112, 115],  # Higher highs
+        }, index=pd.date_range("2022-01-01", periods=7))
+
+        result = pd.DataFrame(index=indicator.index)
+
+        # Force peaks manually for deterministic test
+        indicator["RSI_lows"] = [0, 0, 0, 0, -1, 0, 0]  # Two indicator highs
+        price["Close_lows"] = [0, 0, 0, 0, 1, 0, 0]    # Two price highs
+
+        out = bullish_divergence_multi_dataframe(
+            first_df=indicator,
+            second_df=price,
+            result_df=result,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2,
+            result_column="bullish_divergence"
+        )
+
+        self.assertIn("bullish_divergence", out.columns)
+        self.assertTrue(any(out["bullish_divergence"]))
+
+        indicator = pd.DataFrame({
+            "RSI": [50, 60, 70, 65, 60, 58, 55],
+        }, index=pd.date_range("2022-01-01", periods=7))
+        price = pd.DataFrame({
+            "Close": [100, 102, 105, 108, 110, 112, 115],  # Higher highs
+        }, index=pd.date_range("2022-01-01", periods=7))
+
+        result = pd.DataFrame(index=indicator.index)
+
+        # Force peaks manually for deterministic test
+        indicator["RSI_lows"] = [0, 0, 0, 0, 1, 0, 0]  # Two indicator highs
+        price["Close_lows"] = [0, 0, 0, 0, 1, 0, 0]  # Two price highs
+
+        out = bullish_divergence_multi_dataframe(
+            first_df=indicator,
+            second_df=price,
+            result_df=result,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2,
+            result_column="bullish_divergence"
+        )
+
+        self.assertIn("bullish_divergence", out.columns)
+        self.assertFalse(any(out["bullish_divergence"]))
+
+        indicator = pd.DataFrame({
+            "RSI": [50, 60, 70, 65, 60, 58, 55],
+        }, index=pd.date_range("2022-01-01", periods=7))
+        price = pd.DataFrame({
+            "Close": [100, 102, 105, 108, 110, 112, 115],  # Higher highs
+        }, index=pd.date_range("2022-01-01", periods=7))
+
+        result = pd.DataFrame(index=indicator.index)
+
+        # Force peaks manually for deterministic test
+        indicator["RSI_lows"] = [0, 0, 0, -1, 0, 0, 0]  # Two indicator highs
+        price["Close_lows"] = [0, 0, 0, 0, 0, 1, 0]  # Two price highs
+
+        out = bullish_divergence_multi_dataframe(
+            first_df=indicator,
+            second_df=price,
+            result_df=result,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2,
+            result_column="bullish_divergence"
+        )
+
+        self.assertIn("bullish_divergence", out.columns)
+        self.assertFalse(any(out["bullish_divergence"]))
+
+        out = bullish_divergence_multi_dataframe(
+            first_df=indicator,
+            second_df=price,
+            result_df=result,
+            first_column="RSI",
+            second_column="Close",
+            window_size=3,
+            result_column="bullish_divergence"
+        )
+
+        self.assertIn("bullish_divergence", out.columns)
+        self.assertTrue(any(out["bullish_divergence"]))
+
+    def test_missing_column_exception(self):
+        df1 = pd.DataFrame({"RSI": [50, 60]}, index=pd.date_range("2022-01-01", periods=2))
+        df2 = pd.DataFrame({"Close": [100, 110]}, index=pd.date_range("2022-01-01", periods=2))
+        result = pd.DataFrame(index=df1.index)
+
+        with self.assertRaises(PyIndicatorException):
+            bullish_divergence_multi_dataframe(
+                first_df=df1.drop("RSI", axis=1),
+                second_df=df2,
+                result_df=result,
+                first_column="RSI",
+                second_column="Close"
+            )
+
+    def test_not_enough_data_exception(self):
+        df1 = pd.DataFrame({"RSI": [50]}, index=pd.date_range("2022-01-01", periods=1))
+        df2 = pd.DataFrame({"Close": [100]}, index=pd.date_range("2022-01-01", periods=1))
+        result = pd.DataFrame(index=df1.index)
+
+        # Assume detect_peaks adds _highs column
+        df1["RSI_lows"] = [1]
+        df2["Close_lows"] = [1]
+
+        with self.assertRaises(PyIndicatorException):
+            bullish_divergence_multi_dataframe(
+                first_df=df1,
+                second_df=df2,
+                result_df=result,
+                first_column="RSI",
+                second_column="Close",
+                window_size=3
+            )
+
+    def test_different_timeframes_align_correctly(self):
+        daily_index = pd.date_range("2022-01-01", periods=2, freq="D")
+        indicator_df = pd.DataFrame({
+            "RSI": [65, 60],
+        }, index=daily_index)
+
+        # 2-hour close prices — only some times will match the daily timestamps
+        two_hour_index = pd.date_range("2022-01-01", periods=12, freq="2h")
+        price_df = pd.DataFrame({
+            "Close": [100, 102, 105, 108, 110, 112, 115, 117, 120, 122, 125, 130]
+        }, index=two_hour_index)
+
+        result_df = pd.DataFrame(index=price_df.index)
+
+        # Inject fake peaks
+        indicator_df["RSI_lows"] = [-1, 0]
+        price_df["Close_lows"] = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+        result = bullish_divergence_multi_dataframe(
+            first_df=indicator_df,
+            second_df=price_df,
+            result_df=result_df,
+            first_column="RSI",
+            second_column="Close",
+            window_size=2,
+            result_column="bullish_divergence"
+        )
+        self.assertIn("bullish_divergence", result.columns)
+        self.assertTrue(any(result["bullish_divergence"]))
