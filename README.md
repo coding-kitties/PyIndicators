@@ -557,7 +557,7 @@ Example
 ```python
 from investing_algorithm_framework import download
 
-from pyindicators import ema
+from pyindicators import bollinger_bands
 
 pl_df = download(
     symbol="btc/eur",
@@ -608,7 +608,7 @@ Example
 ```python
 from investing_algorithm_framework import download
 
-from pyindicators import ema
+from pyindicators import atr
 
 pl_df = download(
     symbol="btc/eur",
@@ -640,7 +640,6 @@ pd_df.tail(10)
 ```
 
 ![ATR](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/atr.png)
-
 
 ### Pattern Recognition
 
