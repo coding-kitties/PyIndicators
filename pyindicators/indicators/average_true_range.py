@@ -47,8 +47,10 @@ def atr(
         # Polars version
         df = data.with_columns([
             (pl.col("High") - pl.col("Low")).alias("H_L"),
-            (pl.col("High") - pl.col(source_column).shift(1)).abs().alias("H_Cp"),
-            (pl.col("Low") - pl.col(source_column).shift(1)).abs().alias("L_Cp"),
+            (pl.col("High") -
+                pl.col(source_column).shift(1)).abs().alias("H_Cp"),
+            (pl.col("Low") -
+                pl.col(source_column).shift(1)).abs().alias("L_Cp"),
         ])
 
         # True Range = max of H-L, H-Cprev, L-Cprev

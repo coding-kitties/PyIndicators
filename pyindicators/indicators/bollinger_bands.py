@@ -1,7 +1,6 @@
 from typing import Union
 from pandas import DataFrame as PdDataFrame
 from polars import DataFrame as PlDataFrame
-import pandas as pd
 import polars as pl
 from pyindicators.exceptions import PyIndicatorException
 
@@ -42,7 +41,9 @@ def bollinger_bands(
         ])
 
     else:
-        raise PyIndicatorException("Input data must be a pandas or polars DataFrame.")
+        raise PyIndicatorException(
+            "Input data must be a pandas or polars DataFrame."
+        )
 
 
 def bollinger_width(
@@ -71,12 +72,15 @@ def bollinger_width(
     if isinstance(data, PdDataFrame):
         data[result_column] = data['BB_upper_temp'] - data['BB_lower_temp']
         # Drop temporary columns
-        data = data.drop(columns=['BB_middle_temp', 'BB_upper_temp', 'BB_lower_temp'])
+        data = data.drop(
+            columns=['BB_middle_temp', 'BB_upper_temp', 'BB_lower_temp']
+        )
         return data
 
     elif isinstance(data, PlDataFrame):
         return data.with_columns(
-            (pl.col('BB_upper_temp') - pl.col('BB_lower_temp')).alias(result_column)
+            (pl.col('BB_upper_temp') -
+             pl.col('BB_lower_temp')).alias(result_column)
         ).drop(['BB_middle_temp', 'BB_upper_temp', 'BB_lower_temp'])
 
     else:

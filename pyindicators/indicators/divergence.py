@@ -286,7 +286,8 @@ def bullish_divergence(
             or second_column_lows not in data.columns:
 
         # Check if the two columns are in the data
-        if first_column not in data.columns or second_column not in data.columns:
+        if first_column not in data.columns \
+                or second_column not in data.columns:
             raise PyIndicatorException(
                 f"{first_column} and {second_column} columns "
                 "are required in the data"
@@ -412,7 +413,8 @@ def bearish_divergence(
             or second_column_highs not in data.columns:
 
         # Check if the two columns are in the data
-        if first_column not in data.columns or second_column not in data.columns:
+        if first_column not in data.columns \
+                or second_column not in data.columns:
             raise PyIndicatorException(
                 f"{first_column} and {second_column} columns "
                 "are required in the data"
@@ -463,6 +465,7 @@ def bearish_divergence(
 
     df[result_column] = result
     return pl.DataFrame(df) if is_polars else df
+
 
 def bearish_divergence_multi_dataframe(
     first_df: Union[pd.DataFrame, pl.DataFrame],
