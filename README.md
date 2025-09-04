@@ -1,6 +1,6 @@
 # PyIndicators
 
-PyIndicators is a powerful and user-friendly Python library for technical analysis indicators, metrics and helper functions. Written entirely in Python, it requires no external dependencies, ensuring seamless integration and ease of use.
+PyIndicators is a powerful and user-friendly Python library for financial technical analysis indicators, metrics and helper functions. Written entirely in Python, it requires no external dependencies, ensuring seamless integration and ease of use.
 
 ## Sponsors
 
@@ -29,13 +29,16 @@ pip install pyindicators
   * [Weighted Moving Average (WMA)](#weighted-moving-average-wma)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
-  * [Stochastic Oscillator (STO)](#stochastic-oscillator-sto)
-* [Momentum indicators](#momentum-indicators)
+* [Momentum and Oscillators](#momentum-and-oscillators)
   * [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
   * [Relative Strength Index Wilders method (Wilders RSI)](#wilders-relative-strength-index-wilders-rsi)
   * [Williams %R](#williams-r)
   * [Average Directional Index (ADX)](#average-directional-index-adx)
+  * [Stochastic Oscillator (STO)](#stochastic-oscillator-sto)
+* [Volatility indicators](#volatility-indicators)
+  * [Bollinger Bands (BB)](#bollinger-bands-bb)
+  * [Average True Range (ATR)](#average-true-range-atr)
 * [Pattern recognition](#pattern-recognition)
   * [Detect Peaks](#detect-peaks)
   * [Detect Bullish Divergence](#detect-bullish-divergence)
@@ -208,57 +211,7 @@ pd_df.tail(10)
 
 ![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema.png)
 
-#### Stochastic Oscillator (STO)
-The Stochastic Oscillator (STO) is a momentum indicator that compares a particular closing price of an asset to a range of its prices over a certain period. It is used to identify overbought or oversold conditions in a market. The STO consists of two lines: %K and %D, where %K is the main line and %D is the signal line.
-
-```python
-def stochastic_oscillator(
-    data: Union[pd.DataFrame, pl.DataFrame],
-    high_column: str = "High",
-    low_column: str = "Low",
-    close_column: str = "Close",
-    k_period: int = 14,
-    k_slowing: int = 3,
-    d_period: int = 3,
-    result_column: Optional[str] = None
-) -> Union[pd.DataFrame, pl.DataFrame]:
-```
-
-Example
-
-```python
-from investing_algorithm_framework import download
-from pyindicators import stochastic_oscillator
-pl_df = download(
-    symbol="btc/eur",
-    market="binance",
-    time_frame="1d",
-    start_date="2023-12-01",
-    end_date="2023-12-25",
-    save=True,
-    storage_path="./data"
-)
-pd_df = download(
-    symbol="btc/eur",
-    market="binance",
-    time_frame="1d",
-    start_date="2023-12-01",
-    end_date="2023-12-25",
-    pandas=True,
-    save=True,
-    storage_path="./data"
-)
-# Calculate Stochastic Oscillator for Polars DataFrame
-pl_df = stochastic_oscillator(pl_df, high_column="High", low_column="Low", close_column="Close", k_period=14, k_slowing=3, d_period=3, result_column="STO")
-pl_df.show(10)
-# Calculate Stochastic Oscillator for Pandas DataFrame
-pd_df = stochastic_oscillator(pd_df, high_column="High", low_column="Low", close_column="Close", k_period=14, k_slowing=3, d_period=3, result_column="STO")
-pd_df.tail(10)
-```
-
-![STO](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/sto.png)
-
-### Momentum Indicators
+### Momentum and Oscillators
 
 Indicators that measure the strength and speed of price movements rather than the direction.
 
@@ -527,6 +480,167 @@ pd_df.tail(10)
 ```
 
 ![ADX](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/adx.png)
+
+#### Stochastic Oscillator (STO)
+The Stochastic Oscillator (STO) is a momentum indicator that compares a particular closing price of an asset to a range of its prices over a certain period. It is used to identify overbought or oversold conditions in a market. The STO consists of two lines: %K and %D, where %K is the main line and %D is the signal line.
+
+```python
+def stochastic_oscillator(
+    data: Union[pd.DataFrame, pl.DataFrame],
+    high_column: str = "High",
+    low_column: str = "Low",
+    close_column: str = "Close",
+    k_period: int = 14,
+    k_slowing: int = 3,
+    d_period: int = 3,
+    result_column: Optional[str] = None
+) -> Union[pd.DataFrame, pl.DataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+from pyindicators import stochastic_oscillator
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+# Calculate Stochastic Oscillator for Polars DataFrame
+pl_df = stochastic_oscillator(pl_df, high_column="High", low_column="Low", close_column="Close", k_period=14, k_slowing=3, d_period=3, result_column="STO")
+pl_df.show(10)
+# Calculate Stochastic Oscillator for Pandas DataFrame
+pd_df = stochastic_oscillator(pd_df, high_column="High", low_column="Low", close_column="Close", k_period=14, k_slowing=3, d_period=3, result_column="STO")
+pd_df.tail(10)
+```
+
+![STO](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/sto.png)
+
+### Volatility indicators
+
+Indicators that measure the rate of price movement, regardless of direction. They help to identify
+periods of high and low volatility in the market.
+
+#### Bollinger Bands (BB)
+
+Bollinger Bands are a volatility indicator that consists of a middle band (SMA) and two outer bands (standard deviations). They help traders identify overbought and oversold conditions.
+
+```python
+def bollinger_bands(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column='Close',
+    period=20,
+    std_dev=2,
+    middle_band_column_result_column='bollinger_middle',
+    upper_band_column_result_column='bollinger_upper',
+    lower_band_column_result_column='bollinger_lower'
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import ema
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate bollinger bands for Polars DataFrame
+pl_df = bollinger_bands(pl_df, source_column="Close")
+pl_df.show(10)
+
+# Calculate bollinger bands for Pandas DataFrame
+pd_df = bollinger_bands(pd_df, source_column="Close")
+pd_df.tail(10)
+```
+
+![BOLLINGER_BANDS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/bollinger_bands.png)
+
+#### Average True Range (ATR)
+
+The Average True Range (ATR) is a volatility indicator that measures the average range between the high and low prices over a specified period. It helps traders identify potential price fluctuations and adjust their strategies accordingly.
+
+```python
+def atr(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column="Close",
+    period=14,
+    result_column="ATR"
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import ema
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate average true range for Polars DataFrame
+pl_df = atr(pl_df, source_column="Close")
+pl_df.show(10)
+
+# Calculate average true range for Pandas DataFrame
+pd_df = atr(pd_df, source_column="Close")
+pd_df.tail(10)
+```
+
+![ATR](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/atr.png)
+
 
 ### Pattern Recognition
 

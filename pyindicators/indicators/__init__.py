@@ -19,6 +19,8 @@ from .divergence import detect_peaks, bearish_divergence, \
     bullish_divergence, bearish_divergence_multi_dataframe, \
     bullish_divergence_multi_dataframe
 from .stochastic_oscillator import stochastic_oscillator
+from .average_true_range import atr
+from .bollinger_bands import bollinger_bands, bollinger_width
 
 __all__ = [
     'sma',
@@ -52,5 +54,8 @@ __all__ = [
     'is_divergence',
     'stochastic_oscillator',
     'bearish_divergence_multi_dataframe',
-    'bullish_divergence_multi_dataframe'
+    'bullish_divergence_multi_dataframe',
+    'atr',
+    'bollinger_bands',
+    'bollinger_width'
 ]

@@ -145,3 +145,4 @@ bumpversion.egg-info/
 .vscode/
 
 test.ipynb
+/resources
