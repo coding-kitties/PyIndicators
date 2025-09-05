@@ -1,4 +1,4 @@
-from .indicators import sma, rsi, ema, wilders_rsi, adx, \
+from .indicators import sma, rsi, ema, wilders_rsi, adx, roc, cci, \
     crossover, is_crossover, wma, macd, willr, is_crossunder, crossunder, \
     is_lower_low_detected, is_divergence, bollinger_width, \
     is_below, is_above, get_slope, has_any_higher_then_threshold, \
@@ -47,5 +47,7 @@ __all__ = [
     'bullish_divergence_multi_dataframe',
     'bollinger_bands',
     'bollinger_width',
-    'atr'
+    'atr',
+    'cci',
+    'roc'
 ]

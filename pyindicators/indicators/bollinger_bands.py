@@ -64,9 +64,9 @@ def bollinger_width(
         source_column=source_column,
         period=period,
         std_dev=std_dev,
-        middle_band_column='BB_middle_temp',
-        upper_band_column='BB_upper_temp',
-        lower_band_column='BB_lower_temp'
+        middle_band_column_result_column='BB_middle_temp',
+        upper_band_column_result_column='BB_upper_temp',
+        lower_band_column_result_column='BB_lower_temp'
     )
 
     if isinstance(data, PdDataFrame):

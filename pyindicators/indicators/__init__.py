@@ -21,6 +21,8 @@ from .divergence import detect_peaks, bearish_divergence, \
 from .stochastic_oscillator import stochastic_oscillator
 from .average_true_range import atr
 from .bollinger_bands import bollinger_bands, bollinger_width
+from .commodity_channel_index import cci
+from .rate_of_change import roc
 
 __all__ = [
     'sma',
@@ -57,5 +59,7 @@ __all__ = [
     'bullish_divergence_multi_dataframe',
     'atr',
     'bollinger_bands',
-    'bollinger_width'
+    'bollinger_width',
+    'cci',
+    'roc'
 ]
