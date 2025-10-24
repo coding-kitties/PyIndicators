@@ -103,10 +103,10 @@ def get_higher_lows_index(data, order=5, K=2):
 
 
 def detect_peaks(
-    data: Union[pd.DataFrame, pl.DataFrame],
-    source_column: str,
-    number_of_neighbors_to_compare: int = 5,
-    min_consecutive: int = 2
+        data: Union[pd.DataFrame, pl.DataFrame],
+        source_column: str,
+        number_of_neighbors_to_compare: int = 5,
+        min_consecutive: int = 2
 ) -> Union[pd.DataFrame, pl.DataFrame]:
     """
     Detects local peak structures in a time series column
@@ -153,20 +153,46 @@ def detect_peaks(
         data[f"{source_column}_highs"] = np.nan
         data[f"{source_column}_lows"] = np.nan
 
-        data.loc[data.index[hh_idx], f"{source_column}_highs"] = 1
-        data.loc[data.index[lh_idx], f"{source_column}_highs"] = -1
-        data.loc[data.index[ll_idx], f"{source_column}_lows"] = 1
-        data.loc[data.index[hl_idx], f"{source_column}_lows"] = -1
+        # Fix: Filter indices to ensure they're within bounds and convert to list
+        valid_hh_idx = [i for i in hh_idx if 0 <= i < len(data)]
+        valid_lh_idx = [i for i in lh_idx if 0 <= i < len(data)]
+        valid_ll_idx = [i for i in ll_idx if 0 <= i < len(data)]
+        valid_hl_idx = [i for i in hl_idx if 0 <= i < len(data)]
+
+        # Use iloc for integer-based indexing instead of loc with index arrays
+        if len(valid_hh_idx) > 0:
+            data.iloc[valid_hh_idx, data.columns.get_loc(
+                f"{source_column}_highs")] = 1
+        if len(valid_lh_idx) > 0:
+            data.iloc[valid_lh_idx, data.columns.get_loc(
+                f"{source_column}_highs")] = -1
+        if len(valid_ll_idx) > 0:
+            data.iloc[valid_ll_idx, data.columns.get_loc(
+                f"{source_column}_lows")] = 1
+        if len(valid_hl_idx) > 0:
+            data.iloc[valid_hl_idx, data.columns.get_loc(
+                f"{source_column}_lows")] = -1
+
         return data
 
     elif isinstance(data, pl.DataFrame):
         highs_col = np.full(len(data), np.nan)
         lows_col = np.full(len(data), np.nan)
 
-        highs_col[hh_idx] = 1
-        highs_col[lh_idx] = -1
-        lows_col[ll_idx] = 1
-        lows_col[hl_idx] = -1
+        # Filter indices for polars as well
+        valid_hh_idx = [i for i in hh_idx if 0 <= i < len(data)]
+        valid_lh_idx = [i for i in lh_idx if 0 <= i < len(data)]
+        valid_ll_idx = [i for i in ll_idx if 0 <= i < len(data)]
+        valid_hl_idx = [i for i in hl_idx if 0 <= i < len(data)]
+
+        if len(valid_hh_idx) > 0:
+            highs_col[valid_hh_idx] = 1
+        if len(valid_lh_idx) > 0:
+            highs_col[valid_lh_idx] = -1
+        if len(valid_ll_idx) > 0:
+            lows_col[valid_ll_idx] = 1
+        if len(valid_hl_idx) > 0:
+            lows_col[valid_hl_idx] = -1
 
         data = data.with_columns([
             pl.Series(f"{source_column}_highs", highs_col),
