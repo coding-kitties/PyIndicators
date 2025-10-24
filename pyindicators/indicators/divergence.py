@@ -153,7 +153,8 @@ def detect_peaks(
         data[f"{source_column}_highs"] = np.nan
         data[f"{source_column}_lows"] = np.nan
 
-        # Fix: Filter indices to ensure they're within bounds and convert to list
+        # Fix: Filter indices to ensure they're within bounds and
+        # convert to list
         valid_hh_idx = [i for i in hh_idx if 0 <= i < len(data)]
         valid_lh_idx = [i for i in lh_idx if 0 <= i < len(data)]
         valid_ll_idx = [i for i in ll_idx if 0 <= i < len(data)]
