@@ -215,6 +215,17 @@ def check_divergence_pattern(series_a, series_b, target_a=-1, target_b=1):
     Returns:
         bool: True if pattern is found, False otherwise
     """
+    # Convert to flat numpy arrays for consistent integer indexing
+    # This handles pandas Series with DatetimeIndex correctly
+    if hasattr(series_a, 'values'):
+        series_a = series_a.values.flatten()
+    elif hasattr(series_a, 'flatten'):
+        series_a = series_a.flatten()
+    if hasattr(series_b, 'values'):
+        series_b = series_b.values.flatten()
+    elif hasattr(series_b, 'flatten'):
+        series_b = series_b.flatten()
+
     try:
         # Find the first index of `target_a` (e.g., -1 in the indicator)
         a_index = next(i for i, val in enumerate(series_a) if val == target_a)
@@ -223,9 +234,13 @@ def check_divergence_pattern(series_a, series_b, target_a=-1, target_b=1):
 
     # From that point forward, check if series_b has a target_b
     for j in range(a_index, len(series_b)):
-        if series_b[j] == -1:
+        val = series_b[j]
+        # Handle numpy scalar comparison explicitly
+        if hasattr(val, 'item'):
+            val = val.item()
+        if val == -1:
             return False  # Higher low before lower low — invalid
-        if series_b[j] == target_b:
+        if val == target_b:
             return True  # Valid divergence pattern
     return False
 

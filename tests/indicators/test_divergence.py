@@ -830,3 +830,134 @@ class TestBullishDivergenceMultiDataFrame(TestCase):
             window_size=7
         )
         self.assertTrue(any(df["bearish_divergence"]))
+
+
+class TestCheckDivergencePatternWithDatetimeIndex(TestCase):
+    """Tests to verify divergence functions work correctly with DatetimeIndex."""
+
+    def test_check_divergence_pattern_with_datetime_index(self):
+        """Test that check_divergence_pattern works with DatetimeIndex Series."""
+        from pyindicators.indicators.divergence import check_divergence_pattern
+
+        series_a = pd.Series(
+            [np.nan, -1, np.nan],
+            index=pd.date_range('2024-01-01', periods=3, freq='1h')
+        )
+        series_b = pd.Series(
+            [np.nan, np.nan, 1],
+            index=pd.date_range('2024-01-01', periods=3, freq='1h')
+        )
+
+        result = check_divergence_pattern(series_a, series_b, target_a=-1, target_b=1)
+        self.assertTrue(result)
+
+    def test_check_divergence_pattern_with_integer_index(self):
+        """Test that check_divergence_pattern still works with integer index."""
+        from pyindicators.indicators.divergence import check_divergence_pattern
+
+        series_a = pd.Series([np.nan, -1, np.nan])
+        series_b = pd.Series([np.nan, np.nan, 1])
+
+        result = check_divergence_pattern(series_a, series_b, target_a=-1, target_b=1)
+        self.assertTrue(result)
+
+    def test_check_divergence_pattern_with_numpy_arrays(self):
+        """Test that check_divergence_pattern works with numpy arrays."""
+        from pyindicators.indicators.divergence import check_divergence_pattern
+
+        series_a = np.array([np.nan, -1, np.nan])
+        series_b = np.array([np.nan, np.nan, 1])
+
+        result = check_divergence_pattern(series_a, series_b, target_a=-1, target_b=1)
+        self.assertTrue(result)
+
+    def test_bearish_divergence_multi_dataframe_with_datetime_index(self):
+        """Test bearish_divergence_multi_dataframe with DatetimeIndex DataFrames."""
+        from pyindicators import macd, detect_peaks
+
+        # Data with DatetimeIndex (common when loading from CSV or APIs)
+        df = pd.DataFrame({
+            'Close': [100, 101, 102, 101, 100, 99, 100, 101, 102, 103, 102, 101]
+        }, index=pd.date_range('2024-01-01', periods=12, freq='1h'))
+
+        # Apply indicators
+        macd_data = macd(
+            df.copy(),
+            source_column="Close",
+            short_period=3,
+            long_period=6,
+            signal_period=3
+        )
+        close_data = detect_peaks(
+            df.copy(),
+            source_column="Close",
+            number_of_neighbors_to_compare=2,
+            min_consecutive=1
+        )
+        macd_data = detect_peaks(
+            macd_data,
+            source_column="macd_histogram",
+            number_of_neighbors_to_compare=2,
+            min_consecutive=1
+        )
+
+        # This should not raise ValueError with DatetimeIndex
+        divergence_data = bearish_divergence_multi_dataframe(
+            first_df=macd_data,
+            second_df=close_data,
+            result_df=close_data.copy(),
+            first_column="macd_histogram",
+            second_column="Close",
+            window_size=5,
+            result_column="bearish_divergence"
+        )
+
+        # Verify the result has the expected column and index
+        self.assertIn("bearish_divergence", divergence_data.columns)
+        self.assertIsInstance(divergence_data.index, pd.DatetimeIndex)
+
+    def test_bullish_divergence_multi_dataframe_with_datetime_index(self):
+        """Test bullish_divergence_multi_dataframe with DatetimeIndex DataFrames."""
+        from pyindicators import macd, detect_peaks
+
+        # Data with DatetimeIndex
+        df = pd.DataFrame({
+            'Close': [103, 102, 101, 100, 99, 100, 101, 102, 101, 100, 99, 98]
+        }, index=pd.date_range('2024-01-01', periods=12, freq='1h'))
+
+        # Apply indicators
+        macd_data = macd(
+            df.copy(),
+            source_column="Close",
+            short_period=3,
+            long_period=6,
+            signal_period=3
+        )
+        close_data = detect_peaks(
+            df.copy(),
+            source_column="Close",
+            number_of_neighbors_to_compare=2,
+            min_consecutive=1
+        )
+        macd_data = detect_peaks(
+            macd_data,
+            source_column="macd_histogram",
+            number_of_neighbors_to_compare=2,
+            min_consecutive=1
+        )
+
+        # This should not raise ValueError with DatetimeIndex
+        divergence_data = bullish_divergence_multi_dataframe(
+            first_df=macd_data,
+            second_df=close_data,
+            result_df=close_data.copy(),
+            first_column="macd_histogram",
+            second_column="Close",
+            window_size=5,
+            result_column="bullish_divergence"
+        )
+
+        # Verify the result has the expected column and index
+        self.assertIn("bullish_divergence", divergence_data.columns)
+        self.assertIsInstance(divergence_data.index, pd.DatetimeIndex)
+

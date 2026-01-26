@@ -10,7 +10,20 @@ from .indicators import sma, rsi, ema, wilders_rsi, adx, roc, cci, \
 from .exceptions import PyIndicatorException
 from .date_range import DateRange
 
+# Version information
+__version__ = "0.15.0"
+__version_info__ = tuple(int(x) for x in __version__.split("."))
+
+
+def get_version():
+    """Return the version string of pyindicators."""
+    return __version__
+
+
 __all__ = [
+    '__version__',
+    '__version_info__',
+    'get_version',
     'sma',
     'wma',
     'is_crossover',
