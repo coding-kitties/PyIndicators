@@ -38,7 +38,11 @@ pip install pyindicators
   * [Stochastic Oscillator (STO)](#stochastic-oscillator-sto)
 * [Volatility indicators](#volatility-indicators)
   * [Bollinger Bands (BB)](#bollinger-bands-bb)
+  * [Bollinger Bands Overshoot](#bollinger-bands-overshoot)
   * [Average True Range (ATR)](#average-true-range-atr)
+  * [Moving Average Envelope (MAE)](#moving-average-envelope-mae)
+* [Support and Resistance](#support-and-resistance)
+  * [Fibonacci Retracement](#fibonacci-retracement)
 * [Pattern recognition](#pattern-recognition)
   * [Detect Peaks](#detect-peaks)
   * [Detect Bullish Divergence](#detect-bullish-divergence)
@@ -590,6 +594,68 @@ pd_df.tail(10)
 
 ![BOLLINGER_BANDS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/bollinger_bands.png)
 
+#### Bollinger Bands Overshoot
+
+Bollinger Bands Overshoot measures how far the price has exceeded the upper or lower Bollinger Band, expressed as a percentage of the half-band width (distance from middle to upper/lower band). This indicator helps identify extreme price movements and potential mean reversion opportunities.
+
+**Calculation:**
+- When price > upper band (bullish overshoot): `((Price - Upper Band) / (Upper Band - Middle Band)) × 100`
+- When price < lower band (bearish overshoot): `((Price - Lower Band) / (Middle Band - Lower Band)) × 100`
+- When price is within bands: `0%`
+
+**Interpretation:**
+- Positive values indicate overbought conditions (price above upper band)
+- Negative values indicate oversold conditions (price below lower band)
+- High overshoots (e.g., 40%) indicate increased risk of mean reversion
+
+```python
+def bollinger_overshoot(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column='Close',
+    period=20,
+    std_dev=2,
+    result_column='bollinger_overshoot'
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import bollinger_overshoot
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate Bollinger Bands Overshoot for Polars DataFrame
+pl_df = bollinger_overshoot(pl_df, source_column="Close")
+pl_df.show(10)
+
+# Calculate Bollinger Bands Overshoot for Pandas DataFrame
+pd_df = bollinger_overshoot(pd_df, source_column="Close")
+pd_df.tail(10)
+```
+
+![BOLLINGER_OVERSHOOT](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/bollinger_overshoot.png)
+
 #### Average True Range (ATR)
 
 The Average True Range (ATR) is a volatility indicator that measures the average range between the high and low prices over a specified period. It helps traders identify potential price fluctuations and adjust their strategies accordingly.
@@ -640,6 +706,125 @@ pd_df.tail(10)
 ```
 
 ![ATR](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/atr.png)
+
+#### Moving Average Envelope (MAE)
+
+Moving Average Envelopes are percentage-based envelopes set above and below a moving average. The moving average forms the base, and the envelopes are set at a fixed percentage above and below. This indicator is useful for identifying overbought/oversold conditions, spotting trend direction, and finding support and resistance levels.
+
+```python
+def moving_average_envelope(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str = 'Close',
+    period: int = 20,
+    percentage: float = 2.5,
+    ma_type: str = 'sma',
+    middle_column: str = 'ma_envelope_middle',
+    upper_column: str = 'ma_envelope_upper',
+    lower_column: str = 'ma_envelope_lower'
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import moving_average_envelope
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate Moving Average Envelope for Polars DataFrame
+pl_df = moving_average_envelope(pl_df, source_column="Close", period=20, percentage=2.5)
+pl_df.show(10)
+
+# Calculate Moving Average Envelope for Pandas DataFrame
+pd_df = moving_average_envelope(pd_df, source_column="Close", period=20, percentage=2.5)
+pd_df.tail(10)
+```
+
+![MOVING_AVERAGE_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/moving_average_envelope.png)
+
+### Support and Resistance
+
+Indicators that help identify potential support and resistance levels in the market.
+
+#### Fibonacci Retracement
+
+Fibonacci retracement levels are horizontal lines that indicate where support and resistance are likely to occur. They are based on Fibonacci numbers and are drawn between a swing high and swing low. The standard levels are 0.0 (0%), 0.236 (23.6%), 0.382 (38.2%), 0.5 (50%), 0.618 (61.8% - Golden Ratio), 0.786 (78.6%), and 1.0 (100%).
+
+The calculation formula is:
+```
+Level Price = Swing High - (Swing High - Swing Low) × Fibonacci Ratio
+```
+
+```python
+def fibonacci_retracement(
+    data: Union[PdDataFrame, PlDataFrame],
+    high_column: str = 'High',
+    low_column: str = 'Low',
+    levels: Optional[List[float]] = None,
+    lookback_period: Optional[int] = None,
+    swing_high: Optional[float] = None,
+    swing_low: Optional[float] = None,
+    result_prefix: str = 'fib'
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import fibonacci_retracement
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate Fibonacci retracement for Polars DataFrame
+pl_df = fibonacci_retracement(pl_df, high_column="High", low_column="Low")
+pl_df.show(10)
+
+# Calculate Fibonacci retracement for Pandas DataFrame
+pd_df = fibonacci_retracement(pd_df, high_column="High", low_column="Low")
+pd_df.tail(10)
+```
+
+![FIBONACCI_RETRACEMENT](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/fibonacci_retracement.png)
 
 ### Pattern Recognition
 
