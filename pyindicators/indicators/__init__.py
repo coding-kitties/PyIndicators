@@ -20,9 +20,14 @@ from .divergence import detect_peaks, bearish_divergence, \
     bullish_divergence_multi_dataframe
 from .stochastic_oscillator import stochastic_oscillator
 from .average_true_range import atr
-from .bollinger_bands import bollinger_bands, bollinger_width
+from .bollinger_bands import bollinger_bands, bollinger_width, \
+    bollinger_overshoot
 from .commodity_channel_index import cci
 from .rate_of_change import roc
+from .fibonacci_retracement import fibonacci_retracement, \
+    fibonacci_retracement_levels, fibonacci_extension
+from .moving_average_envelope import moving_average_envelope, \
+    sma_envelope, ema_envelope
 
 __all__ = [
     'sma',
@@ -60,6 +65,13 @@ __all__ = [
     'atr',
     'bollinger_bands',
     'bollinger_width',
+    'bollinger_overshoot',
     'cci',
-    'roc'
+    'roc',
+    'fibonacci_retracement',
+    'fibonacci_retracement_levels',
+    'fibonacci_extension',
+    'moving_average_envelope',
+    'sma_envelope',
+    'ema_envelope'
 ]

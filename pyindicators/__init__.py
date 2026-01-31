@@ -1,12 +1,17 @@
-from .indicators import sma, rsi, ema, wilders_rsi, adx, roc, cci, \
-    crossover, is_crossover, wma, macd, willr, is_crossunder, crossunder, \
-    is_lower_low_detected, is_divergence, bollinger_width, \
-    is_below, is_above, get_slope, has_any_higher_then_threshold, \
-    has_slope_above_threshold, has_any_lower_then_threshold, \
-    has_values_above_threshold, has_values_below_threshold, is_down_trend, \
-    is_up_trend, up_and_downtrends, detect_peaks, atr, bollinger_bands, \
-    bearish_divergence, bullish_divergence, stochastic_oscillator, \
-    bearish_divergence_multi_dataframe, bullish_divergence_multi_dataframe
+from .indicators import (
+    sma, rsi, ema, wilders_rsi, adx, roc, cci,
+    crossover, is_crossover, wma, macd, willr, is_crossunder, crossunder,
+    is_lower_low_detected, is_divergence, bollinger_width,
+    bollinger_overshoot, is_below, is_above, get_slope,
+    has_any_higher_then_threshold, has_slope_above_threshold,
+    has_any_lower_then_threshold, has_values_above_threshold,
+    has_values_below_threshold, is_down_trend,
+    is_up_trend, up_and_downtrends, detect_peaks, atr, bollinger_bands,
+    bearish_divergence, bullish_divergence, stochastic_oscillator,
+    bearish_divergence_multi_dataframe, bullish_divergence_multi_dataframe,
+    fibonacci_retracement, fibonacci_retracement_levels, fibonacci_extension,
+    moving_average_envelope, sma_envelope, ema_envelope
+)
 from .exceptions import PyIndicatorException
 from .date_range import DateRange
 
@@ -60,7 +65,14 @@ __all__ = [
     'bullish_divergence_multi_dataframe',
     'bollinger_bands',
     'bollinger_width',
+    'bollinger_overshoot',
     'atr',
     'cci',
-    'roc'
+    'roc',
+    'fibonacci_retracement',
+    'fibonacci_retracement_levels',
+    'fibonacci_extension',
+    'moving_average_envelope',
+    'sma_envelope',
+    'ema_envelope'
 ]
