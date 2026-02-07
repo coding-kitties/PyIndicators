@@ -43,6 +43,8 @@ pip install pyindicators
   * [Moving Average Envelope (MAE)](#moving-average-envelope-mae)
 * [Support and Resistance](#support-and-resistance)
   * [Fibonacci Retracement](#fibonacci-retracement)
+  * [Golden Zone](#golden-zone)
+  * [Golden Zone Signal](#golden-zone-signal)
 * [Pattern recognition](#pattern-recognition)
   * [Detect Peaks](#detect-peaks)
   * [Detect Bullish Divergence](#detect-bullish-divergence)
@@ -825,6 +827,136 @@ pd_df.tail(10)
 ```
 
 ![FIBONACCI_RETRACEMENT](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/fibonacci_retracement.png)
+
+#### Golden Zone
+
+The Golden Zone indicator calculates Fibonacci retracement levels based on the highest high and lowest low over a specified rolling period. The "Golden Zone" refers to the area between the 50% and 61.8% Fibonacci retracement levels, which is often considered a key area for potential price reversals or continuations.
+
+This indicator plots dynamic support/resistance levels that update with each bar, making it useful for identifying potential entry and exit points in trending markets.
+
+The calculation formula is:
+```
+Highest High (HH) = Rolling maximum of high prices over `length` bars
+Lowest Low (LL) = Rolling minimum of low prices over `length` bars
+Diff = HH - LL
+Upper Level = HH - (Diff × 0.5)      # 50% retracement
+Lower Level = HH - (Diff × 0.618)    # 61.8% retracement
+```
+
+```python
+def golden_zone(
+    data: Union[PdDataFrame, PlDataFrame],
+    high_column: str = 'High',
+    low_column: str = 'Low',
+    length: int = 60,
+    retracement_level_1: float = 0.5,
+    retracement_level_2: float = 0.618,
+    upper_column: str = 'golden_zone_upper',
+    lower_column: str = 'golden_zone_lower',
+    hh_column: str = 'golden_zone_hh',
+    ll_column: str = 'golden_zone_ll'
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import golden_zone
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate Golden Zone for Polars DataFrame
+pl_df = golden_zone(pl_df, high_column="High", low_column="Low", length=60)
+pl_df.show(10)
+
+# Calculate Golden Zone for Pandas DataFrame
+pd_df = golden_zone(pd_df, high_column="High", low_column="Low", length=60)
+pd_df.tail(10)
+```
+
+![GOLDEN_ZONE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/golden_zone.png)
+
+#### Golden Zone Signal
+
+The Golden Zone Signal function generates trading signals based on whether the price is within the Golden Zone. It returns a signal value of 1 when the close price is between the upper (50%) and lower (61.8%) boundaries of the Golden Zone, and 0 when the price is outside the zone.
+
+This can be used to identify potential support/resistance areas and generate trading signals when price enters or exits the Golden Zone.
+
+> !Important: This function requires the Golden Zone columns to be present in the DataFrame. You must call the `golden_zone()` function first before using `golden_zone_signal()`.
+
+Signal values:
+- **1**: Price is within the Golden Zone (potential support/resistance area)
+- **0**: Price is outside the Golden Zone
+
+```python
+def golden_zone_signal(
+    data: Union[PdDataFrame, PlDataFrame],
+    close_column: str = 'Close',
+    upper_column: str = 'golden_zone_upper',
+    lower_column: str = 'golden_zone_lower',
+    signal_column: str = 'golden_zone_signal'
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import golden_zone, golden_zone_signal
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# First calculate Golden Zone, then the signal for Polars DataFrame
+pl_df = golden_zone(pl_df, high_column="High", low_column="Low", length=60)
+pl_df = golden_zone_signal(pl_df)
+pl_df.show(10)
+
+# First calculate Golden Zone, then the signal for Pandas DataFrame
+pd_df = golden_zone(pd_df, high_column="High", low_column="Low", length=60)
+pd_df = golden_zone_signal(pd_df)
+pd_df.tail(10)
+```
+
+![GOLDEN_ZONE_SIGNAL](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/golden_zone_signal.png)
 
 ### Pattern Recognition
 

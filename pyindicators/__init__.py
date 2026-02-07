@@ -10,7 +10,8 @@ from .indicators import (
     bearish_divergence, bullish_divergence, stochastic_oscillator,
     bearish_divergence_multi_dataframe, bullish_divergence_multi_dataframe,
     fibonacci_retracement, fibonacci_retracement_levels, fibonacci_extension,
-    moving_average_envelope, sma_envelope, ema_envelope
+    moving_average_envelope, sma_envelope, ema_envelope,
+    golden_zone, golden_zone_signal
 )
 from .exceptions import PyIndicatorException
 from .date_range import DateRange
@@ -74,5 +75,7 @@ __all__ = [
     'fibonacci_extension',
     'moving_average_envelope',
     'sma_envelope',
-    'ema_envelope'
+    'ema_envelope',
+    'golden_zone',
+    'golden_zone_signal'
 ]

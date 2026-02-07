@@ -146,3 +146,5 @@ bumpversion.egg-info/
 
 test.ipynb
 /resources
+
+*.ipynb

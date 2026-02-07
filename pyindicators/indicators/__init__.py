@@ -28,6 +28,7 @@ from .fibonacci_retracement import fibonacci_retracement, \
     fibonacci_retracement_levels, fibonacci_extension
 from .moving_average_envelope import moving_average_envelope, \
     sma_envelope, ema_envelope
+from .golden_zone import golden_zone, golden_zone_signal
 
 __all__ = [
     'sma',
@@ -73,5 +74,7 @@ __all__ = [
     'fibonacci_extension',
     'moving_average_envelope',
     'sma_envelope',
-    'ema_envelope'
+    'ema_envelope',
+    'golden_zone',
+    'golden_zone_signal'
 ]
