@@ -29,6 +29,7 @@ from .fibonacci_retracement import fibonacci_retracement, \
 from .moving_average_envelope import moving_average_envelope, \
     sma_envelope, ema_envelope
 from .golden_zone import golden_zone, golden_zone_signal
+from .fair_value_gap import fair_value_gap, fvg_signal, fvg_filled
 
 __all__ = [
     'sma',
@@ -76,5 +77,8 @@ __all__ = [
     'sma_envelope',
     'ema_envelope',
     'golden_zone',
-    'golden_zone_signal'
+    'golden_zone_signal',
+    'fair_value_gap',
+    'fvg_signal',
+    'fvg_filled'
 ]

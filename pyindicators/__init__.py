@@ -11,7 +11,8 @@ from .indicators import (
     bearish_divergence_multi_dataframe, bullish_divergence_multi_dataframe,
     fibonacci_retracement, fibonacci_retracement_levels, fibonacci_extension,
     moving_average_envelope, sma_envelope, ema_envelope,
-    golden_zone, golden_zone_signal
+    golden_zone, golden_zone_signal,
+    fair_value_gap, fvg_signal, fvg_filled
 )
 from .exceptions import PyIndicatorException
 from .date_range import DateRange
@@ -77,5 +78,8 @@ __all__ = [
     'sma_envelope',
     'ema_envelope',
     'golden_zone',
-    'golden_zone_signal'
+    'golden_zone_signal',
+    'fair_value_gap',
+    'fvg_signal',
+    'fvg_filled'
 ]
