@@ -12,7 +12,8 @@ from .indicators import (
     fibonacci_retracement, fibonacci_retracement_levels, fibonacci_extension,
     moving_average_envelope, sma_envelope, ema_envelope,
     golden_zone, golden_zone_signal,
-    fair_value_gap, fvg_signal, fvg_filled
+    fair_value_gap, fvg_signal, fvg_filled,
+    order_blocks, ob_signal, get_active_order_blocks
 )
 from .exceptions import PyIndicatorException
 from .date_range import DateRange
@@ -81,5 +82,8 @@ __all__ = [
     'golden_zone_signal',
     'fair_value_gap',
     'fvg_signal',
-    'fvg_filled'
+    'fvg_filled',
+    'order_blocks',
+    'ob_signal',
+    'get_active_order_blocks'
 ]

@@ -30,6 +30,7 @@ from .moving_average_envelope import moving_average_envelope, \
     sma_envelope, ema_envelope
 from .golden_zone import golden_zone, golden_zone_signal
 from .fair_value_gap import fair_value_gap, fvg_signal, fvg_filled
+from .order_blocks import order_blocks, ob_signal, get_active_order_blocks
 
 __all__ = [
     'sma',
@@ -80,5 +81,8 @@ __all__ = [
     'golden_zone_signal',
     'fair_value_gap',
     'fvg_signal',
-    'fvg_filled'
+    'fvg_filled',
+    'order_blocks',
+    'ob_signal',
+    'get_active_order_blocks'
 ]
