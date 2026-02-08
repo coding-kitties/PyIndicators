@@ -33,7 +33,8 @@ from .fair_value_gap import fair_value_gap, fvg_signal, fvg_filled
 from .order_blocks import order_blocks, ob_signal, get_active_order_blocks
 from .market_structure import (
     market_structure_break, market_structure_ob,
-    msb_signal, ob_quality_signal, get_market_structure_stats
+    msb_signal, ob_quality_signal, get_market_structure_stats,
+    market_structure_choch_bos, choch_bos_signal, get_choch_bos_stats
 )
 
 __all__ = [
@@ -93,5 +94,8 @@ __all__ = [
     'market_structure_ob',
     'msb_signal',
     'ob_quality_signal',
-    'get_market_structure_stats'
+    'get_market_structure_stats',
+    'market_structure_choch_bos',
+    'choch_bos_signal',
+    'get_choch_bos_stats'
 ]

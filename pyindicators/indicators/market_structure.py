@@ -1,4 +1,4 @@
-from typing import Union, List, Dict, Optional
+from typing import Union, List, Dict
 from pandas import DataFrame as PdDataFrame
 from polars import DataFrame as PlDataFrame
 import polars as pl
@@ -420,9 +420,7 @@ def _market_structure_ob_pandas(
 
     # Track last pivot values
     last_pivot_high = np.nan
-    last_pivot_high_idx = -1
     last_pivot_low = np.nan
-    last_pivot_low_idx = -1
     pivot_high_crossed = True
     pivot_low_crossed = True
 
@@ -433,13 +431,11 @@ def _market_structure_ob_pandas(
         # Check for new pivot high
         if pivot_highs[i]:
             last_pivot_high = high[i]
-            last_pivot_high_idx = i
             pivot_high_crossed = False
 
         # Check for new pivot low
         if pivot_lows[i]:
             last_pivot_low = low[i]
-            last_pivot_low_idx = i
             pivot_low_crossed = False
 
         # Check for bullish MSB
@@ -836,3 +832,425 @@ def get_market_structure_stats(
         'bearish_msb_count': int(data[msb_bearish_column].sum())
     }
 
+
+def market_structure_choch_bos(
+    data: Union[PdDataFrame, PlDataFrame],
+    length: int = 5,
+    high_column: str = 'High',
+    low_column: str = 'Low',
+    close_column: str = 'Close',
+    choch_bullish_column: str = 'choch_bullish',
+    choch_bearish_column: str = 'choch_bearish',
+    bos_bullish_column: str = 'bos_bullish',
+    bos_bearish_column: str = 'bos_bearish',
+    support_column: str = 'support_level',
+    resistance_column: str = 'resistance_level',
+    support_broken_column: str = 'support_broken',
+    resistance_broken_column: str = 'resistance_broken',
+    trend_column: str = 'market_trend'
+) -> Union[PdDataFrame, PlDataFrame]:
+    """
+    Detect Market Structure using fractal-based CHoCH and BOS signals.
+
+    This indicator uses fractal detection to identify significant swing
+    highs and lows, then determines whether price breaks are:
+    - **CHoCH (Change of Character)**: Trend reversal signal
+    - **BOS (Break of Structure)**: Trend continuation signal
+
+    The distinction is based on the current market trend (order flow state):
+    - If trend is bearish (-1) and price breaks above a swing high → CHoCH
+    - If trend is bullish (1) and price breaks above a swing high → BOS
+    - If trend is bullish (1) and price breaks below a swing low → CHoCH
+    - If trend is bearish (-1) and price breaks below a swing low → BOS
+
+    Args:
+        data: pandas or polars DataFrame with OHLC price data
+        length: Lookback period for fractal detection (default: 5, min: 3)
+        high_column: Column name for high prices (default: 'High')
+        low_column: Column name for low prices (default: 'Low')
+        close_column: Column name for close prices (default: 'Close')
+        choch_bullish_column: Result column for bullish CHoCH
+        choch_bearish_column: Result column for bearish CHoCH
+        bos_bullish_column: Result column for bullish BOS
+        bos_bearish_column: Result column for bearish BOS
+        support_column: Result column for support level
+        resistance_column: Result column for resistance level
+        support_broken_column: Result column for support breakout
+        resistance_broken_column: Result column for resistance breakout
+        trend_column: Result column for current market trend (1=bull, -1=bear)
+
+    Returns:
+        DataFrame with added columns:
+            - {choch_bullish_column}: 1 when bullish CHoCH, 0 otherwise
+            - {choch_bearish_column}: 1 when bearish CHoCH, 0 otherwise
+            - {bos_bullish_column}: 1 when bullish BOS, 0 otherwise
+            - {bos_bearish_column}: 1 when bearish BOS, 0 otherwise
+            - {support_column}: Current support level price
+            - {resistance_column}: Current resistance level price
+            - {support_broken_column}: 1 when support is broken
+            - {resistance_broken_column}: 1 when resistance is broken
+            - {trend_column}: Current market trend
+              (1=bullish, -1=bearish, 0=neutral)
+
+    Example:
+        >>> import pandas as pd
+        >>> from pyindicators import market_structure_choch_bos
+        >>> df = pd.DataFrame({
+        ...     'High': [...],
+        ...     'Low': [...],
+        ...     'Close': [...]
+        ... })
+        >>> result = market_structure_choch_bos(df, length=5)
+        >>> choch_signals = result[result['choch_bullish'] == 1]
+        >>> bos_signals = result[result['bos_bullish'] == 1]
+    """
+    if length < 3:
+        raise PyIndicatorException("Length must be at least 3")
+
+    if isinstance(data, PdDataFrame):
+        return _choch_bos_pandas(
+            data, length,
+            high_column, low_column, close_column,
+            choch_bullish_column, choch_bearish_column,
+            bos_bullish_column, bos_bearish_column,
+            support_column, resistance_column,
+            support_broken_column, resistance_broken_column,
+            trend_column
+        )
+    elif isinstance(data, PlDataFrame):
+        pdf = data.to_pandas()
+        result = _choch_bos_pandas(
+            pdf, length,
+            high_column, low_column, close_column,
+            choch_bullish_column, choch_bearish_column,
+            bos_bullish_column, bos_bearish_column,
+            support_column, resistance_column,
+            support_broken_column, resistance_broken_column,
+            trend_column
+        )
+        return pl.from_pandas(result)
+    else:
+        raise PyIndicatorException(
+            "Input data must be a pandas or polars DataFrame."
+        )
+
+
+def _choch_bos_pandas(
+    data: PdDataFrame,
+    length: int,
+    high_column: str,
+    low_column: str,
+    close_column: str,
+    choch_bullish_column: str,
+    choch_bearish_column: str,
+    bos_bullish_column: str,
+    bos_bearish_column: str,
+    support_column: str,
+    resistance_column: str,
+    support_broken_column: str,
+    resistance_broken_column: str,
+    trend_column: str
+) -> PdDataFrame:
+    """Pandas implementation of CHoCH/BOS detection."""
+    high = data[high_column].values
+    low = data[low_column].values
+    close = data[close_column].values
+    n = len(data)
+    p = length // 2
+
+    # Initialize result arrays
+    choch_bullish = np.zeros(n, dtype=int)
+    choch_bearish = np.zeros(n, dtype=int)
+    bos_bullish = np.zeros(n, dtype=int)
+    bos_bearish = np.zeros(n, dtype=int)
+    support_level = np.full(n, np.nan)
+    resistance_level = np.full(n, np.nan)
+    support_broken = np.zeros(n, dtype=int)
+    resistance_broken = np.zeros(n, dtype=int)
+    trend = np.zeros(n, dtype=int)
+
+    # Detect fractals using directional momentum
+    bullish_fractals, bearish_fractals = _detect_fractals(high, low, length)
+
+    # Track swing high/low for structure breaks
+    upper_value = np.nan
+    upper_loc = -1
+    upper_crossed = True
+
+    lower_value = np.nan
+    lower_loc = -1
+    lower_crossed = True
+
+    # Order flow state: 1 = bullish, -1 = bearish, 0 = neutral
+    os_state = 0
+
+    # Support/resistance tracking
+    current_support = np.nan
+    current_resistance = np.nan
+    sup_broken = True
+    res_broken = True
+
+    for i in range(length, n):
+        # Update swing high on bullish fractal
+        if bullish_fractals[i]:
+            upper_value = high[i - p]
+            upper_loc = i - p
+            upper_crossed = False
+
+        # Update swing low on bearish fractal
+        if bearish_fractals[i]:
+            lower_value = low[i - p]
+            lower_loc = i - p
+            lower_crossed = False
+
+        # Check for bullish structure break (close crosses above swing high)
+        if (not upper_crossed and
+                not np.isnan(upper_value) and
+                close[i] > upper_value and
+                close[i - 1] <= upper_value):
+
+            # Determine if CHoCH or BOS
+            if os_state == -1:
+                # Trend was bearish, now breaking up = Change of Character
+                choch_bullish[i] = 1
+            else:
+                # Trend was bullish or neutral = Break of Structure
+                bos_bullish[i] = 1
+
+            # Find support level (lowest low since swing high)
+            if upper_loc >= 0 and i > upper_loc:
+                min_low = low[upper_loc + 1]
+                for j in range(upper_loc + 1, i):
+                    if low[j] < min_low:
+                        min_low = low[j]
+                current_support = min_low
+                sup_broken = False
+
+            upper_crossed = True
+            os_state = 1
+
+        # Check for bearish structure break (close crosses below swing low)
+        if (not lower_crossed and
+                not np.isnan(lower_value) and
+                close[i] < lower_value and
+                close[i - 1] >= lower_value):
+
+            # Determine if CHoCH or BOS
+            if os_state == 1:
+                # Trend was bullish, now breaking down = Change of Character
+                choch_bearish[i] = 1
+            else:
+                # Trend was bearish or neutral = Break of Structure
+                bos_bearish[i] = 1
+
+            # Find resistance level (highest high since swing low)
+            if lower_loc >= 0 and i > lower_loc:
+                max_high = high[lower_loc + 1]
+                for j in range(lower_loc + 1, i):
+                    if high[j] > max_high:
+                        max_high = high[j]
+                current_resistance = max_high
+                res_broken = False
+
+            lower_crossed = True
+            os_state = -1
+
+        # Check for support/resistance breakouts
+        if not sup_broken and not np.isnan(current_support):
+            if close[i] < current_support:
+                support_broken[i] = 1
+                sup_broken = True
+
+        if not res_broken and not np.isnan(current_resistance):
+            if close[i] > current_resistance:
+                resistance_broken[i] = 1
+                res_broken = True
+
+        # Record current levels and trend
+        support_level[i] = current_support if not sup_broken else np.nan
+        resistance_level[i] = current_resistance if not res_broken else np.nan
+        trend[i] = os_state
+
+    # Add results to dataframe
+    data = data.copy()
+    data[choch_bullish_column] = choch_bullish
+    data[choch_bearish_column] = choch_bearish
+    data[bos_bullish_column] = bos_bullish
+    data[bos_bearish_column] = bos_bearish
+    data[support_column] = support_level
+    data[resistance_column] = resistance_level
+    data[support_broken_column] = support_broken
+    data[resistance_broken_column] = resistance_broken
+    data[trend_column] = trend
+
+    return data
+
+
+def _detect_fractals(
+    high: np.ndarray,
+    low: np.ndarray,
+    length: int
+) -> tuple:
+    """
+    Detect fractals using directional momentum method.
+
+    A bullish fractal (swing high) occurs when:
+    - The sum of sign changes in highs over p bars equals -p (falling)
+    - AND the sum p bars ago equaled +p (rising)
+    - AND the high at p bars ago is the highest in the length
+
+    A bearish fractal (swing low) is the inverse.
+    """
+    n = len(high)
+    p = length // 2
+    bullish_fractals = np.zeros(n, dtype=bool)
+    bearish_fractals = np.zeros(n, dtype=bool)
+
+    # Calculate directional sums
+    high_sign = np.zeros(n)
+    low_sign = np.zeros(n)
+
+    for i in range(1, n):
+        high_sign[i] = np.sign(high[i] - high[i - 1])
+        low_sign[i] = np.sign(low[i] - low[i - 1])
+
+    for i in range(length, n):
+        # Sum of high direction over last p bars
+        dh = np.sum(high_sign[i - p + 1:i + 1])
+        # Sum of high direction p bars before that
+        dh_prev = np.sum(high_sign[i - 2 * p + 1:i - p + 1])
+
+        # Sum of low direction over last p bars
+        dl = np.sum(low_sign[i - p + 1:i + 1])
+        # Sum of low direction p bars before that
+        dl_prev = np.sum(low_sign[i - 2 * p + 1:i - p + 1])
+
+        # Check for bullish fractal (swing high)
+        # Direction was rising (+p), now falling (-p), and high[i-p] is highest
+        if dh == -p and dh_prev == p:
+            # Verify it's the highest in the window
+            window_start = max(0, i - length + 1)
+            if high[i - p] == np.max(high[window_start:i + 1]):
+                bullish_fractals[i] = True
+
+        # Check for bearish fractal (swing low)
+        # Direction was falling (-p), now rising (+p), and low[i-p] is lowest
+        if dl == p and dl_prev == -p:
+            # Verify it's the lowest in the window
+            window_start = max(0, i - length + 1)
+            if low[i - p] == np.min(low[window_start:i + 1]):
+                bearish_fractals[i] = True
+
+    return bullish_fractals, bearish_fractals
+
+
+def choch_bos_signal(
+    data: Union[PdDataFrame, PlDataFrame],
+    choch_bullish_column: str = 'choch_bullish',
+    choch_bearish_column: str = 'choch_bearish',
+    bos_bullish_column: str = 'bos_bullish',
+    bos_bearish_column: str = 'bos_bearish',
+    signal_column: str = 'structure_signal'
+) -> Union[PdDataFrame, PlDataFrame]:
+    """
+    Generate trading signals from CHoCH/BOS detection.
+
+    Signal values:
+        - 2: Bullish CHoCH (strong reversal signal - trend change to bullish)
+        - 1: Bullish BOS (continuation signal - bullish trend continues)
+        - -1: Bearish BOS (continuation signal - bearish trend continues)
+        - -2: Bearish CHoCH (strong reversal signal - trend change to bearish)
+        - 0: No signal
+
+    Args:
+        data: DataFrame with CHoCH/BOS columns calculated
+        choch_bullish_column: Column for bullish CHoCH
+        choch_bearish_column: Column for bearish CHoCH
+        bos_bullish_column: Column for bullish BOS
+        bos_bearish_column: Column for bearish BOS
+        signal_column: Result column name
+
+    Returns:
+        DataFrame with added signal column
+
+    Example:
+        >>> df = market_structure_choch_bos(df)
+        >>> df = choch_bos_signal(df)
+        >>> reversal_signals = df[abs(df['structure_signal']) == 2]
+    """
+    if isinstance(data, PdDataFrame):
+        choch_bull = data[choch_bullish_column].values
+        choch_bear = data[choch_bearish_column].values
+        bos_bull = data[bos_bullish_column].values
+        bos_bear = data[bos_bearish_column].values
+
+        signal = np.zeros(len(data), dtype=int)
+        signal = np.where(choch_bull == 1, 2, signal)
+        signal = np.where(choch_bear == 1, -2, signal)
+        signal = np.where(bos_bull == 1, 1, signal)
+        signal = np.where(bos_bear == 1, -1, signal)
+
+        data = data.copy()
+        data[signal_column] = signal
+        return data
+    elif isinstance(data, PlDataFrame):
+        pdf = data.to_pandas()
+        result = choch_bos_signal(
+            pdf, choch_bullish_column, choch_bearish_column,
+            bos_bullish_column, bos_bearish_column, signal_column
+        )
+        return pl.from_pandas(result)
+    else:
+        raise PyIndicatorException(
+            "Input data must be a pandas or polars DataFrame."
+        )
+
+
+def get_choch_bos_stats(
+    data: Union[PdDataFrame, PlDataFrame],
+    choch_bullish_column: str = 'choch_bullish',
+    choch_bearish_column: str = 'choch_bearish',
+    bos_bullish_column: str = 'bos_bullish',
+    bos_bearish_column: str = 'bos_bearish'
+) -> Dict[str, int]:
+    """
+    Calculate statistics for CHoCH/BOS signals.
+
+    Args:
+        data: DataFrame with CHoCH/BOS columns calculated
+        choch_bullish_column: Column for bullish CHoCH
+        choch_bearish_column: Column for bearish CHoCH
+        bos_bullish_column: Column for bullish BOS
+        bos_bearish_column: Column for bearish BOS
+
+    Returns:
+        Dictionary with:
+            - 'choch_bullish_count': Number of bullish CHoCH signals
+            - 'choch_bearish_count': Number of bearish CHoCH signals
+            - 'bos_bullish_count': Number of bullish BOS signals
+            - 'bos_bearish_count': Number of bearish BOS signals
+            - 'total_choch': Total CHoCH signals (reversals)
+            - 'total_bos': Total BOS signals (continuations)
+
+    Example:
+        >>> df = market_structure_choch_bos(df)
+        >>> stats = get_choch_bos_stats(df)
+        >>> print(f"Reversals: {stats['total_choch']}")
+        >>> print(f"Continuations: {stats['total_bos']}")
+    """
+    if isinstance(data, PlDataFrame):
+        data = data.to_pandas()
+
+    choch_bull = int(data[choch_bullish_column].sum())
+    choch_bear = int(data[choch_bearish_column].sum())
+    bos_bull = int(data[bos_bullish_column].sum())
+    bos_bear = int(data[bos_bearish_column].sum())
+
+    return {
+        'choch_bullish_count': choch_bull,
+        'choch_bearish_count': choch_bear,
+        'bos_bullish_count': bos_bull,
+        'bos_bearish_count': bos_bear,
+        'total_choch': choch_bull + choch_bear,
+        'total_bos': bos_bull + bos_bear
+    }

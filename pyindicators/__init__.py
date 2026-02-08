@@ -15,7 +15,8 @@ from .indicators import (
     fair_value_gap, fvg_signal, fvg_filled,
     order_blocks, ob_signal, get_active_order_blocks,
     market_structure_break, market_structure_ob,
-    msb_signal, ob_quality_signal, get_market_structure_stats
+    msb_signal, ob_quality_signal, get_market_structure_stats,
+    market_structure_choch_bos, choch_bos_signal, get_choch_bos_stats
 )
 from .exceptions import PyIndicatorException
 from .date_range import DateRange
@@ -92,5 +93,8 @@ __all__ = [
     'market_structure_ob',
     'msb_signal',
     'ob_quality_signal',
-    'get_market_structure_stats'
+    'get_market_structure_stats',
+    'market_structure_choch_bos',
+    'choch_bos_signal',
+    'get_choch_bos_stats'
 ]
