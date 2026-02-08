@@ -1270,6 +1270,8 @@ The function returns:
 - BOS signals are trend confirmations - good for trend-following entries
 - Use support/resistance levels for stop loss placement
 
+![MARKET_STRUCTURE_CHOCH_BOS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/market_structure_choch_bos.png)
+
 ### Pattern Recognition
 
 #### Detect Peaks
