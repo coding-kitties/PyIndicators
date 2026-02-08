@@ -36,6 +36,10 @@ from .market_structure import (
     msb_signal, ob_quality_signal, get_market_structure_stats,
     market_structure_choch_bos, choch_bos_signal, get_choch_bos_stats
 )
+from .momentum_confluence import (
+    momentum_confluence, momentum_confluence_signal,
+    get_momentum_confluence_stats
+)
 
 __all__ = [
     'sma',
@@ -97,5 +101,8 @@ __all__ = [
     'get_market_structure_stats',
     'market_structure_choch_bos',
     'choch_bos_signal',
-    'get_choch_bos_stats'
+    'get_choch_bos_stats',
+    'momentum_confluence',
+    'momentum_confluence_signal',
+    'get_momentum_confluence_stats'
 ]
