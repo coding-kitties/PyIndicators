@@ -47,6 +47,7 @@ pip install pyindicators
   * [Golden Zone Signal](#golden-zone-signal)
   * [Fair Value Gap (FVG)](#fair-value-gap-fvg)
   * [Order Blocks](#order-blocks)
+  * [Market Structure Break](#market-structure-break)
 * [Pattern recognition](#pattern-recognition)
   * [Detect Peaks](#detect-peaks)
   * [Detect Bullish Divergence](#detect-bullish-divergence)
@@ -1089,6 +1090,106 @@ The `ob_signal` function generates signals:
 - **0**: Price is outside any OB zone
 
 ![ORDER_BLOCKS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/order_blocks.png)
+
+#### Market Structure Break
+
+Market Structure Break (MSB) is a Smart Money Concept (SMC) indicator that detects when price breaks through significant pivot points, signaling potential trend changes. Combined with Order Block detection and quality scoring, this tool helps identify high-probability trading zones.
+
+**Market Structure Break (MSB):**
+- **Bullish MSB:** Price closes above the last pivot high, indicating potential bullish momentum
+- **Bearish MSB:** Price closes below the last pivot low, indicating potential bearish momentum
+
+**Order Block Quality Score (0-100):**
+- Based on momentum z-score and volume percentile
+- Score > 80 indicates a High Probability Zone (HPZ)
+
+**Best Use Cases:**
+- Pullback/retracement trading (enter at OB zones after MSB)
+- Multi-timeframe analysis (use higher TF for bias, lower TF for entries)
+- Supply & demand zone trading
+
+```python
+def market_structure_break(
+    data: Union[PdDataFrame, PlDataFrame],
+    pivot_length: int = 7,
+    momentum_zscore_threshold: float = 0.5,
+    high_column: str = 'High',
+    low_column: str = 'Low',
+    close_column: str = 'Close',
+    volume_column: str = 'Volume',
+    msb_bullish_column: str = 'msb_bullish',
+    msb_bearish_column: str = 'msb_bearish',
+    last_pivot_high_column: str = 'last_pivot_high',
+    last_pivot_low_column: str = 'last_pivot_low',
+    momentum_z_column: str = 'momentum_z'
+) -> Union[PdDataFrame, PlDataFrame]:
+
+def market_structure_ob(
+    data: Union[PdDataFrame, PlDataFrame],
+    pivot_length: int = 7,
+    momentum_zscore_threshold: float = 0.5,
+    max_active_obs: int = 10,
+    ...
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+import pandas as pd
+from pyindicators import (
+    market_structure_break,
+    market_structure_ob,
+    get_market_structure_stats
+)
+
+# Create sample OHLC data
+df = pd.DataFrame({
+    'Open': [...],
+    'High': [...],
+    'Low': [...],
+    'Close': [...],
+    'Volume': [...]
+})
+
+# Basic MSB detection
+df = market_structure_break(df, pivot_length=5)
+print(df[['msb_bullish', 'msb_bearish', 'last_pivot_high', 'last_pivot_low']])
+
+# MSB with Order Block detection and quality scoring
+df = market_structure_ob(df, pivot_length=5)
+print(df[['msb_bullish', 'msb_bearish', 'ob_bullish', 'ob_bearish', 'ob_quality', 'ob_is_hpz']])
+
+# Get statistics
+stats = get_market_structure_stats(df)
+print(f"Reliability: {stats['reliability']:.1f}%")
+print(f"HPZ Count: {stats['hpz_count']}")
+print(f"Bullish MSBs: {stats['bullish_msb_count']}")
+print(f"Bearish MSBs: {stats['bearish_msb_count']}")
+```
+
+The `market_structure_break` function returns:
+- `msb_bullish` / `msb_bearish`: 1 when MSB detected, 0 otherwise
+- `last_pivot_high` / `last_pivot_low`: Most recent pivot levels
+- `momentum_z`: Momentum z-score value
+
+The `market_structure_ob` function additionally returns:
+- `ob_bullish` / `ob_bearish`: 1 when Order Block detected at MSB
+- `ob_top` / `ob_bottom`: Order Block zone boundaries
+- `ob_quality`: Quality score (0-100)
+- `ob_is_hpz`: True if quality > 80 (High Probability Zone)
+- `ob_mitigated`: 1 when Order Block has been mitigated
+
+**Recommended Parameters by Timeframe:**
+
+| Timeframe | pivot_length | Use Case |
+|-----------|-------------|----------|
+| 1m-5m | 2-3 | Scalping entries |
+| 15m | 3-5 | Day trading |
+| 1H | 5-7 | Swing confirmation |
+| 4H-Daily | 7-10 | Trend direction |
+
+![MARKET_STRUCTURE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/market_structure_ob.png)
 
 ### Pattern Recognition
 

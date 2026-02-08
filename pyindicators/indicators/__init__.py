@@ -31,6 +31,10 @@ from .moving_average_envelope import moving_average_envelope, \
 from .golden_zone import golden_zone, golden_zone_signal
 from .fair_value_gap import fair_value_gap, fvg_signal, fvg_filled
 from .order_blocks import order_blocks, ob_signal, get_active_order_blocks
+from .market_structure import (
+    market_structure_break, market_structure_ob,
+    msb_signal, ob_quality_signal, get_market_structure_stats
+)
 
 __all__ = [
     'sma',
@@ -84,5 +88,10 @@ __all__ = [
     'fvg_filled',
     'order_blocks',
     'ob_signal',
-    'get_active_order_blocks'
+    'get_active_order_blocks',
+    'market_structure_break',
+    'market_structure_ob',
+    'msb_signal',
+    'ob_quality_signal',
+    'get_market_structure_stats'
 ]
