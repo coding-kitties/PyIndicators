@@ -494,10 +494,10 @@ def _generate_reversals(
         # Strong bullish reversal
         # Conditions: overflow bearish OR very low trend wave + turning up
         is_overflow_bear = (overflow_bearish[i] == 1 or
-                           overflow_bearish[i - 1] == 1)
+                            overflow_bearish[i - 1] == 1)
         is_extreme_low = trend_wave[i] < 20
         is_turning_up = (trend_wave[i] > trend_wave[i - 1] and
-                        trend_wave[i - 1] <= trend_wave[i - 2])
+                         trend_wave[i - 1] <= trend_wave[i - 2])
 
         if is_overflow_bear and is_turning_up:
             reversal_strong_bullish[i] = 1
@@ -507,10 +507,10 @@ def _generate_reversals(
         # Strong bearish reversal
         # Conditions: overflow bullish OR very high trend wave + turning down
         is_overflow_bull = (overflow_bullish[i] == 1 or
-                           overflow_bullish[i - 1] == 1)
+                            overflow_bullish[i - 1] == 1)
         is_extreme_high = trend_wave[i] > 80
         is_turning_down = (trend_wave[i] < trend_wave[i - 1] and
-                          trend_wave[i - 1] >= trend_wave[i - 2])
+                           trend_wave[i - 1] >= trend_wave[i - 2])
 
         if is_overflow_bull and is_turning_down:
             reversal_strong_bearish[i] = 1

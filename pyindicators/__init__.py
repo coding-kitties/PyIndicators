@@ -18,7 +18,10 @@ from .indicators import (
     msb_signal, ob_quality_signal, get_market_structure_stats,
     market_structure_choch_bos, choch_bos_signal, get_choch_bos_stats,
     momentum_confluence, momentum_confluence_signal,
-    get_momentum_confluence_stats
+    get_momentum_confluence_stats,
+    supertrend_clustering, supertrend_basic, supertrend_signal,
+    get_supertrend_stats,
+    nadaraya_watson_envelope
 )
 from .exceptions import PyIndicatorException
 from .date_range import DateRange
@@ -101,5 +104,10 @@ __all__ = [
     'get_choch_bos_stats',
     'momentum_confluence',
     'momentum_confluence_signal',
-    'get_momentum_confluence_stats'
+    'get_momentum_confluence_stats',
+    'supertrend_clustering',
+    'supertrend_basic',
+    'supertrend_signal',
+    'get_supertrend_stats',
+    'nadaraya_watson_envelope'
 ]

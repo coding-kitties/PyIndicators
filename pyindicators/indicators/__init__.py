@@ -40,6 +40,11 @@ from .momentum_confluence import (
     momentum_confluence, momentum_confluence_signal,
     get_momentum_confluence_stats
 )
+from .supertrend import (
+    supertrend_clustering, supertrend_basic, supertrend_signal,
+    get_supertrend_stats
+)
+from .nadaraya_watson_envelope import nadaraya_watson_envelope
 
 __all__ = [
     'sma',
@@ -104,5 +109,10 @@ __all__ = [
     'get_choch_bos_stats',
     'momentum_confluence',
     'momentum_confluence_signal',
-    'get_momentum_confluence_stats'
+    'get_momentum_confluence_stats',
+    'supertrend_clustering',
+    'supertrend_basic',
+    'supertrend_signal',
+    'get_supertrend_stats',
+    'nadaraya_watson_envelope'
 ]

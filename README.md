@@ -42,6 +42,7 @@ pip install pyindicators
   * [Bollinger Bands Overshoot](#bollinger-bands-overshoot)
   * [Average True Range (ATR)](#average-true-range-atr)
   * [Moving Average Envelope (MAE)](#moving-average-envelope-mae)
+  * [Nadaraya-Watson Envelope (NWE)](#nadaraya-watson-envelope-nwe)
 * [Support and Resistance](#support-and-resistance)
   * [Fibonacci Retracement](#fibonacci-retracement)
   * [Golden Zone](#golden-zone)
@@ -840,6 +841,68 @@ pd_df.tail(10)
 ```
 
 ![MOVING_AVERAGE_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/moving_average_envelope.png)
+
+#### Nadaraya-Watson Envelope (NWE)
+
+The Nadaraya-Watson Envelope uses Gaussian kernel regression to create a smoothed price estimate, then adds an envelope based on the mean absolute error (MAE) scaled by a multiplier. This is a non-repainting (endpoint) implementation inspired by the TradingView "Nadaraya-Watson Envelope [LuxAlgo]" indicator. It is useful for identifying overbought/oversold zones and mean-reversion opportunities.
+
+Calculation:
+- Kernel weights: `w(i) = exp(-i² / (2 × h²))` for `i = 0..lookback-1`
+- Smoothed value: `sum(src[t-i] × w(i)) / sum(w(i))`
+- MAE: SMA of `|src - smoothed|` over the lookback period
+- Upper: `smoothed + mult × MAE`
+- Lower: `smoothed - mult × MAE`
+
+```python
+def nadaraya_watson_envelope(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str = 'Close',
+    bandwidth: float = 8.0,
+    mult: float = 3.0,
+    lookback: int = 500,
+    upper_column: str = 'nwe_upper',
+    lower_column: str = 'nwe_lower',
+    middle_column: str = 'nwe_middle',
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import nadaraya_watson_envelope
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate Nadaraya-Watson Envelope for Polars DataFrame
+pl_df = nadaraya_watson_envelope(pl_df, source_column="Close", bandwidth=8.0, mult=3.0)
+pl_df.show(10)
+
+# Calculate Nadaraya-Watson Envelope for Pandas DataFrame
+pd_df = nadaraya_watson_envelope(pd_df, source_column="Close", bandwidth=8.0, mult=3.0)
+pd_df.tail(10)
+```
+
+![NADARAYA_WATSON_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/nadaraya_watson_envelope.png)
 
 ### Support and Resistance
 

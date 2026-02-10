@@ -148,3 +148,6 @@ test.ipynb
 /resources
 
 *.ipynb
+
+*.html
+*_test.png
