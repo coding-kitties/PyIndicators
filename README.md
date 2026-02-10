@@ -29,8 +29,8 @@ pip install pyindicators
   * [Weighted Moving Average (WMA)](#weighted-moving-average-wma)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
+  * [SuperTrend](#supertrend)
   * [SuperTrend Clustering](#supertrend-clustering)
-  * [SuperTrend Basic](#supertrend-basic)
 * [Momentum and Oscillators](#momentum-and-oscillators)
   * [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
@@ -910,6 +910,50 @@ pd_df.tail(10)
 
 Indicators that combine trend detection with adaptive trailing stops.
 
+#### SuperTrend
+
+The SuperTrend indicator uses a fixed ATR multiplier factor to create a trend-following trailing stop. When the price is above the SuperTrend line the trend is bullish; when below, bearish. Trend changes generate buy/sell signals.
+
+```python
+def supertrend(
+    data: Union[PdDataFrame, PlDataFrame],
+    atr_length: int = 10,
+    factor: float = 3.0
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `supertrend`: The SuperTrend trailing stop value
+- `supertrend_trend`: Current trend (1=bullish, 0=bearish)
+- `supertrend_upper`: Upper band
+- `supertrend_lower`: Lower band
+- `supertrend_signal`: 1=buy signal, -1=sell signal, 0=no signal
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import supertrend
+
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate SuperTrend
+pd_df = supertrend(pd_df, atr_length=10, factor=3.0)
+pd_df.tail(10)
+```
+
+![SUPERTREND](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/supertrend.png)
+
 #### SuperTrend Clustering
 
 The SuperTrend Clustering indicator uses K-means clustering to optimize the ATR multiplier factor for the SuperTrend calculation. It computes multiple SuperTrend variations with different factors, evaluates their performance, and clusters them into "best", "average", and "worst" groups. The best-performing factor is then used to generate an adaptive trailing stop with buy/sell signals.
@@ -975,48 +1019,6 @@ pd_df.tail(10)
 ```
 
 ![SUPERTREND_CLUSTERING](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/supertrend_clustering.png)
-
-#### SuperTrend Basic
-
-The basic SuperTrend indicator uses a fixed ATR multiplier factor to create a trend-following trailing stop. When the price is above the SuperTrend line the trend is bullish; when below, bearish. Trend changes generate buy/sell signals.
-
-```python
-def supertrend_basic(
-    data: Union[PdDataFrame, PlDataFrame],
-    atr_length: int = 10,
-    factor: float = 3.0
-) -> Union[PdDataFrame, PlDataFrame]:
-```
-
-Returns the following columns:
-- `supertrend`: The SuperTrend trailing stop value
-- `supertrend_trend`: Current trend (1=bullish, 0=bearish)
-- `supertrend_upper`: Upper band
-- `supertrend_lower`: Lower band
-- `supertrend_signal`: 1=buy signal, -1=sell signal, 0=no signal
-
-Example
-
-```python
-from investing_algorithm_framework import download
-
-from pyindicators import supertrend_basic
-
-pd_df = download(
-    symbol="btc/eur",
-    market="binance",
-    time_frame="1d",
-    start_date="2023-12-01",
-    end_date="2023-12-25",
-    pandas=True,
-    save=True,
-    storage_path="./data"
-)
-
-# Calculate basic SuperTrend
-pd_df = supertrend_basic(pd_df, atr_length=10, factor=3.0)
-pd_df.tail(10)
-```
 
 ### Support and Resistance
 

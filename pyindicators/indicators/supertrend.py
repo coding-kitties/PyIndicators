@@ -380,7 +380,7 @@ def supertrend_clustering(
     return df
 
 
-def supertrend_basic(
+def supertrend(
     data: Union[PdDataFrame, PlDataFrame],
     atr_length: int = 10,
     factor: float = 3.0

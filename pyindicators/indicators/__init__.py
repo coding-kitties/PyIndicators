@@ -41,7 +41,7 @@ from .momentum_confluence import (
     get_momentum_confluence_stats
 )
 from .supertrend import (
-    supertrend_clustering, supertrend_basic, supertrend_signal,
+    supertrend_clustering, supertrend, supertrend_signal,
     get_supertrend_stats
 )
 from .nadaraya_watson_envelope import nadaraya_watson_envelope
@@ -111,7 +111,7 @@ __all__ = [
     'momentum_confluence_signal',
     'get_momentum_confluence_stats',
     'supertrend_clustering',
-    'supertrend_basic',
+    'supertrend',
     'supertrend_signal',
     'get_supertrend_stats',
     'nadaraya_watson_envelope'

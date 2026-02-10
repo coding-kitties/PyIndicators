@@ -19,7 +19,7 @@ from .indicators import (
     market_structure_choch_bos, choch_bos_signal, get_choch_bos_stats,
     momentum_confluence, momentum_confluence_signal,
     get_momentum_confluence_stats,
-    supertrend_clustering, supertrend_basic, supertrend_signal,
+    supertrend_clustering, supertrend, supertrend_signal,
     get_supertrend_stats,
     nadaraya_watson_envelope
 )
@@ -106,7 +106,7 @@ __all__ = [
     'momentum_confluence_signal',
     'get_momentum_confluence_stats',
     'supertrend_clustering',
-    'supertrend_basic',
+    'supertrend',
     'supertrend_signal',
     'get_supertrend_stats',
     'nadaraya_watson_envelope'
