@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import numpy as np
 
-from pyindicators import supertrend_ai, supertrend, get_supertrend_stats
+from pyindicators import supertrend_clustering, supertrend, get_supertrend_stats
 
 
 class TestSuperTrend(unittest.TestCase):
@@ -66,14 +66,14 @@ class TestSuperTrend(unittest.TestCase):
         result = supertrend(self.df.copy(), atr_length=14, factor=2.0)
         self.assertIn('supertrend', result.columns)
 
-    def test_supertrend_ai_returns_dataframe(self):
-        """Test that supertrend_ai returns a DataFrame."""
-        result = supertrend_ai(self.df.copy(), max_data=100)
+    def test_supertrend_clustering_returns_dataframe(self):
+        """Test that supertrend_clustering returns a DataFrame."""
+        result = supertrend_clustering(self.df.copy(), max_data=100)
         self.assertIsInstance(result, pd.DataFrame)
 
-    def test_supertrend_ai_columns(self):
-        """Test that supertrend_ai adds expected columns."""
-        result = supertrend_ai(self.df.copy(), max_data=100)
+    def test_supertrend_clustering_columns(self):
+        """Test that supertrend_clustering adds expected columns."""
+        result = supertrend_clustering(self.df.copy(), max_data=100)
 
         expected_columns = [
             'supertrend', 'supertrend_trend', 'supertrend_ama',
@@ -82,10 +82,10 @@ class TestSuperTrend(unittest.TestCase):
         for col in expected_columns:
             self.assertIn(col, result.columns)
 
-    def test_supertrend_ai_factor_range(self):
-        """Test that supertrend_ai uses factors within specified range."""
+    def test_supertrend_clustering_factor_range(self):
+        """Test that supertrend_clustering uses factors within specified range."""
         min_mult, max_mult = 1.0, 3.0
-        result = supertrend_ai(
+        result = supertrend_clustering(
             self.df.copy(),
             min_mult=min_mult,
             max_mult=max_mult,
@@ -98,20 +98,20 @@ class TestSuperTrend(unittest.TestCase):
             self.assertGreaterEqual(factor, min_mult - 0.1)
             self.assertLessEqual(factor, max_mult + 0.1)
 
-    def test_supertrend_ai_cluster_options(self):
-        """Test supertrend_ai with different cluster options."""
+    def test_supertrend_clustering_cluster_options(self):
+        """Test supertrend_clustering with different cluster options."""
         for cluster in ['best', 'average', 'worst']:
-            result = supertrend_ai(
+            result = supertrend_clustering(
                 self.df.copy(),
                 from_cluster=cluster,
                 max_data=100
             )
             self.assertIn('supertrend', result.columns)
 
-    def test_supertrend_ai_invalid_factor_range(self):
+    def test_supertrend_clustering_invalid_factor_range(self):
         """Test that invalid factor range raises error."""
         with self.assertRaises(ValueError):
-            supertrend_ai(self.df.copy(), min_mult=5.0, max_mult=1.0)
+            supertrend_clustering(self.df.copy(), min_mult=5.0, max_mult=1.0)
 
     def test_get_supertrend_stats(self):
         """Test statistics function."""
@@ -123,9 +123,9 @@ class TestSuperTrend(unittest.TestCase):
         self.assertIn('current_trend', stats)
         self.assertIn(stats['current_trend'], ['bullish', 'bearish'])
 
-    def test_get_supertrend_stats_ai(self):
-        """Test statistics for AI version includes additional fields."""
-        result = supertrend_ai(self.df.copy(), max_data=100)
+    def test_get_supertrend_stats_clustering(self):
+        """Test statistics for clustering version includes additional fields."""
+        result = supertrend_clustering(self.df.copy(), max_data=100)
         stats = get_supertrend_stats(result)
 
         self.assertIn('avg_factor', stats)

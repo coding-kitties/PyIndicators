@@ -846,7 +846,7 @@ pd_df.tail(10)
 
 #### Nadaraya-Watson Envelope (NWE)
 
-The Nadaraya-Watson Envelope uses Gaussian kernel regression to create a smoothed price estimate, then adds an envelope based on the mean absolute error (MAE) scaled by a multiplier. This is a non-repainting (endpoint) implementation inspired by the TradingView "Nadaraya-Watson Envelope [LuxAlgo]" indicator. It is useful for identifying overbought/oversold zones and mean-reversion opportunities.
+The Nadaraya-Watson Envelope uses Gaussian kernel regression to create a smoothed price estimate, then adds an envelope based on the mean absolute error (MAE) scaled by a multiplier. This is a non-repainting (endpoint) implementation. It is useful for identifying overbought/oversold zones and mean-reversion opportunities.
 
 Calculation:
 - Kernel weights: `w(i) = exp(-i² / (2 × h²))` for `i = 0..lookback-1`
@@ -957,8 +957,6 @@ pd_df.tail(10)
 #### SuperTrend Clustering
 
 The SuperTrend Clustering indicator uses K-means clustering to optimize the ATR multiplier factor for the SuperTrend calculation. It computes multiple SuperTrend variations with different factors, evaluates their performance, and clusters them into "best", "average", and "worst" groups. The best-performing factor is then used to generate an adaptive trailing stop with buy/sell signals.
-
-Based on the LuxAlgo SuperTrend AI indicator concept.
 
 ```python
 def supertrend_clustering(
