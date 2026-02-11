@@ -26,9 +26,6 @@ def golden_zone(
     potential price reversals or continuations. This indicator plots
     dynamic support/resistance levels that update with each bar.
 
-    This indicator is based on the TradingView "Golden Zone" script
-    and calculates rolling Fibonacci retracement levels.
-
     Calculation:
         - Highest High (HH): Rolling maximum of high prices over `length` bars
         - Lowest Low (LL): Rolling minimum of low prices over `length` bars

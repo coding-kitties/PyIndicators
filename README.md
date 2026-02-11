@@ -2,7 +2,9 @@
 
 PyIndicators is a powerful and user-friendly Python library for financial technical analysis indicators, metrics and helper functions. Written entirely in Python, it requires no external dependencies, ensuring seamless integration and ease of use.
 
-## Sponsors
+## Marketplace
+
+We support [Finterion](https://www.finterion.com/) as our go-to marketplace for quantitative trading and trading bots.
 
 <a href="https://www.finterion.com/" target="_blank">
     <picture style="height: 30px;">
@@ -11,6 +13,32 @@ PyIndicators is a powerful and user-friendly Python library for financial techni
     <img src="static/sponsors/finterion-light.svg" alt="Finterion Logo" width="200px" height="50px">
     </picture>
 </a>
+
+## Works with the Investing Algorithm Framework
+
+PyIndicators works natively with the [Investing Algorithm Framework](https://github.com/coding-kitties/investing-algorithm-framework) for creating trading bots. All indicators accept the DataFrame format returned by the framework, so you can go from market data to trading signals without any conversion or glue code.
+
+```python
+from investing_algorithm_framework import download
+from pyindicators import ema, rsi, supertrend
+
+# Download data directly into a DataFrame
+df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2024-01-01",
+    end_date="2024-06-01",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Apply indicators — no conversion needed
+df = ema(df, source_column="Close", period=200)
+df = rsi(df, source_column="Close")
+df = supertrend(df, atr_length=10, factor=3.0)
+```
 
 ## Installation
 
@@ -29,6 +57,7 @@ pip install pyindicators
   * [Weighted Moving Average (WMA)](#weighted-moving-average-wma)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
+  * [Zero-Lag EMA Envelope (ZLEMA)](#zero-lag-ema-envelope-zlema)
   * [EMA Trend Ribbon](#ema-trend-ribbon)
   * [SuperTrend](#supertrend)
   * [SuperTrend Clustering](#supertrend-clustering)
@@ -46,7 +75,6 @@ pip install pyindicators
   * [Average True Range (ATR)](#average-true-range-atr)
   * [Moving Average Envelope (MAE)](#moving-average-envelope-mae)
   * [Nadaraya-Watson Envelope (NWE)](#nadaraya-watson-envelope-nwe)
-  * [Zero-Lag EMA Envelope (ZLEMA)](#zero-lag-ema-envelope-zlema)
 * [Support and Resistance](#support-and-resistance)
   * [Fibonacci Retracement](#fibonacci-retracement)
   * [Golden Zone](#golden-zone)
@@ -226,6 +254,244 @@ pd_df.tail(10)
 ```
 
 ![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema.png)
+
+#### Zero-Lag EMA Envelope (ZLEMA)
+
+The Zero-Lag EMA Envelope combines a Zero-Lag Exponential Moving Average (ZLEMA) with ATR-based bands and multi-bar swing confirmation. The ZLEMA compensates for the inherent lag of a standard EMA by using a lag-compensated source (`close + (close - close[lag])`). Trend state is confirmed when multiple consecutive bars close beyond a band while the ZLEMA slope agrees.
+
+Calculation:
+- `lag = floor((length - 1) / 2)`
+- `compensated = close + (close - close[lag])`
+- `ZLEMA = EMA(compensated, length)`
+- `Upper = ZLEMA + ATR × mult`
+- `Lower = ZLEMA - ATR × mult`
+- Bull: close > Upper for N bars AND ZLEMA rising
+- Bear: close < Lower for N bars AND ZLEMA falling
+
+```python
+def zero_lag_ema_envelope(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str = 'Close',
+    length: int = 200,
+    mult: float = 2.0,
+    atr_length: int = 21,
+    confirm_bars: int = 2,
+    upper_column: str = 'zlema_upper',
+    lower_column: str = 'zlema_lower',
+    middle_column: str = 'zlema_middle',
+    trend_column: str = 'zlema_trend',
+    signal_column: str = 'zlema_signal',
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import zero_lag_ema_envelope
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate Zero-Lag EMA Envelope for Polars DataFrame
+pl_df = zero_lag_ema_envelope(pl_df, source_column="Close", length=200, mult=2.0)
+pl_df.show(10)
+
+# Calculate Zero-Lag EMA Envelope for Pandas DataFrame
+pd_df = zero_lag_ema_envelope(pd_df, source_column="Close", length=200, mult=2.0)
+pd_df.tail(10)
+```
+
+![ZERO_LAG_EMA_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/zero_lag_ema_envelope.png)
+
+#### EMA Trend Ribbon
+
+The EMA Trend Ribbon uses 9 Exponential Moving Averages with increasing periods to visualise trend strength and direction. At each bar the slope of every EMA is checked over a smoothing window; when a threshold number of EMAs agree on direction (default 7 out of 9) the trend is classified as bullish or bearish.
+
+Calculation:
+- Compute 9 EMAs with periods [8, 14, 20, 26, 32, 38, 44, 50, 60]
+- An EMA is "rising" when `EMA[t] >= EMA[t - smoothing_period]`
+- `bullish_count` = number of rising EMAs
+- `bearish_count` = number of falling EMAs
+- Trend = 1 if `bullish_count >= threshold`, -1 if `bearish_count >= threshold`, else 0
+
+```python
+def ema_trend_ribbon(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str = 'Close',
+    ema_lengths: Optional[List[int]] = None,  # default [8,14,20,26,32,38,44,50,60]
+    smoothing_period: int = 2,
+    threshold: int = 7,
+    trend_column: str = 'ema_ribbon_trend',
+    bullish_count_column: str = 'ema_ribbon_bullish_count',
+    bearish_count_column: str = 'ema_ribbon_bearish_count',
+    ema_column_prefix: str = 'ema_ribbon',
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import ema_trend_ribbon
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate EMA Trend Ribbon for Polars DataFrame
+pl_df = ema_trend_ribbon(pl_df, source_column="Close")
+pl_df.show(10)
+
+# Calculate EMA Trend Ribbon for Pandas DataFrame
+pd_df = ema_trend_ribbon(pd_df, source_column="Close")
+pd_df.tail(10)
+```
+
+![EMA_TREND_RIBBON](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema_trend_ribbon.png)
+
+#### SuperTrend
+
+The SuperTrend indicator uses a fixed ATR multiplier factor to create a trend-following trailing stop. When the price is above the SuperTrend line the trend is bullish; when below, bearish. Trend changes generate buy/sell signals.
+
+```python
+def supertrend(
+    data: Union[PdDataFrame, PlDataFrame],
+    atr_length: int = 10,
+    factor: float = 3.0
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `supertrend`: The SuperTrend trailing stop value
+- `supertrend_trend`: Current trend (1=bullish, 0=bearish)
+- `supertrend_upper`: Upper band
+- `supertrend_lower`: Lower band
+- `supertrend_signal`: 1=buy signal, -1=sell signal, 0=no signal
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import supertrend
+
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate SuperTrend
+pd_df = supertrend(pd_df, atr_length=10, factor=3.0)
+pd_df.tail(10)
+```
+
+![SUPERTREND](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/supertrend.png)
+
+#### SuperTrend Clustering
+
+The SuperTrend Clustering indicator uses K-means clustering to optimize the ATR multiplier factor for the SuperTrend calculation. It computes multiple SuperTrend variations with different factors, evaluates their performance, and clusters them into "best", "average", and "worst" groups. The best-performing factor is then used to generate an adaptive trailing stop with buy/sell signals.
+
+```python
+def supertrend_clustering(
+    data: Union[PdDataFrame, PlDataFrame],
+    atr_length: int = 10,
+    min_mult: float = 1.0,
+    max_mult: float = 5.0,
+    step: float = 0.5,
+    perf_alpha: float = 10.0,
+    from_cluster: str = 'best',
+    max_iter: int = 1000,
+    max_data: int = 10000
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `supertrend`: The optimized SuperTrend trailing stop
+- `supertrend_trend`: Current trend (1=bullish, 0=bearish)
+- `supertrend_ama`: Adaptive moving average of SuperTrend
+- `supertrend_perf_idx`: Performance index (0–1 scale)
+- `supertrend_factor`: Currently used ATR factor
+- `supertrend_signal`: 1=buy signal, -1=sell signal, 0=no signal
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import supertrend_clustering, get_supertrend_stats
+
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate SuperTrend Clustering
+pd_df = supertrend_clustering(
+    pd_df,
+    atr_length=14,
+    min_mult=2.0,
+    max_mult=6.0,
+    step=0.5,
+    perf_alpha=14.0,
+    from_cluster='best',
+    max_data=500
+)
+
+# Get statistics
+stats = get_supertrend_stats(pd_df)
+print(stats)
+pd_df.tail(10)
+```
+
+![SUPERTREND_CLUSTERING](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/supertrend_clustering.png)
 
 ### Momentum and Oscillators
 
@@ -907,248 +1173,6 @@ pd_df.tail(10)
 ```
 
 ![NADARAYA_WATSON_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/nadaraya_watson_envelope.png)
-
-#### Zero-Lag EMA Envelope (ZLEMA)
-
-The Zero-Lag EMA Envelope combines a Zero-Lag Exponential Moving Average (ZLEMA) with ATR-based bands and multi-bar swing confirmation. The ZLEMA compensates for the inherent lag of a standard EMA by using a lag-compensated source (`close + (close - close[lag])`). Trend state is confirmed when multiple consecutive bars close beyond a band while the ZLEMA slope agrees.
-
-Calculation:
-- `lag = floor((length - 1) / 2)`
-- `compensated = close + (close - close[lag])`
-- `ZLEMA = EMA(compensated, length)`
-- `Upper = ZLEMA + ATR × mult`
-- `Lower = ZLEMA - ATR × mult`
-- Bull: close > Upper for N bars AND ZLEMA rising
-- Bear: close < Lower for N bars AND ZLEMA falling
-
-```python
-def zero_lag_ema_envelope(
-    data: Union[PdDataFrame, PlDataFrame],
-    source_column: str = 'Close',
-    length: int = 200,
-    mult: float = 2.0,
-    atr_length: int = 21,
-    confirm_bars: int = 2,
-    upper_column: str = 'zlema_upper',
-    lower_column: str = 'zlema_lower',
-    middle_column: str = 'zlema_middle',
-    trend_column: str = 'zlema_trend',
-    signal_column: str = 'zlema_signal',
-) -> Union[PdDataFrame, PlDataFrame]:
-```
-
-Example
-
-```python
-from investing_algorithm_framework import download
-
-from pyindicators import zero_lag_ema_envelope
-
-pl_df = download(
-    symbol="btc/eur",
-    market="binance",
-    time_frame="1d",
-    start_date="2023-12-01",
-    end_date="2023-12-25",
-    save=True,
-    storage_path="./data"
-)
-pd_df = download(
-    symbol="btc/eur",
-    market="binance",
-    time_frame="1d",
-    start_date="2023-12-01",
-    end_date="2023-12-25",
-    pandas=True,
-    save=True,
-    storage_path="./data"
-)
-
-# Calculate Zero-Lag EMA Envelope for Polars DataFrame
-pl_df = zero_lag_ema_envelope(pl_df, source_column="Close", length=200, mult=2.0)
-pl_df.show(10)
-
-# Calculate Zero-Lag EMA Envelope for Pandas DataFrame
-pd_df = zero_lag_ema_envelope(pd_df, source_column="Close", length=200, mult=2.0)
-pd_df.tail(10)
-```
-
-![ZERO_LAG_EMA_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/zero_lag_ema_envelope.png)
-
-### Trend Following
-
-Indicators that combine trend detection with adaptive trailing stops.
-
-#### EMA Trend Ribbon
-
-The EMA Trend Ribbon uses 9 Exponential Moving Averages with increasing periods to visualise trend strength and direction. At each bar the slope of every EMA is checked over a smoothing window; when a threshold number of EMAs agree on direction (default 7 out of 9) the trend is classified as bullish or bearish.
-
-Calculation:
-- Compute 9 EMAs with periods [8, 14, 20, 26, 32, 38, 44, 50, 60]
-- An EMA is "rising" when `EMA[t] >= EMA[t - smoothing_period]`
-- `bullish_count` = number of rising EMAs
-- `bearish_count` = number of falling EMAs
-- Trend = 1 if `bullish_count >= threshold`, -1 if `bearish_count >= threshold`, else 0
-
-```python
-def ema_trend_ribbon(
-    data: Union[PdDataFrame, PlDataFrame],
-    source_column: str = 'Close',
-    ema_lengths: Optional[List[int]] = None,  # default [8,14,20,26,32,38,44,50,60]
-    smoothing_period: int = 2,
-    threshold: int = 7,
-    trend_column: str = 'ema_ribbon_trend',
-    bullish_count_column: str = 'ema_ribbon_bullish_count',
-    bearish_count_column: str = 'ema_ribbon_bearish_count',
-    ema_column_prefix: str = 'ema_ribbon',
-) -> Union[PdDataFrame, PlDataFrame]:
-```
-
-Example
-
-```python
-from investing_algorithm_framework import download
-
-from pyindicators import ema_trend_ribbon
-
-pl_df = download(
-    symbol="btc/eur",
-    market="binance",
-    time_frame="1d",
-    start_date="2023-12-01",
-    end_date="2023-12-25",
-    save=True,
-    storage_path="./data"
-)
-pd_df = download(
-    symbol="btc/eur",
-    market="binance",
-    time_frame="1d",
-    start_date="2023-12-01",
-    end_date="2023-12-25",
-    pandas=True,
-    save=True,
-    storage_path="./data"
-)
-
-# Calculate EMA Trend Ribbon for Polars DataFrame
-pl_df = ema_trend_ribbon(pl_df, source_column="Close")
-pl_df.show(10)
-
-# Calculate EMA Trend Ribbon for Pandas DataFrame
-pd_df = ema_trend_ribbon(pd_df, source_column="Close")
-pd_df.tail(10)
-```
-
-![EMA_TREND_RIBBON](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema_trend_ribbon.png)
-
-#### SuperTrend
-
-The SuperTrend indicator uses a fixed ATR multiplier factor to create a trend-following trailing stop. When the price is above the SuperTrend line the trend is bullish; when below, bearish. Trend changes generate buy/sell signals.
-
-```python
-def supertrend(
-    data: Union[PdDataFrame, PlDataFrame],
-    atr_length: int = 10,
-    factor: float = 3.0
-) -> Union[PdDataFrame, PlDataFrame]:
-```
-
-Returns the following columns:
-- `supertrend`: The SuperTrend trailing stop value
-- `supertrend_trend`: Current trend (1=bullish, 0=bearish)
-- `supertrend_upper`: Upper band
-- `supertrend_lower`: Lower band
-- `supertrend_signal`: 1=buy signal, -1=sell signal, 0=no signal
-
-Example
-
-```python
-from investing_algorithm_framework import download
-
-from pyindicators import supertrend
-
-pd_df = download(
-    symbol="btc/eur",
-    market="binance",
-    time_frame="1d",
-    start_date="2023-12-01",
-    end_date="2023-12-25",
-    pandas=True,
-    save=True,
-    storage_path="./data"
-)
-
-# Calculate SuperTrend
-pd_df = supertrend(pd_df, atr_length=10, factor=3.0)
-pd_df.tail(10)
-```
-
-![SUPERTREND](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/supertrend.png)
-
-#### SuperTrend Clustering
-
-The SuperTrend Clustering indicator uses K-means clustering to optimize the ATR multiplier factor for the SuperTrend calculation. It computes multiple SuperTrend variations with different factors, evaluates their performance, and clusters them into "best", "average", and "worst" groups. The best-performing factor is then used to generate an adaptive trailing stop with buy/sell signals.
-
-```python
-def supertrend_clustering(
-    data: Union[PdDataFrame, PlDataFrame],
-    atr_length: int = 10,
-    min_mult: float = 1.0,
-    max_mult: float = 5.0,
-    step: float = 0.5,
-    perf_alpha: float = 10.0,
-    from_cluster: str = 'best',
-    max_iter: int = 1000,
-    max_data: int = 10000
-) -> Union[PdDataFrame, PlDataFrame]:
-```
-
-Returns the following columns:
-- `supertrend`: The optimized SuperTrend trailing stop
-- `supertrend_trend`: Current trend (1=bullish, 0=bearish)
-- `supertrend_ama`: Adaptive moving average of SuperTrend
-- `supertrend_perf_idx`: Performance index (0–1 scale)
-- `supertrend_factor`: Currently used ATR factor
-- `supertrend_signal`: 1=buy signal, -1=sell signal, 0=no signal
-
-Example
-
-```python
-from investing_algorithm_framework import download
-
-from pyindicators import supertrend_clustering, get_supertrend_stats
-
-pd_df = download(
-    symbol="btc/eur",
-    market="binance",
-    time_frame="1d",
-    start_date="2023-12-01",
-    end_date="2023-12-25",
-    pandas=True,
-    save=True,
-    storage_path="./data"
-)
-
-# Calculate SuperTrend Clustering
-pd_df = supertrend_clustering(
-    pd_df,
-    atr_length=14,
-    min_mult=2.0,
-    max_mult=6.0,
-    step=0.5,
-    perf_alpha=14.0,
-    from_cluster='best',
-    max_data=500
-)
-
-# Get statistics
-stats = get_supertrend_stats(pd_df)
-print(stats)
-pd_df.tail(10)
-```
-
-![SUPERTREND_CLUSTERING](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/supertrend_clustering.png)
 
 ### Support and Resistance
 
