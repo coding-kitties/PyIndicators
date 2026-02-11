@@ -21,7 +21,9 @@ from .indicators import (
     get_momentum_confluence_stats,
     supertrend_clustering, supertrend, supertrend_signal,
     get_supertrend_stats,
-    nadaraya_watson_envelope
+    nadaraya_watson_envelope,
+    zero_lag_ema_envelope,
+    ema_trend_ribbon
 )
 from .exceptions import PyIndicatorException
 from .date_range import DateRange
@@ -109,5 +111,7 @@ __all__ = [
     'supertrend',
     'supertrend_signal',
     'get_supertrend_stats',
-    'nadaraya_watson_envelope'
+    'nadaraya_watson_envelope',
+    'zero_lag_ema_envelope',
+    'ema_trend_ribbon'
 ]

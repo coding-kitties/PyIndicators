@@ -29,6 +29,7 @@ pip install pyindicators
   * [Weighted Moving Average (WMA)](#weighted-moving-average-wma)
   * [Simple Moving Average (SMA)](#simple-moving-average-sma)
   * [Exponential Moving Average (EMA)](#exponential-moving-average-ema)
+  * [EMA Trend Ribbon](#ema-trend-ribbon)
   * [SuperTrend](#supertrend)
   * [SuperTrend Clustering](#supertrend-clustering)
 * [Momentum and Oscillators](#momentum-and-oscillators)
@@ -45,6 +46,7 @@ pip install pyindicators
   * [Average True Range (ATR)](#average-true-range-atr)
   * [Moving Average Envelope (MAE)](#moving-average-envelope-mae)
   * [Nadaraya-Watson Envelope (NWE)](#nadaraya-watson-envelope-nwe)
+  * [Zero-Lag EMA Envelope (ZLEMA)](#zero-lag-ema-envelope-zlema)
 * [Support and Resistance](#support-and-resistance)
   * [Fibonacci Retracement](#fibonacci-retracement)
   * [Golden Zone](#golden-zone)
@@ -906,9 +908,139 @@ pd_df.tail(10)
 
 ![NADARAYA_WATSON_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/nadaraya_watson_envelope.png)
 
+#### Zero-Lag EMA Envelope (ZLEMA)
+
+The Zero-Lag EMA Envelope combines a Zero-Lag Exponential Moving Average (ZLEMA) with ATR-based bands and multi-bar swing confirmation. The ZLEMA compensates for the inherent lag of a standard EMA by using a lag-compensated source (`close + (close - close[lag])`). Trend state is confirmed when multiple consecutive bars close beyond a band while the ZLEMA slope agrees.
+
+Calculation:
+- `lag = floor((length - 1) / 2)`
+- `compensated = close + (close - close[lag])`
+- `ZLEMA = EMA(compensated, length)`
+- `Upper = ZLEMA + ATR × mult`
+- `Lower = ZLEMA - ATR × mult`
+- Bull: close > Upper for N bars AND ZLEMA rising
+- Bear: close < Lower for N bars AND ZLEMA falling
+
+```python
+def zero_lag_ema_envelope(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str = 'Close',
+    length: int = 200,
+    mult: float = 2.0,
+    atr_length: int = 21,
+    confirm_bars: int = 2,
+    upper_column: str = 'zlema_upper',
+    lower_column: str = 'zlema_lower',
+    middle_column: str = 'zlema_middle',
+    trend_column: str = 'zlema_trend',
+    signal_column: str = 'zlema_signal',
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import zero_lag_ema_envelope
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate Zero-Lag EMA Envelope for Polars DataFrame
+pl_df = zero_lag_ema_envelope(pl_df, source_column="Close", length=200, mult=2.0)
+pl_df.show(10)
+
+# Calculate Zero-Lag EMA Envelope for Pandas DataFrame
+pd_df = zero_lag_ema_envelope(pd_df, source_column="Close", length=200, mult=2.0)
+pd_df.tail(10)
+```
+
+![ZERO_LAG_EMA_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/zero_lag_ema_envelope.png)
+
 ### Trend Following
 
 Indicators that combine trend detection with adaptive trailing stops.
+
+#### EMA Trend Ribbon
+
+The EMA Trend Ribbon uses 9 Exponential Moving Averages with increasing periods to visualise trend strength and direction. At each bar the slope of every EMA is checked over a smoothing window; when a threshold number of EMAs agree on direction (default 7 out of 9) the trend is classified as bullish or bearish.
+
+Calculation:
+- Compute 9 EMAs with periods [8, 14, 20, 26, 32, 38, 44, 50, 60]
+- An EMA is "rising" when `EMA[t] >= EMA[t - smoothing_period]`
+- `bullish_count` = number of rising EMAs
+- `bearish_count` = number of falling EMAs
+- Trend = 1 if `bullish_count >= threshold`, -1 if `bearish_count >= threshold`, else 0
+
+```python
+def ema_trend_ribbon(
+    data: Union[PdDataFrame, PlDataFrame],
+    source_column: str = 'Close',
+    ema_lengths: Optional[List[int]] = None,  # default [8,14,20,26,32,38,44,50,60]
+    smoothing_period: int = 2,
+    threshold: int = 7,
+    trend_column: str = 'ema_ribbon_trend',
+    bullish_count_column: str = 'ema_ribbon_bullish_count',
+    bearish_count_column: str = 'ema_ribbon_bearish_count',
+    ema_column_prefix: str = 'ema_ribbon',
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import ema_trend_ribbon
+
+pl_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    save=True,
+    storage_path="./data"
+)
+pd_df = download(
+    symbol="btc/eur",
+    market="binance",
+    time_frame="1d",
+    start_date="2023-12-01",
+    end_date="2023-12-25",
+    pandas=True,
+    save=True,
+    storage_path="./data"
+)
+
+# Calculate EMA Trend Ribbon for Polars DataFrame
+pl_df = ema_trend_ribbon(pl_df, source_column="Close")
+pl_df.show(10)
+
+# Calculate EMA Trend Ribbon for Pandas DataFrame
+pd_df = ema_trend_ribbon(pd_df, source_column="Close")
+pd_df.tail(10)
+```
+
+![EMA_TREND_RIBBON](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema_trend_ribbon.png)
 
 #### SuperTrend
 

@@ -29,8 +29,6 @@ def nadaraya_watson_envelope(
     then adds an envelope based on the mean absolute error (MAE) scaled
     by a multiplier. This is a non-repainting (endpoint) implementation.
 
-    Based on the TradingView "Nadaraya-Watson Envelope [LuxAlgo]" indicator.
-
     Calculation:
         - Kernel weights: w(i) = exp(-i² / (2 * h²)) for i = 0..lookback-1
         - Smoothed value: sum(src[t-i] * w(i)) / sum(w(i))

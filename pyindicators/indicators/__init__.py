@@ -45,6 +45,8 @@ from .supertrend import (
     get_supertrend_stats
 )
 from .nadaraya_watson_envelope import nadaraya_watson_envelope
+from .zero_lag_ema_envelope import zero_lag_ema_envelope
+from .ema_trend_ribbon import ema_trend_ribbon
 
 __all__ = [
     'sma',
@@ -114,5 +116,7 @@ __all__ = [
     'supertrend',
     'supertrend_signal',
     'get_supertrend_stats',
-    'nadaraya_watson_envelope'
+    'nadaraya_watson_envelope',
+    'zero_lag_ema_envelope',
+    'ema_trend_ribbon'
 ]
