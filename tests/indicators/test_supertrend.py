@@ -163,6 +163,65 @@ class TestSuperTrend(unittest.TestCase):
                     f"Signal should be non-zero at index {i}"
                 )
 
+    def test_supertrend_wicks_true(self):
+        """Test supertrend with wicks=True (default)."""
+        result = supertrend(self.df.copy(), wicks=True)
+        self.assertIn('supertrend', result.columns)
+        # Trend values should still be 0 or 1
+        unique_trends = result['supertrend_trend'].unique()
+        for trend in unique_trends:
+            self.assertIn(trend, [0, 1])
+
+    def test_supertrend_wicks_false(self):
+        """Test supertrend with wicks=False (close-only mode)."""
+        result = supertrend(self.df.copy(), wicks=False)
+        self.assertIn('supertrend', result.columns)
+        unique_trends = result['supertrend_trend'].unique()
+        for trend in unique_trends:
+            self.assertIn(trend, [0, 1])
+
+    def test_supertrend_wicks_produces_different_results(self):
+        """Test that wicks=True and wicks=False produce different results."""
+        # Use volatile data with large wicks to highlight the difference
+        np.random.seed(99)
+        n = 200
+        close = 100 + np.cumsum(np.random.randn(n) * 2)
+        high = close + np.abs(np.random.randn(n) * 5)  # large upper wicks
+        low = close - np.abs(np.random.randn(n) * 5)   # large lower wicks
+        open_price = close + np.random.randn(n) * 1
+
+        volatile_df = pd.DataFrame({
+            'Open': open_price,
+            'High': high,
+            'Low': low,
+            'Close': close
+        })
+
+        result_wicks = supertrend(volatile_df.copy(), wicks=True)
+        result_no_wicks = supertrend(volatile_df.copy(), wicks=False)
+
+        # With large wicks the trend detection differs
+        self.assertFalse(
+            result_wicks['supertrend_trend'].equals(
+                result_no_wicks['supertrend_trend']
+            ),
+            "wicks=True and wicks=False should produce different trend results "
+            "on volatile data with large wicks"
+        )
+
+    def test_supertrend_doji4price_handling(self):
+        """Test that doji candles (O=H=L=C) don't break the calculation."""
+        df = self.df.copy()
+        # Insert a doji4price candle
+        doji_price = 110.0
+        df.loc[50, 'Open'] = doji_price
+        df.loc[50, 'High'] = doji_price
+        df.loc[50, 'Low'] = doji_price
+        df.loc[50, 'Close'] = doji_price
+
+        result = supertrend(df)
+        self.assertFalse(result['supertrend'].isna().all())
+
 
 if __name__ == '__main__':
     unittest.main()

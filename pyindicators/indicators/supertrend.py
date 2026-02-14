@@ -3,8 +3,6 @@ SuperTrend Clustering Indicator
 
 This indicator implements the SuperTrend with optimization using
 K-means clustering to find the optimal ATR multiplier factor.
-
-Based on the LuxAlgo SuperTrend AI indicator concept.
 """
 from typing import Union, Dict, List, Tuple
 import numpy as np
@@ -383,24 +381,29 @@ def supertrend_clustering(
 def supertrend(
     data: Union[PdDataFrame, PlDataFrame],
     atr_length: int = 10,
-    factor: float = 3.0
+    factor: float = 3.0,
+    wicks: bool = True
 ) -> Union[PdDataFrame, PlDataFrame]:
     """
-    Calculate the basic SuperTrend indicator without AI optimization.
+    Calculate the SuperTrend indicator.
 
-    This is a simpler version that uses a fixed ATR multiplier factor.
+    Based on the standard SuperTrend formula by Alex Orekhov (everget).
+    Uses ATR-based trailing stops with trend detection.
 
     Parameters:
-        data: DataFrame with OHLC data (High, Low, Close columns required)
+        data: DataFrame with OHLC data
+              (Open, High, Low, Close columns required)
         atr_length: Period for ATR calculation (default: 10)
         factor: ATR multiplier factor (default: 3.0)
+        wicks: If True, use High/Low for trend detection and band
+               clamping. If False, use Close only. (default: True)
 
     Returns:
         DataFrame with added columns:
         - supertrend: The SuperTrend trailing stop value
         - supertrend_trend: Current trend (1=bullish, 0=bearish)
-        - supertrend_upper: Upper band
-        - supertrend_lower: Lower band
+        - supertrend_upper: Upper band (short stop)
+        - supertrend_lower: Lower band (long stop)
         - supertrend_signal: 1=buy signal, -1=sell signal, 0=no signal
     """
     is_polars = isinstance(data, PlDataFrame)
@@ -415,9 +418,14 @@ def supertrend(
     high = df['High'].values
     low = df['Low'].values
     close = df['Close'].values
+    open_price = df['Open'].values
     atr_values = df['_atr'].values
     hl2 = (high + low) / 2
     n = len(df)
+
+    # Price references for trend detection and band clamping
+    high_price = high if wicks else close
+    low_price = low if wicks else close
 
     # Initialize arrays
     upper = np.full(n, np.nan)
@@ -429,28 +437,41 @@ def supertrend(
     # Initial values
     upper[0] = hl2[0] + atr_values[0] * factor
     lower[0] = hl2[0] - atr_values[0] * factor
+    trend[0] = 1
+    supertrend_val[0] = lower[0]
 
     for i in range(1, n):
         up = hl2[i] + atr_values[i] * factor
         dn = hl2[i] - atr_values[i] * factor
 
-        # Update upper band
-        if close[i-1] < upper[i-1]:
-            upper[i] = min(up, upper[i-1])
-        else:
-            upper[i] = up
+        # Doji4price: all OHLC values equal — preserve previous stops
+        doji4price = (
+            open_price[i] == close[i]
+            and open_price[i] == low[i]
+            and open_price[i] == high[i]
+        )
 
-        # Update lower band
-        if close[i-1] > lower[i-1]:
+        # Update lower band (long stop)
+        if doji4price:
+            lower[i] = lower[i-1]
+        elif low_price[i-1] > lower[i-1]:
             lower[i] = max(dn, lower[i-1])
         else:
             lower[i] = dn
 
-        # Determine trend
-        if close[i] > upper[i]:
-            trend[i] = 1
-        elif close[i] < lower[i]:
-            trend[i] = 0
+        # Update upper band (short stop)
+        if doji4price:
+            upper[i] = upper[i-1]
+        elif high_price[i-1] < upper[i-1]:
+            upper[i] = min(up, upper[i-1])
+        else:
+            upper[i] = up
+
+        # Determine trend using previous bar's stops
+        if trend[i-1] == 0 and high_price[i] > upper[i-1]:
+            trend[i] = 1  # Flip to bullish
+        elif trend[i-1] == 1 and low_price[i] < lower[i-1]:
+            trend[i] = 0  # Flip to bearish
         else:
             trend[i] = trend[i-1]
 
@@ -462,9 +483,6 @@ def supertrend(
             signal[i] = 1  # Buy signal
         elif trend[i] < trend[i-1]:
             signal[i] = -1  # Sell signal
-
-    # First bar
-    supertrend_val[0] = upper[0]
 
     # Add results to DataFrame
     df['supertrend'] = supertrend_val

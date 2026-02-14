@@ -30,7 +30,7 @@ def order_blocks(
     orders, creating significant price movements. They often act as
     strong support/resistance levels.
 
-    This implementation follows the LuxAlgo methodology:
+    This implementation follows methodology:
     - Uses swing highs/lows to identify potential reversal points
     - Bullish OB: Forms at swing low, detected when price breaks above
       the swing high

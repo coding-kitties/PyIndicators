@@ -26,7 +26,7 @@ def fair_value_gap(
     between candlesticks, representing institutional order flow. These gaps
     often act as support/resistance zones where price tends to return.
 
-    This implementation follows the LuxAlgo methodology which includes:
+    This implementation includes:
     - A threshold filter to ignore small gaps
     - Close price confirmation (close[1] must confirm the gap direction)
 
