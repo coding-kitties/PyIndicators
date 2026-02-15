@@ -67,6 +67,10 @@ from .liquidity_levels_voids import (
     liquidity_levels_voids, liquidity_levels_voids_signal,
     get_liquidity_levels_voids_stats
 )
+from .pulse_mean_accelerator import (
+    pulse_mean_accelerator, pulse_mean_accelerator_signal,
+    get_pulse_mean_accelerator_stats
+)
 
 __all__ = [
     'sma',
@@ -154,5 +158,8 @@ __all__ = [
     'get_liquidity_pool_stats',
     'liquidity_levels_voids',
     'liquidity_levels_voids_signal',
-    'get_liquidity_levels_voids_stats'
+    'get_liquidity_levels_voids_stats',
+    'pulse_mean_accelerator',
+    'pulse_mean_accelerator_signal',
+    'get_pulse_mean_accelerator_stats'
 ]

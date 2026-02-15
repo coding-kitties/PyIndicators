@@ -1,13 +1,10 @@
 """
 Liquidity Pools Indicator
 
-Faithful Python translation of the **Liquidity Pools [LuxAlgo]**
-indicator from TradingView (Pine Script v5, Oct 16 2024, 332 lines).
-
 Identifies liquidity pool zones by analysing high and low wicked
 price areas, the number of contacts, and the frequency of visits.
 
-Algorithm overview (matching Pine Script exactly)
+Algorithm overview
 -------------------------------------------------
 1. Track a *highest* (``hst``) and *lowest* (``lst``) reference
    candle.  On each bar, adjust these references when price makes
@@ -19,8 +16,8 @@ Algorithm overview (matching Pine Script exactly)
    body level must be stable (unchanged for 2 bars).
 
 3. When enough contacts accumulate (``contact_count``) and the
-   bars-since-last-wick counter crosses above ``confirmation_bars``
-   (``ta.crossover(bs_hw, wait)`` in Pine), AND the close is on
+   bars-since-last-wick counter crosses above ``confirmation_bars``,
+   AND the close is on
    the correct side of the reference body level, a zone is created.
 
 4. Zone creation uses a *running zone* pattern (``h_zn`` / ``l_zn``)
@@ -31,7 +28,7 @@ Algorithm overview (matching Pine Script exactly)
    - No overlap -> create a fresh running zone and push to array.
 
 5. Zone extension: the most recent zone accumulates fractional volume
-   from every overlapping candle (``get_civ`` in Pine).
+   from every overlapping candle.
 
 6. Zone mitigation: when price closes beyond the zone boundary for
    two consecutive bars, the zone is removed.
@@ -55,10 +52,6 @@ from pyindicators.exceptions import PyIndicatorException
 def _get_civ(h: float, lo: float, v: float,
              zone_top: float, zone_bot: float) -> float:
     """Return the fraction of candle volume that lies inside *zone*.
-
-    Mirrors Pine Script's ``get_civ`` helper:
-    ``nz((_h - _l) / _r, 1) * volume`` where _h/_l are clamped to
-    the zone boundaries.
     """
     r = h - lo
     if r <= 0:
@@ -94,17 +87,11 @@ def liquidity_pools(
 ) -> Union[PdDataFrame, PlDataFrame]:
     """Detect Liquidity Pool zones on OHLC(V) data.
 
-    Faithful translation of:
-    *Liquidity Pools [LuxAlgo]* -- Pine Script v5, Oct 16 2024.
-
     Args:
         data: pandas or polars DataFrame with OHLC(V) data.
         contact_count: Minimum wick contacts required to form a zone
-            (Pine: ``cNum``, default 2).
         gap_bars: Minimum bars between successive contacts
-            (Pine: ``gapCount``, default 5).
         confirmation_bars: Bars to wait before confirming a zone
-            (Pine: ``wait``, default 10).
         high_column: Column name for highs.
         low_column: Column name for lows.
         open_column: Column name for opens.
@@ -188,7 +175,6 @@ def liquidity_pools(
             return pl.from_pandas(df)
         return df
 
-    # -- Pine: var declarations (persistent across bars) --------------
     c_top_0 = max(opens[0], closes[0])
     c_bot_0 = min(opens[0], closes[0])
 
@@ -210,7 +196,6 @@ def liquidity_pools(
     hi_vol = 0.0    # var float hi_vol = 0
     lo_vol = 0.0    # var float lo_vol = 0
 
-    # Running zones (Pine: var zn h_zn, l_zn -- initially na)
     # Each: {top, bottom, state, vol, start_bar, right_bar} or None
     h_zn = None
     l_zn = None
@@ -219,11 +204,10 @@ def liquidity_pools(
     bull_zones: list[dict] = []
     bear_zones: list[dict] = []
 
-    # Pine: var int bs_hw = 0, bs_lw = 0
+    # var int bs_hw = 0, bs_lw = 0
     bs_hw = 0
     bs_lw = 0
 
-    # Previous-bar references for Pine [1] / [2] lookbacks
     prev_h_wick = False
     prev_l_wick = False
     hst_t_1ago = hst["t"]
@@ -244,8 +228,6 @@ def liquidity_pools(
         c_bot = min(o, c)
 
         # -- 1. Adjusting High and Low Check Boundaries ---------------
-        # Pine: if (high > hst.h) and ((c_top > hst.h) or
-        #        (c_top < hst.t))
         if h > hst["h"] and (c_top > hst["h"] or c_top < hst["t"]):
             if h_count > 1:
                 # Reset low reference to current candle
@@ -264,8 +246,6 @@ def liquidity_pools(
             h_count = 1
             last_h_wick = bar
 
-        # Pine: if (low < lst.l) and ((c_bot < lst.l) or
-        #        (c_bot > lst.b))
         if lo < lst["l"] and (c_bot < lst["l"] or c_bot > lst["b"]):
             if l_count > 1:
                 # Reset high reference to current candle
@@ -285,22 +265,16 @@ def liquidity_pools(
             last_l_wick = bar
 
         # -- 2. Compute wicks for current bar -------------------------
-        # Pine: h_wick = high > hst.t and c_top <= hst.t
         h_wick = (h > hst["t"]) and (c_top <= hst["t"])
-        # Pine: l_wick = low < lst.b and c_bot >= lst.b
         l_wick = (lo < lst["b"]) and (c_bot >= lst["b"])
 
-        # -- 3. Counting contacts (Pine uses [1] / [2] refs) ---------
-        # Pine: if (h_wick[1] and (hst.t[1] == hst.t[2])
-        #         and (bs_hw > gapCount))
+        # -- 3. Counting contacts ---------
         if (prev_h_wick
                 and hst_t_1ago == hst_t_2ago
                 and prev_bs_hw > gap_bars):
             h_count += 1
             last_h_wick = bar - 1
 
-        # Pine: if (l_wick[1] and (lst.b[1] == lst.b[2])
-        #         and (bs_lw > gapCount))
         if (prev_l_wick
                 and lst_b_1ago == lst_b_2ago
                 and prev_bs_lw > gap_bars):
@@ -308,20 +282,17 @@ def liquidity_pools(
             last_l_wick = bar - 1
 
         # -- 4. Bars since last wick ----------------------------------
-        # Pine: bs_hw := math.abs(last_h_wick - bar_index)
         bs_hw = abs(last_h_wick - bar)
         bs_lw = abs(last_l_wick - bar)
 
         # -- 5. Track outer extremes ----------------------------------
-        # Pine: if (high > hst.h)  hst.h := high
         if h > hst["h"]:
             hst["h"] = h
-        # Pine: if (low < lst.l)  lst.l := low
+
         if lo < lst["l"]:
             lst["l"] = lo
 
         # -- 6. Volume tracking (reference-level volume) --------------
-        # Pine: hst_vol = max((high - hst.t), 0) / (high-low) * vol
         h_range = h - lo
         if h_range > 0:
             hi_vol += max(h - hst["t"], 0) / h_range * v
@@ -338,8 +309,6 @@ def liquidity_pools(
         )
 
         # -- 7a. Bearish pool (resistance) from high contacts ---------
-        # Pine: if (h_count >= cNum) and ta.crossover(bs_hw, wait)
-        #        and (close < hst.t)
         if (h_count >= contact_count
                 and hw_cross
                 and c < hst["t"]):
@@ -394,8 +363,6 @@ def liquidity_pools(
                 bear_zones.append(h_zn)
 
         # -- 7b. Bullish pool (support) from low contacts -------------
-        # Pine: if (l_count >= cNum) and ta.crossover(bs_lw, wait)
-        #        and (close > lst.b)
         if (l_count >= contact_count
                 and lw_cross
                 and c > lst["b"]):
@@ -460,7 +427,7 @@ def liquidity_pools(
             zb = z["bottom"]
 
             # Most recent zone: accumulate candle volume if
-            # overlapping (Pine get_civ) and extend line
+            # overlapping and extend line
             if i == len(bull_zones) - 1:
                 if c > zt:
                     z["right_bar"] = bar
@@ -488,7 +455,7 @@ def liquidity_pools(
             zb = z["bottom"]
 
             # Most recent zone: accumulate candle volume if
-            # overlapping (Pine get_civ) and extend line
+            # overlapping and extend line
             if i == len(bear_zones) - 1:
                 if c < zb:
                     z["right_bar"] = bar

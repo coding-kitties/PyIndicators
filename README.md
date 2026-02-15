@@ -498,6 +498,61 @@ pd_df.tail(10)
 
 ![SUPERTREND_CLUSTERING](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/supertrend_clustering.png)
 
+#### Pulse Mean Accelerator (PMA)
+
+The Pulse Mean Accelerator is a trend-following overlay indicator
+translated from the Pine Script® by MisinkoMaster.  It adds a
+volatility- and momentum-scaled acceleration offset to a base moving
+average.  The acceleration accumulates over a configurable lookback:
+bars where source momentum exceeds MA momentum push the PMA further
+from the MA, while bars where the MA leads source momentum pull it
+back.  Multiple MA types (RMA, SMA, EMA, WMA, DEMA, TEMA, HMA),
+volatility measures (ATR, Standard Deviation, MAD), and smoothing
+modes are supported.
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `source_column` | str | `"Close"` | Source price column |
+| `ma_type` | str | `"RMA"` | MA type: RMA, SMA, EMA, WMA, DEMA, TEMA, HMA |
+| `ma_length` | int | `20` | Lookback for the base moving average |
+| `accel_lookback` | int | `32` | Bars over which acceleration is accumulated |
+| `max_accel` | float | `0.2` | Maximum absolute acceleration factor |
+| `volatility_type` | str | `"Standard Deviation"` | Volatility: ATR, Standard Deviation, MAD |
+| `smooth_type` | str | `"Double Moving Average"` | Smoothing: NONE, Exponential, Extra Moving Average, Double Moving Average |
+| `use_confirmation` | bool | `True` | Require combined PMA+MA momentum to confirm trend flips |
+
+**Output columns:** `pma`, `pma_ma`, `pma_trend`, `pma_long`, `pma_short`, `pma_acceleration`
+
+```python
+import pandas as pd
+from pyindicators import (
+    pulse_mean_accelerator,
+    pulse_mean_accelerator_signal,
+    get_pulse_mean_accelerator_stats,
+)
+
+# --- With pandas ---
+df = pd.read_csv("data.csv")
+df = pulse_mean_accelerator(
+    df,
+    ma_type="RMA",
+    ma_length=20,
+    accel_lookback=32,
+    max_accel=0.2,
+    volatility_type="Standard Deviation",
+    smooth_type="Double Moving Average",
+    use_confirmation=True,
+)
+df = pulse_mean_accelerator_signal(df)
+stats = get_pulse_mean_accelerator_stats(df)
+print(stats)
+df[["Close", "pma", "pma_ma", "pma_trend", "pma_long", "pma_short"]].tail(10)
+```
+
+![PULSE_MEAN_ACCELERATOR](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/pulse_mean_accelerator.png)
+
 ### Momentum and Oscillators
 
 Indicators that measure the strength and speed of price movements rather than the direction.
@@ -1983,6 +2038,8 @@ The function returns:
 - Mitigation signals a change in market structure; the zone is no longer valid
 - Increase `contact_count` for higher-quality, more reliable zones
 
+![LIQUIDITY_POOLS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/liquidity_pools.png)
+
 #### Liquidity Levels / Voids (VP)
 
 Liquidity Levels / Voids is a Smart Money Concept indicator that uses volume-profile analysis between swing points to identify price levels where little volume was traded — these are *liquidity voids* that price tends to revisit.
@@ -2062,6 +2119,8 @@ The function returns:
 - When price is above a void, expect it to be pulled down (bearish bias)
 - Use `liq_void_count` to gauge overall market imbalance
 - Decrease `detection_length` for more frequent void detection on shorter timeframes
+
+![LIQUIDITY_LEVELS_VOIDS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/liquidity_levels_voids.png)
 
 ### Pattern Recognition
 

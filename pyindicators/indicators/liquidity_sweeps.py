@@ -49,8 +49,6 @@ def liquidity_sweeps(
     A liquidity sweep occurs when price momentarily pierces a swing
     high or swing low—grabbing resting liquidity—before reversing.
 
-    Three detection modes mirror the Pine Script original:
-
     * ``"wicks"`` – only wick-through sweeps (high > swing high but
       close < swing high, or low < swing low but close > swing low).
     * ``"outbreak_retest"`` – only outbreak-and-retest sweeps (price
@@ -246,8 +244,7 @@ def _detect_pivot_highs(high: np.ndarray, length: int) -> np.ndarray:
     Detect pivot highs.  A pivot high at index *i* means
     ``high[i]`` >= all highs in ``[i-length … i+length]``.
 
-    The result is delayed by *length* bars (like Pine's
-    ``ta.pivothigh(len, len)``).
+    The result is delayed by *length* bars
     """
     n = len(high)
     pivots = np.full(n, np.nan)
@@ -302,7 +299,7 @@ def _liquidity_sweeps_pandas(
     pivot_lows = _detect_pivot_lows(low, swing_length)
 
     # ------------------------------------------------------------------ #
-    #  Pivot tracking structures (mirrors Pine Script UDT arrays)         #
+    #  Pivot tracking structures                                         #
     # ------------------------------------------------------------------ #
     # Each tracked pivot: {price, bar_idx, broken, mitigated, wick_used}
     tracked_highs: List[Dict] = []

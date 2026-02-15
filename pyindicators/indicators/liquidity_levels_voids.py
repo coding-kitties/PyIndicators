@@ -1,8 +1,7 @@
 """
 Liquidity Levels / Voids (Volume Profile) Indicator
 
-Based on the Liquidity Levels/Voids (VP) [LuxAlgo] concept from
-TradingView.  Uses volume-profile analysis between swing points to
+Uses volume-profile analysis between swing points to
 identify price levels where little volume was traded — these are
 *liquidity voids* that price tends to revisit.
 
@@ -86,8 +85,7 @@ def liquidity_levels_voids(
     Args:
         data: pandas or polars DataFrame with OHLCV data.
         detection_length: Lookback/look-ahead period for swing
-            detection (default: 47).  Equivalent to Pine Script's
-            ``ppLen`` parameter.
+            detection (default: 47).
         threshold: Volume fraction below which a level is classified
             as a liquidity void (default: 0.21, i.e. 21 %).  A level
             is a void if its volume < ``threshold * max_volume_level``.
@@ -156,7 +154,7 @@ def liquidity_levels_voids(
     active_voids: list[list[float]] = []
 
     # Previous pivot bar index and previous HIGH/LOW values for
-    # swing comparison (mirrors pp.x, pp.x1 in Pine).
+    # swing comparison.
     prev_pivot_bar: int = -1
     prev_pivot_bar_2: int = -1
 
@@ -225,7 +223,7 @@ def liquidity_levels_voids(
 
                                 # Check if already filled in the
                                 # interval from vp_start to current
-                                # bar (mirrors Pine's fill loop)
+                                # bar
                                 filled_already = False
                                 mid = (lev_bot + lev_top) / 2.0
                                 fill_start = -1

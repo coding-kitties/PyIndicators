@@ -67,7 +67,7 @@ def buyside_sellside_liquidity(
     Args:
         data: pandas or polars DataFrame with OHLC data.
         detection_length: Lookback period for pivot detection
-            (default: 7). Pine equivalent: ``ta.pivothigh(liqLen, 1)``.
+            (default: 7).
         margin: Divisor for the ATR margin band (default: 6.9).
             Effective margin = ``10 / margin * ATR(atr_period)``.
         buyside_margin: Multiplier for the breach zone around
