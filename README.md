@@ -85,6 +85,9 @@ pip install pyindicators
   * [Market Structure CHoCH/BOS](#market-structure-chochbos)
   * [Liquidity Sweeps](#liquidity-sweeps)
   * [Buyside & Sellside Liquidity](#buyside--sellside-liquidity)
+  * [Pure Price Action Liquidity Sweeps](#pure-price-action-liquidity-sweeps)
+  * [Liquidity Pools](#liquidity-pools)
+  * [Liquidity Levels / Voids (VP)](#liquidity-levels--voids-vp)
 * [Pattern recognition](#pattern-recognition)
   * [Detect Peaks](#detect-peaks)
   * [Detect Bullish Divergence](#detect-bullish-divergence)
@@ -1825,6 +1828,240 @@ The function returns:
 - Liquidity voids are imbalance zones that price often revisits—use as take-profit targets
 
 ![BUYSIDE_SELLSIDE_LIQUIDITY](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/buy_side_sell_side_liquidity.png)
+
+#### Pure Price Action Liquidity Sweeps
+
+Pure Price Action Liquidity Sweeps is a Smart Money Concept indicator that uses recursive fractal swing detection to identify significant pivot levels and detect liquidity sweep events.
+
+Unlike simple swing-based approaches, this indicator employs a hierarchical pivot detection algorithm with configurable depth to find progressively more significant swing points. A liquidity sweep occurs when price wicks through a pivot level without closing beyond it—indicating institutional stop-hunting. Levels are automatically invalidated once price closes through them (mitigated).
+
+Three detection granularities are available:
+
+- **Short Term** (depth 1) – detects all basic swing pivots, yielding the most sweep signals.
+- **Intermediate Term** (depth 2) – uses two levels of fractal filtering for moderately significant pivots.
+- **Long Term** (depth 3) – three levels of recursion, producing only the most significant swing points and fewest sweeps.
+
+```python
+def pure_price_action_liquidity_sweeps(
+    data: Union[PdDataFrame, PlDataFrame],
+    term: str = "long",
+    high_column: str = "High",
+    low_column: str = "Low",
+    close_column: str = "Close",
+    max_level_age: int = 2000,
+    bullish_sweep_column: str = "ppa_sweep_bullish",
+    bearish_sweep_column: str = "ppa_sweep_bearish",
+    sweep_high_column: str = "ppa_sweep_high",
+    sweep_low_column: str = "ppa_sweep_low",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+import pandas as pd
+from pyindicators import (
+    pure_price_action_liquidity_sweeps,
+    pure_price_action_liquidity_sweep_signal,
+    get_pure_price_action_liquidity_sweep_stats
+)
+
+# Create sample OHLC data
+df = pd.DataFrame({
+    'High': [...],
+    'Low': [...],
+    'Close': [...]
+})
+
+# Detect pure price action liquidity sweeps (long-term fractal depth)
+df = pure_price_action_liquidity_sweeps(df, term="long")
+print(df[['ppa_sweep_bullish', 'ppa_sweep_bearish', 'ppa_sweep_high', 'ppa_sweep_low']])
+
+# Generate trading signals
+# 1 = bullish sweep, -1 = bearish sweep, 0 = no sweep
+df = pure_price_action_liquidity_sweep_signal(df)
+bullish_sweeps = df[df['ppa_sweep_signal'] == 1]
+
+# Get statistics
+stats = get_pure_price_action_liquidity_sweep_stats(df)
+print(f"Total bullish sweeps: {stats['total_bullish']}")
+print(f"Total bearish sweeps: {stats['total_bearish']}")
+```
+
+The function returns:
+- `ppa_sweep_bullish`: 1 when a bullish sweep is detected (sell-side liquidity grabbed below a pivot low)
+- `ppa_sweep_bearish`: 1 when a bearish sweep is detected (buy-side liquidity grabbed above a pivot high)
+- `ppa_sweep_high`: Price level of the swept swing high on bearish-sweep bars
+- `ppa_sweep_low`: Price level of the swept swing low on bullish-sweep bars
+
+**Trading Strategy:**
+- Use the `term` parameter to match your trading timeframe (short for scalping, long for swing trading)
+- Bullish sweeps at pivot lows suggest smart money accumulation—potential long entries
+- Bearish sweeps at pivot highs suggest smart money distribution—potential short entries
+- Higher-depth sweeps (long term) are rarer but more significant
+
+![PURE_PRICE_ACTION_LIQUIDITY_SWEEPS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/pure_price_action_liquidity_sweeps.png)
+
+#### Liquidity Pools
+
+Liquidity Pools is a Smart Money Concept indicator that identifies zones where resting orders cluster, detected by tracking areas where price repeatedly bounces (wicks) from a level.
+
+A **bullish pool** (support) forms when price wicks below a body-bottom level multiple times without closing below it. A **bearish pool** (resistance) forms when price wicks above a body-top level multiple times without closing above it. Zones are mitigated (invalidated) when price closes through them on two consecutive bars.
+
+Key parameters:
+
+- **Contact Count** – minimum wick bounces required to form a pool (default: 2). Higher = fewer, more reliable zones.
+- **Gap Bars** – minimum bars between contacts to prevent double-counting (default: 5).
+- **Confirmation Bars** – bars price must stay away before confirming the zone (default: 10).
+
+```python
+def liquidity_pools(
+    data: Union[PdDataFrame, PlDataFrame],
+    contact_count: int = 2,
+    gap_bars: int = 5,
+    confirmation_bars: int = 10,
+    high_column: str = "High",
+    low_column: str = "Low",
+    open_column: str = "Open",
+    close_column: str = "Close",
+    volume_column: Optional[str] = "Volume",
+    bull_pool_top_column: str = "liq_pool_bull_top",
+    bull_pool_bottom_column: str = "liq_pool_bull_bottom",
+    bear_pool_top_column: str = "liq_pool_bear_top",
+    bear_pool_bottom_column: str = "liq_pool_bear_bottom",
+    bull_pool_formed_column: str = "liq_pool_bull_formed",
+    bear_pool_formed_column: str = "liq_pool_bear_formed",
+    bull_pool_mitigated_column: str = "liq_pool_bull_mitigated",
+    bear_pool_mitigated_column: str = "liq_pool_bear_mitigated",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+import pandas as pd
+from pyindicators import (
+    liquidity_pools,
+    liquidity_pool_signal,
+    get_liquidity_pool_stats
+)
+
+# Create sample OHLC data
+df = pd.DataFrame({
+    'Open': [...],
+    'High': [...],
+    'Low': [...],
+    'Close': [...]
+})
+
+# Detect liquidity pools
+df = liquidity_pools(df, contact_count=2, gap_bars=5, confirmation_bars=10)
+print(df[['liq_pool_bull_top', 'liq_pool_bull_bottom',
+          'liq_pool_bear_top', 'liq_pool_bear_bottom']])
+
+# Generate trading signals
+# 1 = bullish pool formed (support), -1 = bearish pool formed (resistance)
+df = liquidity_pool_signal(df)
+pool_events = df[df['liq_pool_signal'] != 0]
+
+# Get statistics
+stats = get_liquidity_pool_stats(df)
+print(f"Bull pools formed: {stats['total_bull_formed']}")
+print(f"Bear pools formed: {stats['total_bear_formed']}")
+print(f"Total mitigated: {stats['total_mitigated']}")
+```
+
+The function returns:
+- `liq_pool_bull_top` / `liq_pool_bull_bottom`: Boundaries of the most recent active bullish pool (NaN if none)
+- `liq_pool_bear_top` / `liq_pool_bear_bottom`: Boundaries of the most recent active bearish pool (NaN if none)
+- `liq_pool_bull_formed` / `liq_pool_bear_formed`: 1 when a new pool forms
+- `liq_pool_bull_mitigated` / `liq_pool_bear_mitigated`: 1 when a pool is mitigated (broken)
+
+**Trading Strategy:**
+- Bullish pools are support zones where institutional buyers accumulate—look for long entries near the zone
+- Bearish pools are resistance zones where institutional sellers distribute—look for short entries near the zone
+- Mitigation signals a change in market structure; the zone is no longer valid
+- Increase `contact_count` for higher-quality, more reliable zones
+
+#### Liquidity Levels / Voids (VP)
+
+Liquidity Levels / Voids is a Smart Money Concept indicator that uses volume-profile analysis between swing points to identify price levels where little volume was traded — these are *liquidity voids* that price tends to revisit.
+
+Between each pair of detected swing points, the price range is divided into equally-spaced levels and a volume profile is built. Levels where the traded volume is below a configurable threshold (as a fraction of the maximum level's volume) are classified as liquidity voids — low-volume zones that act as price magnets.
+
+Key parameters:
+
+- **Detection Length** — lookback/look-ahead period for swing detection (default: 47).
+- **Threshold** — volume fraction below which a level is a void (default: 0.21, i.e. 21%).
+- **Sensitivity** — number of price levels per swing range (default: 27). Higher = thinner, more granular zones.
+
+```python
+def liquidity_levels_voids(
+    data: Union[PdDataFrame, PlDataFrame],
+    detection_length: int = 47,
+    threshold: float = 0.21,
+    sensitivity: int = 27,
+    high_column: str = "High",
+    low_column: str = "Low",
+    close_column: str = "Close",
+    volume_column: Optional[str] = "Volume",
+    void_formed_column: str = "liq_void_formed",
+    void_filled_column: str = "liq_void_filled",
+    void_count_column: str = "liq_void_count",
+    void_nearest_top_column: str = "liq_void_nearest_top",
+    void_nearest_bottom_column: str = "liq_void_nearest_bot",
+    void_above_count_column: str = "liq_void_above_count",
+    void_below_count_column: str = "liq_void_below_count",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+import pandas as pd
+from pyindicators import (
+    liquidity_levels_voids,
+    liquidity_levels_voids_signal,
+    get_liquidity_levels_voids_stats
+)
+
+# Create sample OHLCV data
+df = pd.DataFrame({
+    'High': [...],
+    'Low': [...],
+    'Close': [...],
+    'Volume': [...]
+})
+
+# Detect liquidity voids (volume-profile based)
+df = liquidity_levels_voids(df, detection_length=47, threshold=0.21, sensitivity=27)
+print(df[['liq_void_count', 'liq_void_nearest_top', 'liq_void_nearest_bot']])
+
+# Generate directional signal based on void proximity
+# 1 = price below nearest void (bullish magnet), -1 = price above (bearish magnet)
+df = liquidity_levels_voids_signal(df)
+signals = df[df['liq_void_signal'] != 0]
+
+# Get statistics
+stats = get_liquidity_levels_voids_stats(df)
+print(f"Formation events: {stats['total_formation_events']}")
+print(f"Fill events: {stats['total_fill_events']}")
+print(f"Active voids: {stats['active_voids_last_bar']}")
+```
+
+The function returns:
+- `liq_void_formed`: 1 on bars where new liquidity voids are identified
+- `liq_void_filled`: 1 on bars where a void is filled (price crosses through it)
+- `liq_void_count`: Total number of active unfilled voids
+- `liq_void_nearest_top` / `liq_void_nearest_bot`: Boundaries of the nearest unfilled void to the current close
+- `liq_void_above_count` / `liq_void_below_count`: Unfilled voids above/below the current price
+
+**Trading Strategy:**
+- Liquidity voids act as magnets — price is drawn to fill low-volume areas
+- When price is below a void, expect it to be pulled up (bullish bias)
+- When price is above a void, expect it to be pulled down (bearish bias)
+- Use `liq_void_count` to gauge overall market imbalance
+- Decrease `detection_length` for more frequent void detection on shorter timeframes
 
 ### Pattern Recognition
 
