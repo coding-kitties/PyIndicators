@@ -71,6 +71,43 @@ from .pulse_mean_accelerator import (
     pulse_mean_accelerator, pulse_mean_accelerator_signal,
     get_pulse_mean_accelerator_stats
 )
+from .equal_highs_lows import (
+    equal_highs_lows, equal_highs_lows_signal,
+    get_equal_highs_lows_stats
+)
+from .swing_structure import (
+    swing_structure, swing_structure_signal,
+    get_swing_structure_stats
+)
+from .premium_discount_zones import (
+    premium_discount_zones, premium_discount_zones_signal,
+    get_premium_discount_zones_stats
+)
+from .internal_external_liquidity_zones import (
+    internal_external_liquidity_zones,
+    internal_external_liquidity_zones_signal,
+    get_internal_external_liquidity_zones_stats
+)
+from .volume_weighted_trend import (
+    volume_weighted_trend, volume_weighted_trend_signal,
+    get_volume_weighted_trend_stats
+)
+from .breaker_blocks import (
+    breaker_blocks, breaker_blocks_signal,
+    get_breaker_blocks_stats
+)
+from .optimal_trade_entry import (
+    optimal_trade_entry, optimal_trade_entry_signal,
+    get_optimal_trade_entry_stats
+)
+from .mitigation_blocks import (
+    mitigation_blocks, mitigation_blocks_signal,
+    get_mitigation_blocks_stats
+)
+from .rejection_blocks import (
+    rejection_blocks, rejection_blocks_signal,
+    get_rejection_blocks_stats
+)
 
 __all__ = [
     'sma',
@@ -161,5 +198,32 @@ __all__ = [
     'get_liquidity_levels_voids_stats',
     'pulse_mean_accelerator',
     'pulse_mean_accelerator_signal',
-    'get_pulse_mean_accelerator_stats'
+    'get_pulse_mean_accelerator_stats',
+    'equal_highs_lows',
+    'equal_highs_lows_signal',
+    'get_equal_highs_lows_stats',
+    'swing_structure',
+    'swing_structure_signal',
+    'get_swing_structure_stats',
+    'premium_discount_zones',
+    'premium_discount_zones_signal',
+    'get_premium_discount_zones_stats',
+    'internal_external_liquidity_zones',
+    'internal_external_liquidity_zones_signal',
+    'get_internal_external_liquidity_zones_stats',
+    'volume_weighted_trend',
+    'volume_weighted_trend_signal',
+    'get_volume_weighted_trend_stats',
+    'breaker_blocks',
+    'breaker_blocks_signal',
+    'get_breaker_blocks_stats',
+    'optimal_trade_entry',
+    'optimal_trade_entry_signal',
+    'get_optimal_trade_entry_stats',
+    'mitigation_blocks',
+    'mitigation_blocks_signal',
+    'get_mitigation_blocks_stats',
+    'rejection_blocks',
+    'rejection_blocks_signal',
+    'get_rejection_blocks_stats'
 ]

@@ -7,7 +7,7 @@ def rsi(
     data: Union[pd.DataFrame, pl.DataFrame],
     source_column: str,
     period: int = 14,
-    result_column: str = None,
+    result_column: str = "rsi",
 ) -> Union[pd.DataFrame, pl.DataFrame]:
     """
     Function to calculate the RSI (Relative Strength Index) of a series.
@@ -17,16 +17,12 @@ def rsi(
         source_column (str): The name of the series.
         period (int): The period for the RSI calculation.
         result_column (str, optional): The name of the column to store
-        the RSI values. Defaults to None, which means it will
-        be named "RSI_{period}".
+        the RSI values. Defaults to "rsi".
 
     Returns:
         Union[pd.DataFrame, pl.DataFrame]: The DataFrame with the RSI
         column added.
     """
-
-    if result_column is None:
-        result_column = f"rsi_{period}"
 
     if isinstance(data, pd.DataFrame):
         # Compute price changes
@@ -82,7 +78,7 @@ def wilders_rsi(
     data: Union[pd.DataFrame, pl.DataFrame],
     source_column: str,
     period: int = 14,
-    result_column: str = None,
+    result_column: str = "wilders_rsi",
 ) -> Union[pd.DataFrame, pl.DataFrame]:
     """
     Compute RSI using wilders method (Wilder’s Smoothing).
@@ -96,9 +92,6 @@ def wilders_rsi(
     Returns:
         Union[pd.DataFrame, pl.DataFrame]: DataFrame with RSI values.
     """
-
-    if result_column is None:
-        result_column = f"rsi_{period}"
 
     if isinstance(data, pd.DataFrame):
         delta = data[source_column].diff()

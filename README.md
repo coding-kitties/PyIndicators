@@ -61,6 +61,8 @@ pip install pyindicators
   * [EMA Trend Ribbon](#ema-trend-ribbon)
   * [SuperTrend](#supertrend)
   * [SuperTrend Clustering](#supertrend-clustering)
+  * [Pulse Mean Accelerator (PMA)](#pulse-mean-accelerator-pma)
+  * [Volume Weighted Trend (VWT)](#volume-weighted-trend-vwt)
 * [Momentum and Oscillators](#momentum-and-oscillators)
   * [Moving Average Convergence Divergence (MACD)](#moving-average-convergence-divergence-macd)
   * [Relative Strength Index (RSI)](#relative-strength-index-rsi)
@@ -81,6 +83,10 @@ pip install pyindicators
   * [Golden Zone Signal](#golden-zone-signal)
   * [Fair Value Gap (FVG)](#fair-value-gap-fvg)
   * [Order Blocks](#order-blocks)
+  * [Breaker Blocks](#breaker-blocks)
+  * [Mitigation Blocks](#mitigation-blocks)
+  * [Rejection Blocks](#rejection-blocks)
+  * [Optimal Trade Entry (OTE)](#optimal-trade-entry-ote)
   * [Market Structure Break](#market-structure-break)
   * [Market Structure CHoCH/BOS](#market-structure-chochbos)
   * [Liquidity Sweeps](#liquidity-sweeps)
@@ -88,6 +94,8 @@ pip install pyindicators
   * [Pure Price Action Liquidity Sweeps](#pure-price-action-liquidity-sweeps)
   * [Liquidity Pools](#liquidity-pools)
   * [Liquidity Levels / Voids (VP)](#liquidity-levels--voids-vp)
+  * [Internal & External Liquidity Zones](#internal--external-liquidity-zones)
+  * [Premium / Discount Zones](#premium--discount-zones)
 * [Pattern recognition](#pattern-recognition)
   * [Detect Peaks](#detect-peaks)
   * [Detect Bullish Divergence](#detect-bullish-divergence)
@@ -156,7 +164,7 @@ pd_df = wma(pd_df, source_column="Close", period=200, result_column="WMA_200")
 pd_df.tail(10)
 ```
 
-![WMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/wma.png)
+![WMA](static/images/indicators/wma.png)
 
 #### Simple Moving Average (SMA)
 
@@ -207,7 +215,7 @@ pd_df = sma(pd_df, source_column="Close", period=200, result_column="SMA_200")
 pd_df.tail(10)
 ```
 
-![SMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/sma.png)
+![SMA](static/images/indicators/sma.png)
 
 #### Exponential Moving Average (EMA)
 
@@ -258,7 +266,7 @@ pd_df = ema(pd_df, source_column="Close", period=200, result_column="EMA_200")
 pd_df.tail(10)
 ```
 
-![EMA](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema.png)
+![EMA](static/images/indicators/ema.png)
 
 #### Zero-Lag EMA Envelope (ZLEMA)
 
@@ -325,7 +333,7 @@ pd_df = zero_lag_ema_envelope(pd_df, source_column="Close", length=200, mult=2.0
 pd_df.tail(10)
 ```
 
-![ZERO_LAG_EMA_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/zero_lag_ema_envelope.png)
+![ZERO_LAG_EMA_ENVELOPE](static/images/indicators/zero_lag_ema_envelope.png)
 
 #### EMA Trend Ribbon
 
@@ -388,7 +396,7 @@ pd_df = ema_trend_ribbon(pd_df, source_column="Close")
 pd_df.tail(10)
 ```
 
-![EMA_TREND_RIBBON](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/ema_trend_ribbon.png)
+![EMA_TREND_RIBBON](static/images/indicators/ema_trend_ribbon.png)
 
 #### SuperTrend
 
@@ -432,7 +440,7 @@ pd_df = supertrend(pd_df, atr_length=10, factor=3.0)
 pd_df.tail(10)
 ```
 
-![SUPERTREND](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/supertrend.png)
+![SUPERTREND](static/images/indicators/supertrend.png)
 
 #### SuperTrend Clustering
 
@@ -496,7 +504,7 @@ print(stats)
 pd_df.tail(10)
 ```
 
-![SUPERTREND_CLUSTERING](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/supertrend_clustering.png)
+![SUPERTREND_CLUSTERING](static/images/indicators/supertrend_clustering.png)
 
 #### Pulse Mean Accelerator (PMA)
 
@@ -551,7 +559,60 @@ print(stats)
 df[["Close", "pma", "pma_ma", "pma_trend", "pma_long", "pma_short"]].tail(10)
 ```
 
-![PULSE_MEAN_ACCELERATOR](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/pulse_mean_accelerator.png)
+![PULSE_MEAN_ACCELERATOR](static/images/indicators/pulse_mean_accelerator.png)
+
+#### Volume Weighted Trend (VWT)
+
+The Volume Weighted Trend indicator uses a Volume Weighted Moving Average (VWMA) with ATR-based volatility bands to determine trend direction. Based on the "Volume Weighted Trend [QuantAlgo]" concept. The VWMA serves as the trend baseline, while upper and lower bands (VWMA +/- ATR * multiplier) define breakout thresholds. The trend flips bullish when price closes above the upper band and bearish when price closes below the lower band.
+
+```python
+def volume_weighted_trend(
+    df: Union[PdDataFrame, PlDataFrame],
+    vwma_length: int = 34,
+    atr_multiplier: float = 1.5,
+    high_column: str = "High",
+    low_column: str = "Low",
+    close_column: str = "Close",
+    volume_column: str = "Volume",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `vwt_vwma`: Volume Weighted Moving Average
+- `vwt_atr`: Average True Range
+- `vwt_upper`: Upper volatility band (VWMA + ATR * multiplier)
+- `vwt_lower`: Lower volatility band (VWMA - ATR * multiplier)
+- `vwt_trend`: Trend direction (+1 bullish, -1 bearish, 0 undefined)
+- `vwt_trend_changed`: 1 on bars where trend flipped, 0 otherwise
+- `vwt_signal`: +1 on bullish flip, -1 on bearish flip, 0 otherwise
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import volume_weighted_trend, get_volume_weighted_trend_stats
+
+pd_df = download(
+    symbol="btc/eur",
+    market="bitvavo",
+    time_frame="4h",
+    start_date="2024-01-01",
+    end_date="2024-04-01",
+    pandas=True,
+)
+
+# Calculate Volume Weighted Trend
+pd_df = volume_weighted_trend(pd_df, vwma_length=34, atr_multiplier=1.5)
+
+# Get summary statistics
+stats = get_volume_weighted_trend_stats(pd_df)
+print(stats)
+
+pd_df[["Close", "vwt_vwma", "vwt_upper", "vwt_lower", "vwt_trend", "vwt_signal"]].tail(10)
+```
+
+![VOLUME_WEIGHTED_TREND](static/images/indicators/volume_weighted_trend.png)
 
 ### Momentum and Oscillators
 
@@ -611,7 +672,7 @@ pl_df.show(10)
 pd_df.tail(10)
 ```
 
-![MACD](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/macd.png)
+![MACD](static/images/indicators/macd.png)
 
 #### Relative Strength Index (RSI)
 
@@ -662,7 +723,7 @@ pd_df = rsi(pd_df, source_column="Close", period=14, result_column="RSI_14")
 pd_df.tail(10)
 ```
 
-![RSI](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/rsi.png)
+![RSI](static/images/indicators/rsi.png)
 
 #### Wilders Relative Strength Index (Wilders RSI)
 
@@ -713,7 +774,7 @@ pd_df = wilders_rsi(pd_df, source_column="Close", period=14, result_column="RSI_
 pd_df.tail(10)
 ```
 
-![wilders_RSI](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/wilders_rsi.png)
+![wilders_RSI](static/images/indicators/wilders_rsi.png)
 
 #### Williams %R
 
@@ -769,7 +830,7 @@ pd_df = willr(pd_df, result_column="WILLR")
 pd_df.tail(10)
 ```
 
-![williams %R](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/willr.png)
+![williams %R](static/images/indicators/willr.png)
 
 #### Average Directional Index (ADX)
 
@@ -821,7 +882,7 @@ pd_df = adx(pd_df)
 pd_df.tail(10)
 ```
 
-![ADX](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/adx.png)
+![ADX](static/images/indicators/adx.png)
 
 #### Stochastic Oscillator (STO)
 The Stochastic Oscillator (STO) is a momentum indicator that compares a particular closing price of an asset to a range of its prices over a certain period. It is used to identify overbought or oversold conditions in a market. The STO consists of two lines: %K and %D, where %K is the main line and %D is the signal line.
@@ -871,7 +932,7 @@ pd_df = stochastic_oscillator(pd_df, high_column="High", low_column="Low", close
 pd_df.tail(10)
 ```
 
-![STO](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/sto.png)
+![STO](static/images/indicators/sto.png)
 
 #### Momentum Confluence
 
@@ -942,7 +1003,7 @@ print(f"Divergences detected: {stats['divergence_bullish_count']}")
 - `-1`: Bearish confluence
 - `-2`: Strong bearish reversal signal
 
-![MOMENTUM_CONFLUENCE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/momentum_confluence.png)
+![MOMENTUM_CONFLUENCE](static/images/indicators/momentum_confluence.png)
 
 
 ### Volatility indicators
@@ -1002,7 +1063,7 @@ pd_df = bollinger_bands(pd_df, source_column="Close")
 pd_df.tail(10)
 ```
 
-![BOLLINGER_BANDS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/bollinger_bands.png)
+![BOLLINGER_BANDS](static/images/indicators/bollinger_bands.png)
 
 #### Bollinger Bands Overshoot
 
@@ -1064,7 +1125,7 @@ pd_df = bollinger_overshoot(pd_df, source_column="Close")
 pd_df.tail(10)
 ```
 
-![BOLLINGER_OVERSHOOT](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/bollinger_overshoot.png)
+![BOLLINGER_OVERSHOOT](static/images/indicators/bollinger_overshoot.png)
 
 #### Average True Range (ATR)
 
@@ -1115,7 +1176,7 @@ pd_df = atr(pd_df, source_column="Close")
 pd_df.tail(10)
 ```
 
-![ATR](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/atr.png)
+![ATR](static/images/indicators/atr.png)
 
 #### Moving Average Envelope (MAE)
 
@@ -1170,7 +1231,7 @@ pd_df = moving_average_envelope(pd_df, source_column="Close", period=20, percent
 pd_df.tail(10)
 ```
 
-![MOVING_AVERAGE_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/moving_average_envelope.png)
+![MOVING_AVERAGE_ENVELOPE](static/images/indicators/moving_average_envelope.png)
 
 #### Nadaraya-Watson Envelope (NWE)
 
@@ -1232,7 +1293,7 @@ pd_df = nadaraya_watson_envelope(pd_df, source_column="Close", bandwidth=8.0, mu
 pd_df.tail(10)
 ```
 
-![NADARAYA_WATSON_ENVELOPE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/nadaraya_watson_envelope.png)
+![NADARAYA_WATSON_ENVELOPE](static/images/indicators/nadaraya_watson_envelope.png)
 
 ### Support and Resistance
 
@@ -1296,7 +1357,7 @@ pd_df = fibonacci_retracement(pd_df, high_column="High", low_column="Low")
 pd_df.tail(10)
 ```
 
-![FIBONACCI_RETRACEMENT](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/fibonacci_retracement.png)
+![FIBONACCI_RETRACEMENT](static/images/indicators/fibonacci_retracement.png)
 
 #### Golden Zone
 
@@ -1364,7 +1425,7 @@ pd_df = golden_zone(pd_df, high_column="High", low_column="Low", length=60)
 pd_df.tail(10)
 ```
 
-![GOLDEN_ZONE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/golden_zone.png)
+![GOLDEN_ZONE](static/images/indicators/golden_zone.png)
 
 #### Golden Zone Signal
 
@@ -1426,7 +1487,7 @@ pd_df = golden_zone_signal(pd_df)
 pd_df.tail(10)
 ```
 
-![GOLDEN_ZONE_SIGNAL](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/golden_zone_signal.png)
+![GOLDEN_ZONE_SIGNAL](static/images/indicators/golden_zone_signal.png)
 
 #### Fair Value Gap (FVG)
 
@@ -1485,7 +1546,7 @@ The `fvg_filled` function detects when FVGs have been mitigated:
 - Bullish FVG filled: Price drops to reach the bottom of the gap
 - Bearish FVG filled: Price rises to reach the top of the gap
 
-![FAIR_VALUE_GAP](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/fair_value_gap.png)
+![FAIR_VALUE_GAP](static/images/indicators/fair_value_gap.png)
 
 #### Order Blocks
 
@@ -1556,7 +1617,302 @@ The `ob_signal` function generates signals:
 - **-1**: Price is within a bearish OB zone (potential short entry)
 - **0**: Price is outside any OB zone
 
-![ORDER_BLOCKS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/order_blocks.png)
+![ORDER_BLOCKS](static/images/indicators/order_blocks.png)
+
+#### Breaker Blocks
+
+Breaker Blocks are failed Order Blocks that flip into opposite support/resistance zones after a Market Structure Shift (MSS). Inspired by the "Breaker Blocks with Signals [LuxAlgo]" indicator.
+
+**Concept:**
+- When a bullish MSS occurs (close breaks above the most recent swing high) after a confirmed lower-low pattern, the decisive bullish candle in the up-leg becomes a **Bullish Breaker Block (+BB)** — acting as future support.
+- When a bearish MSS occurs (close breaks below the most recent swing low) after a confirmed higher-high pattern, the decisive bearish candle becomes a **Bearish Breaker Block (-BB)** — acting as future resistance.
+
+**Signals:**
+- **Entry Long (+BB):** Price opens between the center line and the top, then closes above the top (bounce confirmation)
+- **Entry Short (-BB):** Price opens between the center line and the bottom, then closes below the bottom
+- **Cancel:** Price closes past the center line without triggering an entry (invalidation)
+- **Mitigated:** Price closes fully through the opposite side of the zone
+
+```python
+def breaker_blocks(
+    data: Union[PdDataFrame, PlDataFrame],
+    swing_length: int = 5,
+    use_body: bool = False,
+    use_2_candles: bool = False,
+    stop_at_first_center_break: bool = True,
+    high_column: str = "High",
+    low_column: str = "Low",
+    open_column: str = "Open",
+    close_column: str = "Close",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `bb_bullish` / `bb_bearish`: 1 when a Breaker Block is formed
+- `bb_top` / `bb_bottom` / `bb_center`: Active BB zone boundaries (forward-filled)
+- `bb_direction`: 1 for bullish BB, -1 for bearish BB, 0 when no BB is active
+- `bb_entry_long` / `bb_entry_short`: 1 when an entry signal fires
+- `bb_cancel`: 1 when the center line is broken (invalidation)
+- `bb_mitigated`: 1 when the BB is fully mitigated
+
+Signal function:
+- `bb_signal`: `1` = long entry, `-1` = short entry, `0` = no signal
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import (
+    breaker_blocks,
+    breaker_blocks_signal,
+    get_breaker_blocks_stats,
+)
+
+pd_df = download(
+    symbol="btc/eur",
+    market="bitvavo",
+    time_frame="4h",
+    start_date="2024-01-01",
+    end_date="2024-06-01",
+    pandas=True,
+)
+
+# Detect Breaker Blocks
+pd_df = breaker_blocks(pd_df, swing_length=5)
+pd_df = breaker_blocks_signal(pd_df)
+
+# Get summary statistics
+stats = get_breaker_blocks_stats(pd_df)
+print(stats)
+
+pd_df[["Close", "bb_bullish", "bb_bearish", "bb_top", "bb_bottom",
+       "bb_entry_long", "bb_entry_short", "bb_signal"]].tail(10)
+```
+
+![BREAKER_BLOCKS](static/images/indicators/breaker_blocks.png)
+
+#### Mitigation Blocks
+
+Mitigation Blocks identify the **first candle that initiates** an impulsive move leading to a Market Structure Shift — the origin of institutional order flow.
+
+**Concept (ICT / Smart Money):**
+- While an *Order Block* is the last **opposing** candle before an impulse, a *Mitigation Block* is the first **same-direction** candle that **starts** the move.
+- **Bullish Mitigation Block:** After a bullish MSS (close breaks swing high with confirmed LL pattern), the first bullish candle (close > open) after the preceding swing low that kicked off the upward impulse.
+- **Bearish Mitigation Block:** After a bearish MSS (close breaks swing low with confirmed HH pattern), the first bearish candle (close < open) after the preceding swing high that kicked off the downward impulse.
+- When price returns to a Mitigation Block zone, institutional traders are "mitigating" (closing/adjusting) positions opened at that origin candle.
+
+**Signals:**
+- **Entry Long:** Price retraces into the bullish MB zone (potential long entry)
+- **Entry Short:** Price retraces into the bearish MB zone (potential short entry)
+- **Mitigated:** Price closes through the opposite side of the zone (block invalidated)
+
+```python
+def mitigation_blocks(
+    data: Union[PdDataFrame, PlDataFrame],
+    swing_length: int = 5,
+    use_body: bool = False,
+    high_column: str = "High",
+    low_column: str = "Low",
+    open_column: str = "Open",
+    close_column: str = "Close",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `mb_bullish` / `mb_bearish`: 1 when a Mitigation Block is established
+- `mb_top` / `mb_bottom`: Active MB zone boundaries (forward-filled)
+- `mb_direction`: 1 for bullish MB, -1 for bearish MB, 0 when no MB is active
+- `mb_entry_long` / `mb_entry_short`: 1 when price enters the MB zone
+- `mb_mitigated`: 1 when the MB zone is mitigated
+
+Signal function:
+- `mb_signal`: `1` = long entry, `-1` = short entry, `0` = no signal
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import (
+    mitigation_blocks,
+    mitigation_blocks_signal,
+    get_mitigation_blocks_stats,
+)
+
+pd_df = download(
+    symbol="btc/eur",
+    market="bitvavo",
+    time_frame="4h",
+    start_date="2024-01-01",
+    end_date="2024-06-01",
+    pandas=True,
+)
+
+# Detect Mitigation Blocks
+pd_df = mitigation_blocks(pd_df, swing_length=5)
+pd_df = mitigation_blocks_signal(pd_df)
+
+# Get summary statistics
+stats = get_mitigation_blocks_stats(pd_df)
+print(stats)
+
+pd_df[["Close", "mb_bullish", "mb_bearish", "mb_top",
+       "mb_bottom", "mb_entry_long", "mb_entry_short",
+       "mb_signal"]].tail(10)
+```
+
+![MITIGATION_BLOCKS](static/images/indicators/mitigation_blocks.png)
+
+#### Rejection Blocks
+
+Rejection Blocks identify candles at swing extremes whose **disproportionately long wicks** signal institutional rejection of a price level, creating a tradeable zone.
+
+**Concept (ICT / Smart Money):**
+- A Rejection Block forms when a candle at a pivot point has a wick that is at least `wick_threshold` (default 50 %) of the total candle range.
+- The long wick shows that price was driven to a level but was *rejected* — institutional participants absorbed the orders and pushed price back.
+- **Bullish Rejection Block:** At a confirmed swing low, the candle's **lower wick** (Low → body bottom) is disproportionately large. The zone spans the lower wick area.
+- **Bearish Rejection Block:** At a confirmed swing high, the candle's **upper wick** (body top → High) is disproportionately large. The zone spans the upper wick area.
+- When price returns to this wick zone, the same institutional interest is expected — a potential trade entry.
+
+**Signals:**
+- **Entry Long:** Price retraces into the bullish RB zone (potential long entry)
+- **Entry Short:** Price retraces into the bearish RB zone (potential short entry)
+- **Mitigated:** Price closes through the opposite side of the zone (block invalidated)
+
+```python
+def rejection_blocks(
+    data: Union[PdDataFrame, PlDataFrame],
+    swing_length: int = 5,
+    wick_threshold: float = 0.5,
+    high_column: str = "High",
+    low_column: str = "Low",
+    open_column: str = "Open",
+    close_column: str = "Close",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `rb_bullish` / `rb_bearish`: 1 when a Rejection Block is established
+- `rb_top` / `rb_bottom`: Active RB zone boundaries (forward-filled)
+- `rb_direction`: 1 for bullish RB, -1 for bearish RB, 0 when no RB is active
+- `rb_entry_long` / `rb_entry_short`: 1 when price enters the RB zone
+- `rb_mitigated`: 1 when the RB zone is mitigated
+
+Signal function:
+- `rb_signal`: `1` = long entry, `-1` = short entry, `0` = no signal
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import (
+    rejection_blocks,
+    rejection_blocks_signal,
+    get_rejection_blocks_stats,
+)
+
+pd_df = download(
+    symbol="btc/eur",
+    market="bitvavo",
+    time_frame="4h",
+    start_date="2024-01-01",
+    end_date="2024-06-01",
+    pandas=True,
+)
+
+# Detect Rejection Blocks
+pd_df = rejection_blocks(pd_df, swing_length=5, wick_threshold=0.5)
+pd_df = rejection_blocks_signal(pd_df)
+
+# Get summary statistics
+stats = get_rejection_blocks_stats(pd_df)
+print(stats)
+
+pd_df[["Close", "rb_bullish", "rb_bearish", "rb_top",
+       "rb_bottom", "rb_entry_long", "rb_entry_short",
+       "rb_signal"]].tail(10)
+```
+
+![REJECTION_BLOCKS](static/images/indicators/rejection_blocks.png)
+
+#### Optimal Trade Entry (OTE)
+
+Identifies ICT Optimal Trade Entry zones — the Fibonacci 61.8 %–78.6 % retracement of an impulse leg following a Market Structure Shift (MSS).
+
+**Concept (ICT / Smart Money):**
+- After a Break of Structure, the market typically retraces before continuing. The OTE zone (61.8 %–78.6 % Fibonacci retracement) is where institutional traders are most likely to enter or add to positions.
+- **Bullish OTE:** After a bullish MSS (close breaks swing high with confirmed Lower Low), the OTE zone is the 61.8 %–78.6 % pullback of the impulse leg from swing low to the MSS bar.
+- **Bearish OTE:** After a bearish MSS (close breaks swing low with confirmed Higher High), the OTE zone is the 61.8 %–78.6 % retracement from swing high down to the MSS bar.
+
+**Signals:**
+- **Entry Long:** Price retraces into the bullish OTE zone (potential long entry)
+- **Entry Short:** Price retraces into the bearish OTE zone (potential short entry)
+- **Invalidated:** Price closes beyond the impulse origin (zone no longer valid)
+
+**Optional Premium/Discount filter:** Only emit bullish OTEs when the impulse origin is in the discount zone, and bearish OTEs when in the premium zone.
+
+```python
+def optimal_trade_entry(
+    data: Union[PdDataFrame, PlDataFrame],
+    swing_length: int = 5,
+    ote_fib_start: float = 0.618,
+    ote_fib_end: float = 0.786,
+    premium_discount_filter: bool = False,
+    high_column: str = "High",
+    low_column: str = "Low",
+    open_column: str = "Open",
+    close_column: str = "Close",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `ote_bullish` / `ote_bearish`: 1 when an OTE zone is established
+- `ote_zone_top` / `ote_zone_bottom`: Active OTE zone boundaries (forward-filled)
+- `ote_direction`: 1 for bullish OTE, -1 for bearish OTE, 0 when no OTE is active
+- `ote_entry_long` / `ote_entry_short`: 1 when price enters the OTE zone
+- `ote_invalidated`: 1 when the OTE zone is invalidated
+- `ote_impulse_high` / `ote_impulse_low`: Impulse leg boundaries
+- `ote_fib_*`: Fibonacci retracement levels (0 %, 23.6 %, 38.2 %, 50 %, 61.8 %, 70.5 %, 78.6 %, 100 %)
+
+Signal function:
+- `ote_signal`: `1` = long entry, `-1` = short entry, `0` = no signal
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import (
+    optimal_trade_entry,
+    optimal_trade_entry_signal,
+    get_optimal_trade_entry_stats,
+)
+
+pd_df = download(
+    symbol="btc/eur",
+    market="bitvavo",
+    time_frame="4h",
+    start_date="2024-01-01",
+    end_date="2024-06-01",
+    pandas=True,
+)
+
+# Detect Optimal Trade Entry zones
+pd_df = optimal_trade_entry(pd_df, swing_length=5)
+pd_df = optimal_trade_entry_signal(pd_df)
+
+# Get summary statistics
+stats = get_optimal_trade_entry_stats(pd_df)
+print(stats)
+
+pd_df[["Close", "ote_bullish", "ote_bearish", "ote_zone_top",
+       "ote_zone_bottom", "ote_entry_long", "ote_entry_short",
+       "ote_signal"]].tail(10)
+```
+
+![OPTIMAL_TRADE_ENTRY](static/images/indicators/optimal_trade_entry.png)
 
 #### Market Structure Break
 
@@ -1656,7 +2012,7 @@ The `market_structure_ob` function additionally returns:
 | 1H | 5-7 | Swing confirmation |
 | 4H-Daily | 7-10 | Trend direction |
 
-![MARKET_STRUCTURE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/market_structure_ob.png)
+![MARKET_STRUCTURE](static/images/indicators/market_structure_ob.png)
 
 #### Market Structure CHoCH/BOS
 
@@ -1736,7 +2092,7 @@ The function returns:
 - BOS signals are trend confirmations - good for trend-following entries
 - Use support/resistance levels for stop loss placement
 
-![MARKET_STRUCTURE_CHOCH_BOS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/market_structure_choch_bos.png)
+![MARKET_STRUCTURE_CHOCH_BOS](static/images/indicators/market_structure_choch_bos.png)
 
 #### Liquidity Sweeps
 
@@ -1808,7 +2164,7 @@ The function returns:
 - Bearish sweeps above swing highs indicate potential short entries (smart money distribution)
 - Use the sweep level (`liq_sweep_high` / `liq_sweep_low`) as a reference for stop-loss placement
 
-![LIQUIDITY_SWEEPS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/liquidity_sweeps.png)
+![LIQUIDITY_SWEEPS](static/images/indicators/liquidity_sweeps.png)
 
 #### Buyside & Sellside Liquidity
 
@@ -1882,7 +2238,7 @@ The function returns:
 - Sellside levels act as support; a breach signals institutional buying (potential reversal up)
 - Liquidity voids are imbalance zones that price often revisits—use as take-profit targets
 
-![BUYSIDE_SELLSIDE_LIQUIDITY](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/buy_side_sell_side_liquidity.png)
+![BUYSIDE_SELLSIDE_LIQUIDITY](static/images/indicators/buy_side_sell_side_liquidity.png)
 
 #### Pure Price Action Liquidity Sweeps
 
@@ -1955,7 +2311,7 @@ The function returns:
 - Bearish sweeps at pivot highs suggest smart money distribution—potential short entries
 - Higher-depth sweeps (long term) are rarer but more significant
 
-![PURE_PRICE_ACTION_LIQUIDITY_SWEEPS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/pure_price_action_liquidity_sweeps.png)
+![PURE_PRICE_ACTION_LIQUIDITY_SWEEPS](static/images/indicators/pure_price_action_liquidity_sweeps.png)
 
 #### Liquidity Pools
 
@@ -2038,7 +2394,7 @@ The function returns:
 - Mitigation signals a change in market structure; the zone is no longer valid
 - Increase `contact_count` for higher-quality, more reliable zones
 
-![LIQUIDITY_POOLS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/liquidity_pools.png)
+![LIQUIDITY_POOLS](static/images/indicators/liquidity_pools.png)
 
 #### Liquidity Levels / Voids (VP)
 
@@ -2120,7 +2476,179 @@ The function returns:
 - Use `liq_void_count` to gauge overall market imbalance
 - Decrease `detection_length` for more frequent void detection on shorter timeframes
 
-![LIQUIDITY_LEVELS_VOIDS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/liquidity_levels_voids.png)
+![LIQUIDITY_LEVELS_VOIDS](static/images/indicators/liquidity_levels_voids.png)
+
+#### Internal & External Liquidity Zones
+
+Internal & External Liquidity Zones is a Smart Money Concept indicator that identifies internal and external liquidity zones based on multi-timeframe pivot analysis, sweep detection, and market structure (BOS / CHoCH).
+
+![Internal & External Liquidity Zones](static/images/indicators/internal_external_liquidity_zones.png)
+
+**External Zones** are derived from longer-period pivots (`external_pivot_length`) and represent major liquidity pools. **Internal Zones** come from shorter-period pivots (`internal_pivot_length`) that reside within the external range.
+
+Core concepts:
+
+- **External Pivot** — a swing high/low confirmed over a longer lookback window. These define the outer liquidity range.
+- **Internal Pivot** — a swing high/low confirmed over a shorter lookback window. Two modes are supported:
+  - `"every_pivot"` — every internal pivot creates a zone.
+  - `"equal_hl"` — only consecutive pivots within an ATR-based tolerance create a zone (equal-high/low logic).
+- **Zone States** — each zone transitions through: 0 = active, 1 = swept (price touched but did not close through), 2 = broken (price closed through the zone).
+- **Sweep Mode** — determines how a zone is swept / broken:
+  - `"wick"` — any wick touch marks a sweep.
+  - `"close"` — only a close through the zone counts as a sweep.
+  - `"wick_close"` — wick touches sweep; closes break.
+- **Structure (BOS / CHoCH)** — for both external and internal pivots, Break of Structure and Change of Character events are detected.
+
+Key parameters:
+
+- **internal_pivot_length** — lookback/look-ahead for internal pivots (default: 3).
+- **external_pivot_length** — lookback/look-ahead for external pivots (default: 10).
+- **internal_mode** — `"every_pivot"` or `"equal_hl"` (default: `"equal_hl"`).
+- **eq_tolerance_atr** — tolerance for the equal-high/low test as a fraction of ATR (default: 0.25).
+- **zone_size_atr** — half-height of each zone as a fraction of ATR (default: 0.40).
+- **sweep_mode** — `"wick"`, `"close"`, or `"wick_close"` (default: `"wick"`).
+- **atr_length** — period for ATR calculation (default: 14).
+
+```python
+def internal_external_liquidity_zones(
+    data: Union[PdDataFrame, PlDataFrame],
+    internal_pivot_length: int = 3,
+    external_pivot_length: int = 10,
+    internal_mode: str = "equal_hl",
+    eq_tolerance_atr: float = 0.25,
+    require_internal_inside: bool = True,
+    reset_internal_on_external: bool = True,
+    atr_length: int = 14,
+    zone_size_atr: float = 0.40,
+    sweep_mode: str = "wick",
+    structure_lookback_external: int = 36,
+    structure_lookback_internal: int = 2,
+    use_closes_for_structure: bool = True,
+    high_column: str = "High",
+    low_column: str = "Low",
+    close_column: str = "Close",
+    ...
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Example
+
+```python
+import pandas as pd
+from pyindicators import (
+    internal_external_liquidity_zones,
+    internal_external_liquidity_zones_signal,
+    get_internal_external_liquidity_zones_stats
+)
+
+# Create sample OHLC data
+df = pd.DataFrame({
+    'High': [...],
+    'Low': [...],
+    'Close': [...]
+})
+
+# Detect internal and external liquidity zones
+df = internal_external_liquidity_zones(
+    df,
+    internal_pivot_length=3,
+    external_pivot_length=10,
+    internal_mode="equal_hl",
+    sweep_mode="wick"
+)
+print(df[[
+    'ielz_ext_high', 'ielz_ext_low',
+    'ielz_int_high', 'ielz_int_low',
+    'ielz_ext_structure', 'ielz_int_structure'
+]])
+
+# Generate a combined signal from sweep results
+# 1 = bullish sweep, -1 = bearish sweep, 0 = no sweep
+df = internal_external_liquidity_zones_signal(df)
+signals = df[df['ielz_signal'] != 0]
+
+# Get summary statistics
+stats = get_internal_external_liquidity_zones_stats(df)
+print(f"External highs: {stats['total_ext_highs']}")
+print(f"External lows: {stats['total_ext_lows']}")
+print(f"Internal highs: {stats['total_int_highs']}")
+print(f"Internal lows: {stats['total_int_lows']}")
+print(f"External sweeps: {stats['total_ext_sweeps']}")
+print(f"Internal sweeps: {stats['total_int_sweeps']}")
+print(f"Bullish sweep ratio: {stats['bullish_sweep_ratio']}")
+```
+
+The function returns:
+- `ielz_ext_high` / `ielz_ext_low`: 1 on bars where an external high/low zone is created
+- `ielz_ext_high_price` / `ielz_ext_low_price`: Price level of the external pivot (NaN otherwise)
+- `ielz_int_high` / `ielz_int_low`: 1 on bars where an internal high/low zone is created
+- `ielz_int_high_price` / `ielz_int_low_price`: Price level of the internal pivot (NaN otherwise)
+- `ielz_range_high` / `ielz_range_low`: Running external range boundaries
+- `ielz_ext_sweep_bull` / `ielz_ext_sweep_bear`: 1 on bars with a bullish/bearish external sweep
+- `ielz_int_sweep_bull` / `ielz_int_sweep_bear`: 1 on bars with a bullish/bearish internal sweep
+- `ielz_ext_structure`: Structure label at external level (`"eBOS"`, `"eCHoCH"`, or `""`)
+- `ielz_int_structure`: Structure label at internal level (`"iBOS"`, `"iCHoCH"`, or `""`)
+
+#### Premium / Discount Zones
+
+Identifies Premium, Discount, and Equilibrium zones based on the current market range defined by swing highs and swing lows. Inspired by Smart Money Concepts (SMC) trading, the market is divided into zones relative to the most recent significant swing range:
+
+- **Premium Zone** -- the upper half of the range (above equilibrium). Price is considered expensive; smart money is more likely to sell.
+- **Discount Zone** -- the lower half of the range (below equilibrium). Price is considered cheap; smart money is more likely to buy.
+- **Equilibrium** -- the exact midpoint (50%) of the range, acting as the decision boundary.
+
+```python
+def premium_discount_zones(
+    data: Union[PdDataFrame, PlDataFrame],
+    swing_length: int = 10,
+    high_column: str = "High",
+    low_column: str = "Low",
+    close_column: str = "Close",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `pdz_range_high`: Current swing range high
+- `pdz_range_low`: Current swing range low
+- `pdz_equilibrium`: Midpoint of the range
+- `pdz_zone`: `"premium"`, `"discount"`, or `"equilibrium"`
+- `pdz_zone_pct`: How deep into the zone (0-100%)
+
+Signal function:
+- `pdz_signal`: `1` = discount zone (potential buy), `-1` = premium zone (potential sell), `0` = equilibrium / no range
+
+Example
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import (
+    premium_discount_zones,
+    premium_discount_zones_signal,
+    get_premium_discount_zones_stats,
+)
+
+pd_df = download(
+    symbol="btc/eur",
+    market="bitvavo",
+    time_frame="1d",
+    start_date="2024-01-01",
+    end_date="2024-06-01",
+    pandas=True,
+)
+
+# Calculate Premium / Discount Zones
+pd_df = premium_discount_zones(pd_df, swing_length=10)
+pd_df = premium_discount_zones_signal(pd_df)
+
+# Get summary statistics
+stats = get_premium_discount_zones_stats(pd_df)
+print(stats)
+
+pd_df[["Close", "pdz_range_high", "pdz_range_low", "pdz_equilibrium", "pdz_zone", "pdz_zone_pct", "pdz_signal"]].tail(10)
+```
+
+![PREMIUM_DISCOUNT_ZONES](static/images/indicators/premium_discount_zones.png)
 
 ### Pattern Recognition
 
@@ -2176,7 +2704,7 @@ pd_df = detect_peaks(pd_df, source_column="Close", number_of_neighbors_to_compar
 pd_df.tail(10)
 ```
 
-![PEAKS](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/detect_peaks.png)
+![PEAKS](static/images/indicators/detect_peaks.png)
 
 #### Detect Bullish Divergence
 
@@ -2233,7 +2761,7 @@ pd_df = bearish_divergence(pd_df, first_column="RSI_14", second_column="Close", 
 pd_df.tail(10)
 ```
 
-![BULLISH_DIVERGENCE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/bullish_divergence.png)
+![BULLISH_DIVERGENCE](static/images/indicators/bullish_divergence.png)
 
 #### Detect Bearish Divergence
 
@@ -2287,7 +2815,7 @@ pd_df = bearish_divergence(pd_df, first_column="RSI_14", second_column="Close", 
 pd_df.tail(10)
 ```
 
-![BEARISH_DIVERGENCE](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/bearish_divergence.png)
+![BEARISH_DIVERGENCE](static/images/indicators/bearish_divergence.png)
 
 ### Indicator helpers
 
@@ -2356,7 +2884,7 @@ pd_df = crossover(
 pd_df.tail(10)
 ```
 
-![CROSSOVER](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/crossover.png)
+![CROSSOVER](static/images/indicators/crossover.png)
 
 #### Is Crossover
 
@@ -2505,7 +3033,7 @@ pd_df = crossunder(
 pd_df.tail(10)
 ```
 
-![CROSSUNDER](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/crossunder.png)
+![CROSSUNDER](static/images/indicators/crossunder.png)
 
 #### Is Crossunder
 
@@ -2701,6 +3229,6 @@ print(result)  # Output: True
 
 Below is a chart showing the threshold and the points where the condition is met:
 
-![has_any_lower_then_threshold](https://github.com/coding-kitties/PyIndicators/blob/main/static/images/indicators/has_any_lower_then_threshold.png)
+![has_any_lower_then_threshold](static/images/indicators/has_any_lower_then_threshold.png)
 
 In this chart, the red line represents the threshold, and the highlighted points are where the `Close` value is below the threshold in the last N data points.
