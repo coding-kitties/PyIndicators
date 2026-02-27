@@ -1,0 +1,29 @@
+{
+  "id": "indicators/support-resistance/overview",
+  "title": "Support & Resistance",
+  "description": "Support and resistance indicators identify key price levels where buying or selling pressure is likely to appear. This category includes both classical techniques (Fibonacci, Golden Zone) and Smart Money Concepts (SMC) / ICT methods (Order Blocks, Liquidity Sweeps, etc.). Most of these are real-time — they react to structural price action rather than smoothing history — though they often have a confirmation delay while waiting for swing points to be validated.",
+  "source": "@site/content/indicators/support-resistance/overview.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/overview",
+  "permalink": "/PyIndicators/indicators/support-resistance/overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/overview.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0,
+  "frontMatter": {
+    "title": "Support & Resistance",
+    "sidebar_label": "Overview",
+    "sidebar_position": 0
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Nadaraya-Watson Envelope (NWE)",
+    "permalink": "/PyIndicators/indicators/volatility/nadaraya-watson-envelope"
+  },
+  "next": {
+    "title": "Fibonacci Retracement",
+    "permalink": "/PyIndicators/indicators/support-resistance/fibonacci-retracement"
+  }
+}

@@ -108,6 +108,43 @@ from .rejection_blocks import (
     rejection_blocks, rejection_blocks_signal,
     get_rejection_blocks_stats
 )
+from .z_score_predictive_zones import (
+    z_score_predictive_zones, z_score_predictive_zones_signal,
+    get_z_score_predictive_zones_stats
+)
+from .volumetric_supply_demand_zones import (
+    volumetric_supply_demand_zones, volumetric_supply_demand_zones_signal,
+    get_volumetric_supply_demand_zones_stats
+)
+from .accumulation_distribution_zones import (
+    accumulation_distribution_zones,
+    accumulation_distribution_zones_signal,
+    get_accumulation_distribution_zones_stats
+)
+from .volume_imbalance import (
+    volume_imbalance, volume_imbalance_signal,
+    get_volume_imbalance_stats
+)
+from .opening_gap import (
+    opening_gap, opening_gap_signal,
+    get_opening_gap_stats
+)
+from .strong_weak_high_low import (
+    strong_weak_high_low, strong_weak_high_low_signal,
+    get_strong_weak_high_low_stats
+)
+from .range_intelligence import (
+    range_intelligence, range_intelligence_signal,
+    get_range_intelligence_stats
+)
+from .momentum_cycle_sentry import (
+    momentum_cycle_sentry, momentum_cycle_sentry_signal,
+    get_momentum_cycle_sentry_stats
+)
+from .trendline_breakout_navigator import (
+    trendline_breakout_navigator, trendline_breakout_navigator_signal,
+    get_trendline_breakout_navigator_stats
+)
 
 __all__ = [
     'sma',
@@ -225,5 +262,32 @@ __all__ = [
     'get_mitigation_blocks_stats',
     'rejection_blocks',
     'rejection_blocks_signal',
-    'get_rejection_blocks_stats'
+    'get_rejection_blocks_stats',
+    'z_score_predictive_zones',
+    'z_score_predictive_zones_signal',
+    'get_z_score_predictive_zones_stats',
+    'volumetric_supply_demand_zones',
+    'volumetric_supply_demand_zones_signal',
+    'get_volumetric_supply_demand_zones_stats',
+    'accumulation_distribution_zones',
+    'accumulation_distribution_zones_signal',
+    'get_accumulation_distribution_zones_stats',
+    'volume_imbalance',
+    'volume_imbalance_signal',
+    'get_volume_imbalance_stats',
+    'opening_gap',
+    'opening_gap_signal',
+    'get_opening_gap_stats',
+    'strong_weak_high_low',
+    'strong_weak_high_low_signal',
+    'get_strong_weak_high_low_stats',
+    'range_intelligence',
+    'range_intelligence_signal',
+    'get_range_intelligence_stats',
+    'momentum_cycle_sentry',
+    'momentum_cycle_sentry_signal',
+    'get_momentum_cycle_sentry_stats',
+    'trendline_breakout_navigator',
+    'trendline_breakout_navigator_signal',
+    'get_trendline_breakout_navigator_stats',
 ]

@@ -96,6 +96,7 @@ pip install pyindicators
   * [Liquidity Levels / Voids (VP)](#liquidity-levels--voids-vp)
   * [Internal & External Liquidity Zones](#internal--external-liquidity-zones)
   * [Premium / Discount Zones](#premium--discount-zones)
+  * [Trendline Breakout Navigator](#trendline-breakout-navigator)
 * [Pattern recognition](#pattern-recognition)
   * [Detect Peaks](#detect-peaks)
   * [Detect Bullish Divergence](#detect-bullish-divergence)
@@ -2649,6 +2650,66 @@ pd_df[["Close", "pdz_range_high", "pdz_range_low", "pdz_equilibrium", "pdz_zone"
 ```
 
 ![PREMIUM_DISCOUNT_ZONES](static/images/indicators/premium_discount_zones.png)
+
+#### Trendline Breakout Navigator
+
+The Trendline Breakout Navigator is a multi-timeframe trendline detection indicator. It detects pivot highs and lows at three swing lengths (long, medium, short), constructs trendlines on HH/LL trend reversals, and tracks trendline breakouts and wick interactions.
+
+```python
+def trendline_breakout_navigator(
+    data: Union[PdDataFrame, PlDataFrame],
+    swing_long: int = 60,
+    swing_medium: int = 30,
+    swing_short: int = 10,
+    enable_long: bool = True,
+    enable_medium: bool = True,
+    enable_short: bool = True,
+    high_column: str = "High",
+    low_column: str = "Low",
+    close_column: str = "Close",
+) -> Union[PdDataFrame, PlDataFrame]:
+```
+
+Returns the following columns:
+- `tbn_trend_long` / `tbn_trend_medium` / `tbn_trend_short`: Trend direction per timeframe (1 = bullish, −1 = bearish, 0 = undetermined)
+- `tbn_value_long` / `tbn_value_medium` / `tbn_value_short`: Projected trendline price per timeframe
+- `tbn_slope_long` / `tbn_slope_medium` / `tbn_slope_short`: Trendline slope per bar per timeframe
+- `tbn_wick_bull` / `tbn_wick_bear`: Wick break flags (bullish / bearish)
+- `tbn_hh` / `tbn_ll`: Higher High / Lower Low confirmation flags
+- `tbn_composite_trend`: Sum of all enabled timeframe trends (−3 to +3)
+
+Signal function:
+- `tbn_signal`: `1` = bullish (composite > 0), `-1` = bearish (composite < 0), `0` = neutral
+
+```python
+from investing_algorithm_framework import download
+
+from pyindicators import (
+    trendline_breakout_navigator,
+    trendline_breakout_navigator_signal,
+    get_trendline_breakout_navigator_stats,
+)
+
+pd_df = download(
+    symbol="btc/eur",
+    market="bitvavo",
+    time_frame="4h",
+    start_date="2024-01-01",
+    end_date="2024-06-01",
+    pandas=True,
+)
+
+# Detect trendlines and breakouts
+pd_df = trendline_breakout_navigator(pd_df, swing_long=60, swing_medium=30, swing_short=10)
+pd_df = trendline_breakout_navigator_signal(pd_df)
+
+# Get summary statistics
+stats = get_trendline_breakout_navigator_stats(pd_df)
+print(stats)
+
+pd_df[["Close", "tbn_trend_long", "tbn_value_long", "tbn_composite_trend",
+       "tbn_wick_bull", "tbn_wick_bear", "tbn_hh", "tbn_ll", "tbn_signal"]].tail(10)
+```
 
 ### Pattern Recognition
 

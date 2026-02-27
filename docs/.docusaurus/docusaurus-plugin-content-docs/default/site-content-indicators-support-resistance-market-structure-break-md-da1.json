@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/market-structure-break",
+  "title": "Market Structure Break",
+  "description": "Minimum bars needed: 2 × pivot_length + 1 bars",
+  "source": "@site/content/indicators/support-resistance/market-structure-break.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/market-structure-break",
+  "permalink": "/PyIndicators/indicators/support-resistance/market-structure-break",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/market-structure-break.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 10,
+  "frontMatter": {
+    "title": "Market Structure Break",
+    "sidebar_position": 10,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Optimal Trade Entry (OTE)",
+    "permalink": "/PyIndicators/indicators/support-resistance/optimal-trade-entry"
+  },
+  "next": {
+    "title": "Market Structure CHoCH/BOS",
+    "permalink": "/PyIndicators/indicators/support-resistance/market-structure-choch-bos"
+  }
+}

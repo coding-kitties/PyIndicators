@@ -1,0 +1,37 @@
+{
+  "id": "indicators/pattern-recognition/bullish-divergence",
+  "title": "Detect Bullish Divergence",
+  "description": "Minimum bars needed: 2 × numberofneighborstocompare + 1 bars",
+  "source": "@site/content/indicators/pattern-recognition/bullish-divergence.md",
+  "sourceDirName": "indicators/pattern-recognition",
+  "slug": "/indicators/pattern-recognition/bullish-divergence",
+  "permalink": "/PyIndicators/indicators/pattern-recognition/bullish-divergence",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/pattern-recognition/bullish-divergence.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Detect Bullish Divergence",
+    "sidebar_position": 2,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Detect Peaks",
+    "permalink": "/PyIndicators/indicators/pattern-recognition/detect-peaks"
+  },
+  "next": {
+    "title": "Detect Bearish Divergence",
+    "permalink": "/PyIndicators/indicators/pattern-recognition/bearish-divergence"
+  }
+}

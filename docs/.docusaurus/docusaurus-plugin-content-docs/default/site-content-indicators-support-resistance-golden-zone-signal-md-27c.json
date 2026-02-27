@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/golden-zone-signal",
+  "title": "Golden Zone Signal",
+  "description": "Minimum bars needed: Same as Golden Zone (length bars)",
+  "source": "@site/content/indicators/support-resistance/golden-zone-signal.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/golden-zone-signal",
+  "permalink": "/PyIndicators/indicators/support-resistance/golden-zone-signal",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/golden-zone-signal.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Golden Zone Signal",
+    "sidebar_position": 3,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Golden Zone",
+    "permalink": "/PyIndicators/indicators/support-resistance/golden-zone"
+  },
+  "next": {
+    "title": "Fair Value Gap (FVG)",
+    "permalink": "/PyIndicators/indicators/support-resistance/fair-value-gap"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "indicators/volatility/nadaraya-watson-envelope",
+  "title": "Nadaraya-Watson Envelope (NWE)",
+  "description": "Minimum bars needed: lookback bars",
+  "source": "@site/content/indicators/volatility/nadaraya-watson-envelope.md",
+  "sourceDirName": "indicators/volatility",
+  "slug": "/indicators/volatility/nadaraya-watson-envelope",
+  "permalink": "/PyIndicators/indicators/volatility/nadaraya-watson-envelope",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/volatility/nadaraya-watson-envelope.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "Nadaraya-Watson Envelope (NWE)",
+    "sidebar_position": 5,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Moving Average Envelope (MAE)",
+    "permalink": "/PyIndicators/indicators/volatility/moving-average-envelope"
+  },
+  "next": {
+    "title": "Overview",
+    "permalink": "/PyIndicators/indicators/support-resistance/overview"
+  }
+}

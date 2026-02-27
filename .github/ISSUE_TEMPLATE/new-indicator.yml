@@ -1,0 +1,140 @@
+name: "🔧 New Indicator"
+description: "Request a new technical indicator implementation"
+title: "[Indicator] "
+labels: ["squad", "indicator"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## New Indicator Request
+        Use this template to request a new indicator for PyIndicators.
+        **Include chart screenshots** showing the expected output — the team needs visual references to reproduce the behavior accurately.
+
+  - type: input
+    id: indicator-name
+    attributes:
+      label: Indicator Name
+      description: "The name of the indicator (e.g., Parabolic SAR, Ichimoku Cloud)"
+      placeholder: "e.g., VWAP (Volume Weighted Average Price)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: "Which category does this indicator belong to?"
+      options:
+        - Trend
+        - Momentum
+        - Volatility
+        - Support & Resistance
+        - Pattern Recognition
+        - Volume
+        - Helpers / Utilities
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: "What does this indicator do? How is it used in trading?"
+      placeholder: "Describe the indicator's purpose, what it measures, and typical use cases..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reference-chart
+    attributes:
+      label: Reference Chart(s)
+      description: |
+        **Paste or drag & drop chart screenshots** showing the expected indicator output.
+        Include charts from TradingView, PineScript, or any other platform.
+        The more visual references, the better — these are used to verify the implementation.
+      placeholder: "Drag and drop images here, or paste image URLs..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: chart-description
+    attributes:
+      label: Chart Description
+      description: |
+        **Describe what the chart(s) show** — agents may not always be able to see images.
+        Include: timeframe, asset, what lines/zones/signals are visible, colors, behavior at key points.
+      placeholder: |
+        - Timeframe: Daily
+        - Asset: BTC/USD
+        - The indicator shows a green line above price during downtrends and red line below during uptrends
+        - Signals are marked with triangles at crossover points
+        - ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: parameters
+    attributes:
+      label: Parameters
+      description: "List the indicator's parameters with types and defaults"
+      placeholder: |
+        - `period` (int, default=14): Lookback period
+        - `multiplier` (float, default=2.0): ATR multiplier
+        - `source` (str, default='Close'): Source column
+      value: |
+        - `period` (int, default=14):
+        - `source_column` (str, default='Close'):
+    validations:
+      required: false
+
+  - type: textarea
+    id: source-reference
+    attributes:
+      label: Source / Reference
+      description: "Link to PineScript source, academic paper, or reference implementation"
+      placeholder: "e.g., https://www.tradingview.com/script/... or a PineScript code block"
+    validations:
+      required: false
+
+  - type: textarea
+    id: output-columns
+    attributes:
+      label: Expected Output Columns
+      description: "What columns should the indicator add to the DataFrame?"
+      placeholder: |
+        - `indicator_value`: Main indicator line
+        - `indicator_signal`: Buy/sell signal (1, -1, 0)
+        - `indicator_upper`: Upper band
+        - `indicator_lower`: Lower band
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: deliverables
+    attributes:
+      label: Deliverables Checklist
+      description: "A complete indicator requires ALL of the following. The squad will handle each."
+      options:
+        - label: "Implementation in `pyindicators/indicators/` (pandas + polars support)"
+          required: true
+        - label: "Exports in `__init__.py` and `__all__`"
+          required: true
+        - label: "Unit tests in `tests/indicators/` (pandas, polars, edge cases)"
+          required: true
+        - label: "Documentation page in `docs/content/indicators/` with chart image"
+          required: true
+        - label: "Sidebar registration in `docs/sidebars.js`"
+          required: true
+        - label: "Entry in README.md features list"
+          required: true
+        - label: "Analysis notebook in `analysis/indicators/` with plotly chart"
+          required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: "Anything else? Special edge cases, related indicators, priority notes..."
+      placeholder: "Optional additional context..."
+    validations:
+      required: false

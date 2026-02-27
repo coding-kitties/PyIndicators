@@ -1,0 +1,37 @@
+{
+  "id": "indicators/trend/supertrend",
+  "title": "SuperTrend",
+  "description": "Minimum bars needed: atr_length bars",
+  "source": "@site/content/indicators/trend/supertrend.md",
+  "sourceDirName": "indicators/trend",
+  "slug": "/indicators/trend/supertrend",
+  "permalink": "/PyIndicators/indicators/trend/supertrend",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/trend/supertrend.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "title": "SuperTrend",
+    "sidebar_position": 6,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "EMA Trend Ribbon",
+    "permalink": "/PyIndicators/indicators/trend/ema-trend-ribbon"
+  },
+  "next": {
+    "title": "SuperTrend Clustering",
+    "permalink": "/PyIndicators/indicators/trend/supertrend-clustering"
+  }
+}

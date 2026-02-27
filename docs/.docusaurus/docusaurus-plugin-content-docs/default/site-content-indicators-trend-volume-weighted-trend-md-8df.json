@@ -1,0 +1,37 @@
+{
+  "id": "indicators/trend/volume-weighted-trend",
+  "title": "Volume Weighted Trend (VWT)",
+  "description": "Minimum bars needed: vwma_length bars",
+  "source": "@site/content/indicators/trend/volume-weighted-trend.md",
+  "sourceDirName": "indicators/trend",
+  "slug": "/indicators/trend/volume-weighted-trend",
+  "permalink": "/PyIndicators/indicators/trend/volume-weighted-trend",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/trend/volume-weighted-trend.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 9,
+  "frontMatter": {
+    "title": "Volume Weighted Trend (VWT)",
+    "sidebar_position": 9,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Pulse Mean Accelerator (PMA)",
+    "permalink": "/PyIndicators/indicators/trend/pulse-mean-accelerator"
+  },
+  "next": {
+    "title": "Overview",
+    "permalink": "/PyIndicators/indicators/momentum/overview"
+  }
+}

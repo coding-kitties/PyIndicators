@@ -1,0 +1,29 @@
+{
+  "id": "indicators/momentum/overview",
+  "title": "Momentum & Oscillators",
+  "description": "Momentum indicators measure the speed and strength of price movements. They oscillate between extremes and are particularly useful for identifying overbought/oversold conditions, momentum divergence, and trend exhaustion. All momentum indicators are lagging due to their smoothing calculations, but they excel at confirming the quality of a trend and signaling when it may be losing steam.",
+  "source": "@site/content/indicators/momentum/overview.md",
+  "sourceDirName": "indicators/momentum",
+  "slug": "/indicators/momentum/overview",
+  "permalink": "/PyIndicators/indicators/momentum/overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/momentum/overview.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0,
+  "frontMatter": {
+    "title": "Momentum & Oscillators",
+    "sidebar_label": "Overview",
+    "sidebar_position": 0
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Volume Weighted Trend (VWT)",
+    "permalink": "/PyIndicators/indicators/trend/volume-weighted-trend"
+  },
+  "next": {
+    "title": "Moving Average Convergence Divergence (MACD)",
+    "permalink": "/PyIndicators/indicators/momentum/macd"
+  }
+}

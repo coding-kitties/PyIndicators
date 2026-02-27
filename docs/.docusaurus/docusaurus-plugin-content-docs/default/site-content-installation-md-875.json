@@ -1,0 +1,28 @@
+{
+  "id": "installation",
+  "title": "Installation",
+  "description": "PyIndicators can be installed using pip:",
+  "source": "@site/content/installation.md",
+  "sourceDirName": ".",
+  "slug": "/installation",
+  "permalink": "/PyIndicators/installation",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/installation.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Installation",
+    "sidebar_position": 2
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Introduction",
+    "permalink": "/PyIndicators/"
+  },
+  "next": {
+    "title": "Overview",
+    "permalink": "/PyIndicators/indicators/trend/overview"
+  }
+}

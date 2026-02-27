@@ -1,0 +1,37 @@
+{
+  "id": "indicators/momentum/rsi",
+  "title": "Relative Strength Index (RSI)",
+  "description": "Minimum bars needed: period bars",
+  "source": "@site/content/indicators/momentum/rsi.md",
+  "sourceDirName": "indicators/momentum",
+  "slug": "/indicators/momentum/rsi",
+  "permalink": "/PyIndicators/indicators/momentum/rsi",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/momentum/rsi.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Relative Strength Index (RSI)",
+    "sidebar_position": 2,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Moving Average Convergence Divergence (MACD)",
+    "permalink": "/PyIndicators/indicators/momentum/macd"
+  },
+  "next": {
+    "title": "Wilders Relative Strength Index (Wilders RSI)",
+    "permalink": "/PyIndicators/indicators/momentum/wilders-rsi"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/strong-weak-high-low",
+  "title": "Strong / Weak Highs & Lows",
+  "description": "Strong / Weak classification requires confirmed swing points and trend context.",
+  "source": "@site/content/indicators/support-resistance/strong-weak-high-low.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/strong-weak-high-low",
+  "permalink": "/PyIndicators/indicators/support-resistance/strong-weak-high-low",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/strong-weak-high-low.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 24,
+  "frontMatter": {
+    "title": "Strong / Weak Highs & Lows",
+    "sidebar_position": 24,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Opening Gap (OG)",
+    "permalink": "/PyIndicators/indicators/support-resistance/opening-gap"
+  },
+  "next": {
+    "title": "Range Intelligence Suite",
+    "permalink": "/PyIndicators/indicators/support-resistance/range-intelligence"
+  }
+}

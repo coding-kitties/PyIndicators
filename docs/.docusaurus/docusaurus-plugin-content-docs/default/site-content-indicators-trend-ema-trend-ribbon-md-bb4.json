@@ -1,0 +1,37 @@
+{
+  "id": "indicators/trend/ema-trend-ribbon",
+  "title": "EMA Trend Ribbon",
+  "description": "Minimum bars needed: ema_max bars",
+  "source": "@site/content/indicators/trend/ema-trend-ribbon.md",
+  "sourceDirName": "indicators/trend",
+  "slug": "/indicators/trend/ema-trend-ribbon",
+  "permalink": "/PyIndicators/indicators/trend/ema-trend-ribbon",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/trend/ema-trend-ribbon.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "EMA Trend Ribbon",
+    "sidebar_position": 5,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Zero-Lag EMA Envelope (ZLEMA)",
+    "permalink": "/PyIndicators/indicators/trend/zero-lag-ema-envelope"
+  },
+  "next": {
+    "title": "SuperTrend",
+    "permalink": "/PyIndicators/indicators/trend/supertrend"
+  }
+}

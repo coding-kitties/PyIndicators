@@ -1,0 +1,37 @@
+{
+  "id": "indicators/helpers/is-uptrend",
+  "title": "Is Uptrend",
+  "description": "Minimum bars needed: slowemaperiod bars",
+  "source": "@site/content/indicators/helpers/is-uptrend.md",
+  "sourceDirName": "indicators/helpers",
+  "slug": "/indicators/helpers/is-uptrend",
+  "permalink": "/PyIndicators/indicators/helpers/is-uptrend",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/helpers/is-uptrend.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "title": "Is Uptrend",
+    "sidebar_position": 6,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Is Downtrend",
+    "permalink": "/PyIndicators/indicators/helpers/is-downtrend"
+  },
+  "next": {
+    "title": "has_any_lower_then_threshold",
+    "permalink": "/PyIndicators/indicators/helpers/has-any-lower-then-threshold"
+  }
+}

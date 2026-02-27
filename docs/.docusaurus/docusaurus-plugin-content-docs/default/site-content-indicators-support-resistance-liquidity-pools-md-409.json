@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/liquidity-pools",
+  "title": "Liquidity Pools",
+  "description": "Minimum bars needed: ≥ contactcount × gapbars bars",
+  "source": "@site/content/indicators/support-resistance/liquidity-pools.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/liquidity-pools",
+  "permalink": "/PyIndicators/indicators/support-resistance/liquidity-pools",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/liquidity-pools.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 15,
+  "frontMatter": {
+    "title": "Liquidity Pools",
+    "sidebar_position": 15,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Pure Price Action Liquidity Sweeps",
+    "permalink": "/PyIndicators/indicators/support-resistance/pure-price-action-liquidity-sweeps"
+  },
+  "next": {
+    "title": "Liquidity Levels / Voids (VP)",
+    "permalink": "/PyIndicators/indicators/support-resistance/liquidity-levels-voids"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/rejection-blocks",
+  "title": "Rejection Blocks",
+  "description": "Minimum bars needed: 2 × swing_length + 1 bars",
+  "source": "@site/content/indicators/support-resistance/rejection-blocks.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/rejection-blocks",
+  "permalink": "/PyIndicators/indicators/support-resistance/rejection-blocks",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/rejection-blocks.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 8,
+  "frontMatter": {
+    "title": "Rejection Blocks",
+    "sidebar_position": 8,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Mitigation Blocks",
+    "permalink": "/PyIndicators/indicators/support-resistance/mitigation-blocks"
+  },
+  "next": {
+    "title": "Optimal Trade Entry (OTE)",
+    "permalink": "/PyIndicators/indicators/support-resistance/optimal-trade-entry"
+  }
+}

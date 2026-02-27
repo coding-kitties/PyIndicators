@@ -1,0 +1,37 @@
+{
+  "id": "indicators/trend/wma",
+  "title": "Weighted Moving Average (WMA)",
+  "description": "Minimum bars needed: period bars",
+  "source": "@site/content/indicators/trend/wma.md",
+  "sourceDirName": "indicators/trend",
+  "slug": "/indicators/trend/wma",
+  "permalink": "/PyIndicators/indicators/trend/wma",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/trend/wma.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Weighted Moving Average (WMA)",
+    "sidebar_position": 1,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Overview",
+    "permalink": "/PyIndicators/indicators/trend/overview"
+  },
+  "next": {
+    "title": "Simple Moving Average (SMA)",
+    "permalink": "/PyIndicators/indicators/trend/sma"
+  }
+}

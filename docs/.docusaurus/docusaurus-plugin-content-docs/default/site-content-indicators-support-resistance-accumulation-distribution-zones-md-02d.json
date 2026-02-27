@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/accumulation-distribution-zones",
+  "title": "Accumulation & Distribution Zones",
+  "description": "Zone detection is triggered when alternating pivot highs and lows form a converging pattern.",
+  "source": "@site/content/indicators/support-resistance/accumulation-distribution-zones.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/accumulation-distribution-zones",
+  "permalink": "/PyIndicators/indicators/support-resistance/accumulation-distribution-zones",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/accumulation-distribution-zones.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 20,
+  "frontMatter": {
+    "title": "Accumulation & Distribution Zones",
+    "sidebar_position": 20,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Volumetric Supply & Demand Zones",
+    "permalink": "/PyIndicators/indicators/support-resistance/volumetric-supply-demand-zones"
+  },
+  "next": {
+    "title": "Volume Imbalance (VI)",
+    "permalink": "/PyIndicators/indicators/support-resistance/volume-imbalance"
+  }
+}

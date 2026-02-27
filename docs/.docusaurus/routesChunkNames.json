@@ -1,0 +1,334 @@
+{
+  "/PyIndicators/__docusaurus/debug-4ab": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---py-indicators-docusaurus-debugb-38-f19"
+    }
+  },
+  "/PyIndicators/__docusaurus/debug/config-b50": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---py-indicators-docusaurus-debugb-38-f19"
+    }
+  },
+  "/PyIndicators/__docusaurus/debug/content-0ce": {
+    "__comp": "__comp---theme-debug-contentba-8-ce7",
+    "__context": {
+      "plugin": "plugin---py-indicators-docusaurus-debugb-38-f19"
+    },
+    "__props": "__props---py-indicators-docusaurus-debug-contentaa-4-353"
+  },
+  "/PyIndicators/__docusaurus/debug/globalData-3ac": {
+    "__comp": "__comp---theme-debug-global-dataede-0fa",
+    "__context": {
+      "plugin": "plugin---py-indicators-docusaurus-debugb-38-f19"
+    }
+  },
+  "/PyIndicators/__docusaurus/debug/metadata-307": {
+    "__comp": "__comp---theme-debug-site-metadata-68-e-3d4",
+    "__context": {
+      "plugin": "plugin---py-indicators-docusaurus-debugb-38-f19"
+    }
+  },
+  "/PyIndicators/__docusaurus/debug/registry-300": {
+    "__comp": "__comp---theme-debug-registry-679-501",
+    "__context": {
+      "plugin": "plugin---py-indicators-docusaurus-debugb-38-f19"
+    }
+  },
+  "/PyIndicators/__docusaurus/debug/routes-de3": {
+    "__comp": "__comp---theme-debug-routes-946-699",
+    "__context": {
+      "plugin": "plugin---py-indicators-docusaurus-debugb-38-f19"
+    }
+  },
+  "/PyIndicators/-2c8": {
+    "__comp": "__comp---theme-docs-root-5-e-9-0b6",
+    "__context": {
+      "plugin": "plugin---py-indicators-aba-3a6"
+    }
+  },
+  "/PyIndicators/-fd0": {
+    "__comp": "__comp---theme-doc-version-roota-7-b-5de",
+    "__props": "__props---py-indicators-6-e-7-105"
+  },
+  "/PyIndicators/tags-26f": {
+    "__comp": "__comp---theme-doc-tags-list-page-372-89e",
+    "__props": "__props---py-indicators-tags-27-b-552"
+  },
+  "/PyIndicators/tags/lagging-0ce": {
+    "__comp": "__comp---theme-doc-tag-doc-list-pagedf-2-9f0",
+    "__props": "__props---py-indicators-tags-lagging-6-df-22a"
+  },
+  "/PyIndicators/tags/real-time-a4e": {
+    "__comp": "__comp---theme-doc-tag-doc-list-pagedf-2-9f0",
+    "__props": "__props---py-indicators-tags-real-time-510-2de"
+  },
+  "/PyIndicators/-703": {
+    "__comp": "__comp---theme-doc-roota-94-67a"
+  },
+  "/PyIndicators/indicators/helpers/crossover-2f6": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-helpers-crossoverede-28c"
+  },
+  "/PyIndicators/indicators/helpers/crossunder-8a5": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-helpers-crossunder-8-e-3-d5e"
+  },
+  "/PyIndicators/indicators/helpers/has-any-lower-then-threshold-b2f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-helpers-has-any-lower-then-thresholdbdc-faf"
+  },
+  "/PyIndicators/indicators/helpers/is-crossover-c1d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-helpers-is-crossover-2-fd-afb"
+  },
+  "/PyIndicators/indicators/helpers/is-crossunder-733": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-helpers-is-crossunder-57-d-e0c"
+  },
+  "/PyIndicators/indicators/helpers/is-downtrend-906": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-helpers-is-downtrenddf-8-0ad"
+  },
+  "/PyIndicators/indicators/helpers/is-uptrend-a2b": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-helpers-is-uptrend-62-a-a49"
+  },
+  "/PyIndicators/indicators/helpers/overview-a23": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-helpers-overviewebe-66d"
+  },
+  "/PyIndicators/indicators/momentum/adx-cb7": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-adxfa-2-59d"
+  },
+  "/PyIndicators/indicators/momentum/macd-3af": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-macd-57-e-ec2"
+  },
+  "/PyIndicators/indicators/momentum/momentum-confluence-2c4": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-momentum-confluence-988-9b6"
+  },
+  "/PyIndicators/indicators/momentum/momentum-cycle-sentry-750": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-momentum-cycle-sentry-430-d23"
+  },
+  "/PyIndicators/indicators/momentum/overview-ca0": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-overview-79-e-95d"
+  },
+  "/PyIndicators/indicators/momentum/rsi-f93": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-rsia-81-35c"
+  },
+  "/PyIndicators/indicators/momentum/stochastic-oscillator-2f3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-stochastic-oscillator-8-a-7-38a"
+  },
+  "/PyIndicators/indicators/momentum/wilders-rsi-eac": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-wilders-rsi-2-ac-b67"
+  },
+  "/PyIndicators/indicators/momentum/williams-r-d09": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-williams-r-5-c-7-7ae"
+  },
+  "/PyIndicators/indicators/momentum/z-score-predictive-zones-094": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-momentum-z-score-predictive-zones-130-63a"
+  },
+  "/PyIndicators/indicators/pattern-recognition/bearish-divergence-6aa": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-pattern-recognition-bearish-divergencea-77-575"
+  },
+  "/PyIndicators/indicators/pattern-recognition/bullish-divergence-638": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-pattern-recognition-bullish-divergence-317-be0"
+  },
+  "/PyIndicators/indicators/pattern-recognition/detect-peaks-4f8": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-pattern-recognition-detect-peaks-13-b-657"
+  },
+  "/PyIndicators/indicators/pattern-recognition/overview-738": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-pattern-recognition-overview-3-c-9-084"
+  },
+  "/PyIndicators/indicators/support-resistance/accumulation-distribution-zones-281": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-accumulation-distribution-zones-02-d-9c7"
+  },
+  "/PyIndicators/indicators/support-resistance/breaker-blocks-9d3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-breaker-blocksfb-0-b35"
+  },
+  "/PyIndicators/indicators/support-resistance/buyside-sellside-liquidity-094": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-buyside-sellside-liquidity-994-e48"
+  },
+  "/PyIndicators/indicators/support-resistance/fair-value-gap-9cc": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-fair-value-gap-50-e-f27"
+  },
+  "/PyIndicators/indicators/support-resistance/fibonacci-retracement-a65": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-fibonacci-retracement-35-e-8e2"
+  },
+  "/PyIndicators/indicators/support-resistance/golden-zone-75f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-golden-zonebf-0-396"
+  },
+  "/PyIndicators/indicators/support-resistance/golden-zone-signal-566": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-golden-zone-signal-27-c-7da"
+  },
+  "/PyIndicators/indicators/support-resistance/internal-external-liquidity-zones-b5a": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-internal-external-liquidity-zones-67-d-c28"
+  },
+  "/PyIndicators/indicators/support-resistance/liquidity-levels-voids-44f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-liquidity-levels-voids-724-87b"
+  },
+  "/PyIndicators/indicators/support-resistance/liquidity-pools-feb": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-liquidity-pools-409-16b"
+  },
+  "/PyIndicators/indicators/support-resistance/liquidity-sweeps-a16": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-liquidity-sweepse-60-ad5"
+  },
+  "/PyIndicators/indicators/support-resistance/market-structure-break-71a": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-market-structure-breakda-1-c72"
+  },
+  "/PyIndicators/indicators/support-resistance/market-structure-choch-bos-d05": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-market-structure-choch-bosa-60-669"
+  },
+  "/PyIndicators/indicators/support-resistance/mitigation-blocks-678": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-mitigation-blocks-689-268"
+  },
+  "/PyIndicators/indicators/support-resistance/opening-gap-a6c": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-opening-gap-65-f-0aa"
+  },
+  "/PyIndicators/indicators/support-resistance/optimal-trade-entry-1f7": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-optimal-trade-entrya-4-e-1b3"
+  },
+  "/PyIndicators/indicators/support-resistance/order-blocks-d71": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-order-blocksa-02-3aa"
+  },
+  "/PyIndicators/indicators/support-resistance/overview-9a3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-overview-842-a81"
+  },
+  "/PyIndicators/indicators/support-resistance/premium-discount-zones-319": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-premium-discount-zones-99-f-efb"
+  },
+  "/PyIndicators/indicators/support-resistance/pure-price-action-liquidity-sweeps-296": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-pure-price-action-liquidity-sweeps-5-a-8-17d"
+  },
+  "/PyIndicators/indicators/support-resistance/range-intelligence-942": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-range-intelligencee-23-f77"
+  },
+  "/PyIndicators/indicators/support-resistance/rejection-blocks-4e4": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-rejection-blocksaaa-5ca"
+  },
+  "/PyIndicators/indicators/support-resistance/strong-weak-high-low-633": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-strong-weak-high-low-26-c-7d9"
+  },
+  "/PyIndicators/indicators/support-resistance/trendline-breakout-navigator-706": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-trendline-breakout-navigator-4-fd-584"
+  },
+  "/PyIndicators/indicators/support-resistance/volume-imbalance-c60": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-volume-imbalanceb-7-e-3dd"
+  },
+  "/PyIndicators/indicators/support-resistance/volumetric-supply-demand-zones-65a": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-support-resistance-volumetric-supply-demand-zones-865-e52"
+  },
+  "/PyIndicators/indicators/trend/ema-97d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-ema-958-dca"
+  },
+  "/PyIndicators/indicators/trend/ema-trend-ribbon-a21": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-ema-trend-ribbonbb-4-ecf"
+  },
+  "/PyIndicators/indicators/trend/overview-4db": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-overviewf-98-1b7"
+  },
+  "/PyIndicators/indicators/trend/pulse-mean-accelerator-303": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-pulse-mean-accelerator-1-e-4-36d"
+  },
+  "/PyIndicators/indicators/trend/sma-875": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-smaed-2-6f3"
+  },
+  "/PyIndicators/indicators/trend/supertrend-8b9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-supertrend-78-c-e06"
+  },
+  "/PyIndicators/indicators/trend/supertrend-clustering-71e": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-supertrend-clusteringf-73-7b9"
+  },
+  "/PyIndicators/indicators/trend/volume-weighted-trend-157": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-volume-weighted-trend-8-df-877"
+  },
+  "/PyIndicators/indicators/trend/wma-dc6": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-wma-04-e-7da"
+  },
+  "/PyIndicators/indicators/trend/zero-lag-ema-envelope-3fb": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-trend-zero-lag-ema-envelope-85-b-6c9"
+  },
+  "/PyIndicators/indicators/volatility/atr-e94": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-volatility-atr-234-021"
+  },
+  "/PyIndicators/indicators/volatility/bollinger-bands-930": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-volatility-bollinger-bands-076-19a"
+  },
+  "/PyIndicators/indicators/volatility/bollinger-overshoot-755": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-volatility-bollinger-overshootac-7-84a"
+  },
+  "/PyIndicators/indicators/volatility/moving-average-envelope-6f8": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-volatility-moving-average-envelope-1-b-0-24a"
+  },
+  "/PyIndicators/indicators/volatility/nadaraya-watson-envelope-ede": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-volatility-nadaraya-watson-envelopeea-9-985"
+  },
+  "/PyIndicators/indicators/volatility/overview-68b": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-indicators-volatility-overview-27-b-a42"
+  },
+  "/PyIndicators/installation-273": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-installation-875-36c"
+  },
+  "/PyIndicators/-de1": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---py-indicators-274-2bb"
+  }
+}

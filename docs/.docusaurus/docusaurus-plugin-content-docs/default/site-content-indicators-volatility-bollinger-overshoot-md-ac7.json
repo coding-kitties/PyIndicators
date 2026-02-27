@@ -1,0 +1,37 @@
+{
+  "id": "indicators/volatility/bollinger-overshoot",
+  "title": "Bollinger Bands Overshoot",
+  "description": "Minimum bars needed: period bars",
+  "source": "@site/content/indicators/volatility/bollinger-overshoot.md",
+  "sourceDirName": "indicators/volatility",
+  "slug": "/indicators/volatility/bollinger-overshoot",
+  "permalink": "/PyIndicators/indicators/volatility/bollinger-overshoot",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/volatility/bollinger-overshoot.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Bollinger Bands Overshoot",
+    "sidebar_position": 2,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Bollinger Bands (BB)",
+    "permalink": "/PyIndicators/indicators/volatility/bollinger-bands"
+  },
+  "next": {
+    "title": "Average True Range (ATR)",
+    "permalink": "/PyIndicators/indicators/volatility/atr"
+  }
+}

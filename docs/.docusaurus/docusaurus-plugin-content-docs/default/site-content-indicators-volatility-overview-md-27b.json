@@ -1,0 +1,29 @@
+{
+  "id": "indicators/volatility/overview",
+  "title": "Volatility Indicators",
+  "description": "Volatility indicators measure how much price is moving, regardless of direction. They help you size positions, set stop-losses, and identify when markets are unusually quiet (potential breakout) or loud (potential exhaustion). All volatility indicators are lagging because they smooth historical price ranges.",
+  "source": "@site/content/indicators/volatility/overview.md",
+  "sourceDirName": "indicators/volatility",
+  "slug": "/indicators/volatility/overview",
+  "permalink": "/PyIndicators/indicators/volatility/overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/volatility/overview.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0,
+  "frontMatter": {
+    "title": "Volatility Indicators",
+    "sidebar_label": "Overview",
+    "sidebar_position": 0
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Momentum Cycle Sentry",
+    "permalink": "/PyIndicators/indicators/momentum/momentum-cycle-sentry"
+  },
+  "next": {
+    "title": "Bollinger Bands (BB)",
+    "permalink": "/PyIndicators/indicators/volatility/bollinger-bands"
+  }
+}

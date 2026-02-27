@@ -1,0 +1,37 @@
+{
+  "id": "indicators/trend/supertrend-clustering",
+  "title": "SuperTrend Clustering",
+  "description": "Minimum bars needed: atr_length bars",
+  "source": "@site/content/indicators/trend/supertrend-clustering.md",
+  "sourceDirName": "indicators/trend",
+  "slug": "/indicators/trend/supertrend-clustering",
+  "permalink": "/PyIndicators/indicators/trend/supertrend-clustering",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/trend/supertrend-clustering.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "title": "SuperTrend Clustering",
+    "sidebar_position": 7,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "SuperTrend",
+    "permalink": "/PyIndicators/indicators/trend/supertrend"
+  },
+  "next": {
+    "title": "Pulse Mean Accelerator (PMA)",
+    "permalink": "/PyIndicators/indicators/trend/pulse-mean-accelerator"
+  }
+}

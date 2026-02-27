@@ -1,0 +1,37 @@
+{
+  "id": "indicators/volatility/bollinger-bands",
+  "title": "Bollinger Bands (BB)",
+  "description": "Minimum bars needed: period bars",
+  "source": "@site/content/indicators/volatility/bollinger-bands.md",
+  "sourceDirName": "indicators/volatility",
+  "slug": "/indicators/volatility/bollinger-bands",
+  "permalink": "/PyIndicators/indicators/volatility/bollinger-bands",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/volatility/bollinger-bands.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Bollinger Bands (BB)",
+    "sidebar_position": 1,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Overview",
+    "permalink": "/PyIndicators/indicators/volatility/overview"
+  },
+  "next": {
+    "title": "Bollinger Bands Overshoot",
+    "permalink": "/PyIndicators/indicators/volatility/bollinger-overshoot"
+  }
+}

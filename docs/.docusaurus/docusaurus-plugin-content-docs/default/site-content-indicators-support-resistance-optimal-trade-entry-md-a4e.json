@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/optimal-trade-entry",
+  "title": "Optimal Trade Entry (OTE)",
+  "description": "Minimum bars needed: 2 × swing_length + 1 bars",
+  "source": "@site/content/indicators/support-resistance/optimal-trade-entry.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/optimal-trade-entry",
+  "permalink": "/PyIndicators/indicators/support-resistance/optimal-trade-entry",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/optimal-trade-entry.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 9,
+  "frontMatter": {
+    "title": "Optimal Trade Entry (OTE)",
+    "sidebar_position": 9,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Rejection Blocks",
+    "permalink": "/PyIndicators/indicators/support-resistance/rejection-blocks"
+  },
+  "next": {
+    "title": "Market Structure Break",
+    "permalink": "/PyIndicators/indicators/support-resistance/market-structure-break"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "indicators/helpers/is-downtrend",
+  "title": "Is Downtrend",
+  "description": "Minimum bars needed: slowemaperiod bars",
+  "source": "@site/content/indicators/helpers/is-downtrend.md",
+  "sourceDirName": "indicators/helpers",
+  "slug": "/indicators/helpers/is-downtrend",
+  "permalink": "/PyIndicators/indicators/helpers/is-downtrend",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/helpers/is-downtrend.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "Is Downtrend",
+    "sidebar_position": 5,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Is Crossunder",
+    "permalink": "/PyIndicators/indicators/helpers/is-crossunder"
+  },
+  "next": {
+    "title": "Is Uptrend",
+    "permalink": "/PyIndicators/indicators/helpers/is-uptrend"
+  }
+}

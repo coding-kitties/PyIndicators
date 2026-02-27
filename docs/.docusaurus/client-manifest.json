@@ -1,0 +1,983 @@
+{
+  "entrypoints": [
+    "main"
+  ],
+  "origins": {
+    "2237": [
+      2237
+    ],
+    "17896441": [
+      1869,
+      8401
+    ],
+    "main": [
+      1869,
+      5354,
+      8792
+    ],
+    "runtime~main": [
+      1869,
+      8792,
+      5354
+    ],
+    "02dd8b0b": [
+      4749
+    ],
+    "04e25624": [
+      1509
+    ],
+    "076a570d": [
+      9583
+    ],
+    "130ca9ef": [
+      1123
+    ],
+    "13bc3e7c": [
+      7220
+    ],
+    "1b018a26": [
+      7886
+    ],
+    "1e4792e7": [
+      9871
+    ],
+    "234970a1": [
+      5364
+    ],
+    "26c5dd67": [
+      9346
+    ],
+    "2742082f": [
+      2308
+    ],
+    "27b94f12": [
+      8126
+    ],
+    "27bb27f8": [
+      7713
+    ],
+    "27cb72c5": [
+      1994
+    ],
+    "2acb7e69": [
+      7900
+    ],
+    "2fd9612a": [
+      8774
+    ],
+    "3179f796": [
+      8971
+    ],
+    "35e1415c": [
+      936
+    ],
+    "3720c009": [
+      1869,
+      4787
+    ],
+    "3c98a128": [
+      4838
+    ],
+    "4095711a": [
+      7767
+    ],
+    "430fefc4": [
+      9754
+    ],
+    "50e1a3dc": [
+      8445
+    ],
+    "510c0509": [
+      6814
+    ],
+    "57d7cbc7": [
+      2021
+    ],
+    "57e7cd49": [
+      2419
+    ],
+    "5a819654": [
+      4066
+    ],
+    "5c7a10d4": [
+      5720
+    ],
+    "5e95c892": [
+      9647
+    ],
+    "62ac14f9": [
+      2231
+    ],
+    "65f3782c": [
+      7325
+    ],
+    "67d9a239": [
+      4366
+    ],
+    "68995c3a": [
+      5847
+    ],
+    "6df66bbc": [
+      2424
+    ],
+    "6e747163": [
+      2828
+    ],
+    "7245aecc": [
+      489
+    ],
+    "78c280f0": [
+      5167
+    ],
+    "79e6443b": [
+      8913
+    ],
+    "842f17db": [
+      3509
+    ],
+    "85bb1d5c": [
+      1045
+    ],
+    "865586bb": [
+      8729
+    ],
+    "875cced9": [
+      8573
+    ],
+    "8a7cc2f9": [
+      9520
+    ],
+    "8df637b4": [
+      8479
+    ],
+    "8e33f0da": [
+      6075
+    ],
+    "9589e998": [
+      921
+    ],
+    "988e5d7d": [
+      1779
+    ],
+    "9942f31e": [
+      6108
+    ],
+    "99ff2564": [
+      3460
+    ],
+    "a02b01b3": [
+      6064
+    ],
+    "a4e57e49": [
+      7107
+    ],
+    "a6047c21": [
+      4995
+    ],
+    "a77d7e81": [
+      3259
+    ],
+    "a7bd4aaa": [
+      7098
+    ],
+    "a81cf257": [
+      8724
+    ],
+    "a94703ab": [
+      1869,
+      9048
+    ],
+    "aaa9abde": [
+      7643
+    ],
+    "aba21aa0": [
+      5742
+    ],
+    "ac7a1e72": [
+      686
+    ],
+    "b7ec6dd8": [
+      1208
+    ],
+    "bb4bf074": [
+      8634
+    ],
+    "bdc3b52a": [
+      3363
+    ],
+    "bf0bdd7d": [
+      4480
+    ],
+    "da15a726": [
+      3228
+    ],
+    "df203c0f": [
+      1869,
+      4279
+    ],
+    "df840add": [
+      4288
+    ],
+    "e23d71ad": [
+      5356
+    ],
+    "e6058922": [
+      7286
+    ],
+    "ea942a2d": [
+      4731
+    ],
+    "ebeb0794": [
+      3891
+    ],
+    "ed2e1b3d": [
+      2607
+    ],
+    "edeef7c0": [
+      6590
+    ],
+    "f731eaf3": [
+      25
+    ],
+    "f98290c7": [
+      5643
+    ],
+    "fa242ef1": [
+      3166
+    ],
+    "fb0a373b": [
+      1963
+    ],
+    "styles": [
+      4279,
+      4787,
+      5354,
+      8401,
+      8792,
+      9048,
+      1869
+    ]
+  },
+  "assets": {
+    "25": {
+      "js": [
+        {
+          "file": "assets/js/f731eaf3.b0bc25a4.js",
+          "hash": "94ac3dbacda54c74",
+          "publicPath": "/PyIndicators/assets/js/f731eaf3.b0bc25a4.js"
+        }
+      ]
+    },
+    "489": {
+      "js": [
+        {
+          "file": "assets/js/7245aecc.57d3bdce.js",
+          "hash": "9f81a3f9d729955c",
+          "publicPath": "/PyIndicators/assets/js/7245aecc.57d3bdce.js"
+        }
+      ]
+    },
+    "686": {
+      "js": [
+        {
+          "file": "assets/js/ac7a1e72.91a57bc8.js",
+          "hash": "dedb4668f71c8e08",
+          "publicPath": "/PyIndicators/assets/js/ac7a1e72.91a57bc8.js"
+        }
+      ]
+    },
+    "921": {
+      "js": [
+        {
+          "file": "assets/js/9589e998.70fdb6b2.js",
+          "hash": "0787356273fae3b5",
+          "publicPath": "/PyIndicators/assets/js/9589e998.70fdb6b2.js"
+        }
+      ]
+    },
+    "936": {
+      "js": [
+        {
+          "file": "assets/js/35e1415c.cc28e5f5.js",
+          "hash": "69800686fb1ecb92",
+          "publicPath": "/PyIndicators/assets/js/35e1415c.cc28e5f5.js"
+        }
+      ]
+    },
+    "1045": {
+      "js": [
+        {
+          "file": "assets/js/85bb1d5c.c03375cf.js",
+          "hash": "8e51e20c8d5c40d5",
+          "publicPath": "/PyIndicators/assets/js/85bb1d5c.c03375cf.js"
+        }
+      ]
+    },
+    "1123": {
+      "js": [
+        {
+          "file": "assets/js/130ca9ef.4be8e861.js",
+          "hash": "b1329718794e8742",
+          "publicPath": "/PyIndicators/assets/js/130ca9ef.4be8e861.js"
+        }
+      ]
+    },
+    "1208": {
+      "js": [
+        {
+          "file": "assets/js/b7ec6dd8.9d75ab98.js",
+          "hash": "7ce505c0e05132e3",
+          "publicPath": "/PyIndicators/assets/js/b7ec6dd8.9d75ab98.js"
+        }
+      ]
+    },
+    "1509": {
+      "js": [
+        {
+          "file": "assets/js/04e25624.ab472297.js",
+          "hash": "485ddf17e42341d5",
+          "publicPath": "/PyIndicators/assets/js/04e25624.ab472297.js"
+        }
+      ]
+    },
+    "1779": {
+      "js": [
+        {
+          "file": "assets/js/988e5d7d.b9bb9b87.js",
+          "hash": "d1fde31d17d39618",
+          "publicPath": "/PyIndicators/assets/js/988e5d7d.b9bb9b87.js"
+        }
+      ]
+    },
+    "1869": {
+      "css": [
+        {
+          "file": "assets/css/styles.bd677779.css",
+          "hash": "d47fe05b0c7228cc",
+          "publicPath": "/PyIndicators/assets/css/styles.bd677779.css"
+        }
+      ]
+    },
+    "1963": {
+      "js": [
+        {
+          "file": "assets/js/fb0a373b.995aa4b8.js",
+          "hash": "39badd91bd0b0e3d",
+          "publicPath": "/PyIndicators/assets/js/fb0a373b.995aa4b8.js"
+        }
+      ]
+    },
+    "1994": {
+      "js": [
+        {
+          "file": "assets/js/27cb72c5.0daebc09.js",
+          "hash": "30a5dddd87348376",
+          "publicPath": "/PyIndicators/assets/js/27cb72c5.0daebc09.js"
+        }
+      ]
+    },
+    "2021": {
+      "js": [
+        {
+          "file": "assets/js/57d7cbc7.c4a67419.js",
+          "hash": "b870f01f047715c2",
+          "publicPath": "/PyIndicators/assets/js/57d7cbc7.c4a67419.js"
+        }
+      ]
+    },
+    "2231": {
+      "js": [
+        {
+          "file": "assets/js/62ac14f9.ef116455.js",
+          "hash": "783c55e5bfb102d7",
+          "publicPath": "/PyIndicators/assets/js/62ac14f9.ef116455.js"
+        }
+      ]
+    },
+    "2237": {
+      "js": [
+        {
+          "file": "assets/js/2237.de61eb3b.js",
+          "hash": "840b1ff16c71bfa1",
+          "publicPath": "/PyIndicators/assets/js/2237.de61eb3b.js"
+        }
+      ]
+    },
+    "2308": {
+      "js": [
+        {
+          "file": "assets/js/2742082f.a1a87b25.js",
+          "hash": "7de0b7ec796cf9b7",
+          "publicPath": "/PyIndicators/assets/js/2742082f.a1a87b25.js"
+        }
+      ]
+    },
+    "2419": {
+      "js": [
+        {
+          "file": "assets/js/57e7cd49.f6c41c6d.js",
+          "hash": "73eee9b156f296d0",
+          "publicPath": "/PyIndicators/assets/js/57e7cd49.f6c41c6d.js"
+        }
+      ]
+    },
+    "2424": {
+      "js": [
+        {
+          "file": "assets/js/6df66bbc.87e58add.js",
+          "hash": "f45de6497a249ff1",
+          "publicPath": "/PyIndicators/assets/js/6df66bbc.87e58add.js"
+        }
+      ]
+    },
+    "2607": {
+      "js": [
+        {
+          "file": "assets/js/ed2e1b3d.b202d99d.js",
+          "hash": "223614e6de6697cb",
+          "publicPath": "/PyIndicators/assets/js/ed2e1b3d.b202d99d.js"
+        }
+      ]
+    },
+    "2828": {
+      "js": [
+        {
+          "file": "assets/js/6e747163.7eecf104.js",
+          "hash": "fb701cbefbccb2ac",
+          "publicPath": "/PyIndicators/assets/js/6e747163.7eecf104.js"
+        }
+      ]
+    },
+    "3166": {
+      "js": [
+        {
+          "file": "assets/js/fa242ef1.dd8dd436.js",
+          "hash": "f7eb240541ccd494",
+          "publicPath": "/PyIndicators/assets/js/fa242ef1.dd8dd436.js"
+        }
+      ]
+    },
+    "3228": {
+      "js": [
+        {
+          "file": "assets/js/da15a726.a7fbd196.js",
+          "hash": "dfec2913e2e4b784",
+          "publicPath": "/PyIndicators/assets/js/da15a726.a7fbd196.js"
+        }
+      ]
+    },
+    "3259": {
+      "js": [
+        {
+          "file": "assets/js/a77d7e81.4ab5d36a.js",
+          "hash": "c58fcecb12de2a4d",
+          "publicPath": "/PyIndicators/assets/js/a77d7e81.4ab5d36a.js"
+        }
+      ]
+    },
+    "3363": {
+      "js": [
+        {
+          "file": "assets/js/bdc3b52a.e95499be.js",
+          "hash": "d4bcccdb55f66c47",
+          "publicPath": "/PyIndicators/assets/js/bdc3b52a.e95499be.js"
+        }
+      ]
+    },
+    "3460": {
+      "js": [
+        {
+          "file": "assets/js/99ff2564.fa0625d9.js",
+          "hash": "2514d50ae956ddb1",
+          "publicPath": "/PyIndicators/assets/js/99ff2564.fa0625d9.js"
+        }
+      ]
+    },
+    "3509": {
+      "js": [
+        {
+          "file": "assets/js/842f17db.eed018d3.js",
+          "hash": "c2a8050faabf7299",
+          "publicPath": "/PyIndicators/assets/js/842f17db.eed018d3.js"
+        }
+      ]
+    },
+    "3891": {
+      "js": [
+        {
+          "file": "assets/js/ebeb0794.b20f6f7a.js",
+          "hash": "3fa5022b308dbc89",
+          "publicPath": "/PyIndicators/assets/js/ebeb0794.b20f6f7a.js"
+        }
+      ]
+    },
+    "4066": {
+      "js": [
+        {
+          "file": "assets/js/5a819654.9df1492e.js",
+          "hash": "a8162f497742af4e",
+          "publicPath": "/PyIndicators/assets/js/5a819654.9df1492e.js"
+        }
+      ]
+    },
+    "4279": {
+      "js": [
+        {
+          "file": "assets/js/df203c0f.8c3a78fe.js",
+          "hash": "b88cf17b266ebb08",
+          "publicPath": "/PyIndicators/assets/js/df203c0f.8c3a78fe.js"
+        }
+      ]
+    },
+    "4288": {
+      "js": [
+        {
+          "file": "assets/js/df840add.ee65c684.js",
+          "hash": "2da13c2cd228176f",
+          "publicPath": "/PyIndicators/assets/js/df840add.ee65c684.js"
+        }
+      ]
+    },
+    "4366": {
+      "js": [
+        {
+          "file": "assets/js/67d9a239.a66cee85.js",
+          "hash": "d02101e8ba47f77a",
+          "publicPath": "/PyIndicators/assets/js/67d9a239.a66cee85.js"
+        }
+      ]
+    },
+    "4480": {
+      "js": [
+        {
+          "file": "assets/js/bf0bdd7d.e7e72398.js",
+          "hash": "9f06fb8d5776e60a",
+          "publicPath": "/PyIndicators/assets/js/bf0bdd7d.e7e72398.js"
+        }
+      ]
+    },
+    "4731": {
+      "js": [
+        {
+          "file": "assets/js/ea942a2d.903aab58.js",
+          "hash": "52be3171a3b8f966",
+          "publicPath": "/PyIndicators/assets/js/ea942a2d.903aab58.js"
+        }
+      ]
+    },
+    "4749": {
+      "js": [
+        {
+          "file": "assets/js/02dd8b0b.2d53833f.js",
+          "hash": "1c423ad1e6c6b6f2",
+          "publicPath": "/PyIndicators/assets/js/02dd8b0b.2d53833f.js"
+        }
+      ]
+    },
+    "4787": {
+      "js": [
+        {
+          "file": "assets/js/3720c009.75d73dfb.js",
+          "hash": "c94a26cac4933d6d",
+          "publicPath": "/PyIndicators/assets/js/3720c009.75d73dfb.js"
+        }
+      ]
+    },
+    "4838": {
+      "js": [
+        {
+          "file": "assets/js/3c98a128.2b548484.js",
+          "hash": "718f681500d4d93e",
+          "publicPath": "/PyIndicators/assets/js/3c98a128.2b548484.js"
+        }
+      ]
+    },
+    "4995": {
+      "js": [
+        {
+          "file": "assets/js/a6047c21.fec7c464.js",
+          "hash": "f38318254901eda9",
+          "publicPath": "/PyIndicators/assets/js/a6047c21.fec7c464.js"
+        }
+      ]
+    },
+    "5167": {
+      "js": [
+        {
+          "file": "assets/js/78c280f0.8d46ac8c.js",
+          "hash": "e010e92e7180d329",
+          "publicPath": "/PyIndicators/assets/js/78c280f0.8d46ac8c.js"
+        }
+      ]
+    },
+    "5354": {
+      "js": [
+        {
+          "file": "assets/js/runtime~main.323efa3b.js",
+          "hash": "9e6b8404d6a30381",
+          "publicPath": "/PyIndicators/assets/js/runtime~main.323efa3b.js"
+        }
+      ]
+    },
+    "5356": {
+      "js": [
+        {
+          "file": "assets/js/e23d71ad.afbffcd8.js",
+          "hash": "bf7db2fc328d13bb",
+          "publicPath": "/PyIndicators/assets/js/e23d71ad.afbffcd8.js"
+        }
+      ]
+    },
+    "5364": {
+      "js": [
+        {
+          "file": "assets/js/234970a1.9ddbd040.js",
+          "hash": "8fc9d13566e1a688",
+          "publicPath": "/PyIndicators/assets/js/234970a1.9ddbd040.js"
+        }
+      ]
+    },
+    "5643": {
+      "js": [
+        {
+          "file": "assets/js/f98290c7.d4bd3d47.js",
+          "hash": "b89bde202eea2f60",
+          "publicPath": "/PyIndicators/assets/js/f98290c7.d4bd3d47.js"
+        }
+      ]
+    },
+    "5720": {
+      "js": [
+        {
+          "file": "assets/js/5c7a10d4.6efc3f72.js",
+          "hash": "4ea9a24214e3dc93",
+          "publicPath": "/PyIndicators/assets/js/5c7a10d4.6efc3f72.js"
+        }
+      ]
+    },
+    "5742": {
+      "js": [
+        {
+          "file": "assets/js/aba21aa0.28cfd24e.js",
+          "hash": "19b0809d2393b382",
+          "publicPath": "/PyIndicators/assets/js/aba21aa0.28cfd24e.js"
+        }
+      ]
+    },
+    "5847": {
+      "js": [
+        {
+          "file": "assets/js/68995c3a.e445c3d5.js",
+          "hash": "c7cc6034ed20f08e",
+          "publicPath": "/PyIndicators/assets/js/68995c3a.e445c3d5.js"
+        }
+      ]
+    },
+    "6064": {
+      "js": [
+        {
+          "file": "assets/js/a02b01b3.4c882f75.js",
+          "hash": "f0bbabfc3841021a",
+          "publicPath": "/PyIndicators/assets/js/a02b01b3.4c882f75.js"
+        }
+      ]
+    },
+    "6075": {
+      "js": [
+        {
+          "file": "assets/js/8e33f0da.62047204.js",
+          "hash": "e956c07548d37781",
+          "publicPath": "/PyIndicators/assets/js/8e33f0da.62047204.js"
+        }
+      ]
+    },
+    "6108": {
+      "js": [
+        {
+          "file": "assets/js/9942f31e.3665f298.js",
+          "hash": "b81f6f087e0d6db3",
+          "publicPath": "/PyIndicators/assets/js/9942f31e.3665f298.js"
+        }
+      ]
+    },
+    "6590": {
+      "js": [
+        {
+          "file": "assets/js/edeef7c0.7cba48e8.js",
+          "hash": "0cf69d2570f65be9",
+          "publicPath": "/PyIndicators/assets/js/edeef7c0.7cba48e8.js"
+        }
+      ]
+    },
+    "6814": {
+      "js": [
+        {
+          "file": "assets/js/510c0509.58ed4f67.js",
+          "hash": "f41a2416a380c218",
+          "publicPath": "/PyIndicators/assets/js/510c0509.58ed4f67.js"
+        }
+      ]
+    },
+    "7098": {
+      "js": [
+        {
+          "file": "assets/js/a7bd4aaa.cfed4e48.js",
+          "hash": "2ee4c0bdc927958a",
+          "publicPath": "/PyIndicators/assets/js/a7bd4aaa.cfed4e48.js"
+        }
+      ]
+    },
+    "7107": {
+      "js": [
+        {
+          "file": "assets/js/a4e57e49.d4c060fe.js",
+          "hash": "fe5931412a68e90f",
+          "publicPath": "/PyIndicators/assets/js/a4e57e49.d4c060fe.js"
+        }
+      ]
+    },
+    "7220": {
+      "js": [
+        {
+          "file": "assets/js/13bc3e7c.12578a73.js",
+          "hash": "34fc0c6ef6f2a46a",
+          "publicPath": "/PyIndicators/assets/js/13bc3e7c.12578a73.js"
+        }
+      ]
+    },
+    "7286": {
+      "js": [
+        {
+          "file": "assets/js/e6058922.1a5b0763.js",
+          "hash": "19e36ef6658da0d4",
+          "publicPath": "/PyIndicators/assets/js/e6058922.1a5b0763.js"
+        }
+      ]
+    },
+    "7325": {
+      "js": [
+        {
+          "file": "assets/js/65f3782c.7c003e5b.js",
+          "hash": "fff57331366bb008",
+          "publicPath": "/PyIndicators/assets/js/65f3782c.7c003e5b.js"
+        }
+      ]
+    },
+    "7643": {
+      "js": [
+        {
+          "file": "assets/js/aaa9abde.14f33f23.js",
+          "hash": "b0dbc10ad4d81368",
+          "publicPath": "/PyIndicators/assets/js/aaa9abde.14f33f23.js"
+        }
+      ]
+    },
+    "7713": {
+      "js": [
+        {
+          "file": "assets/js/27bb27f8.c0b7619b.js",
+          "hash": "e02e0452de016c2e",
+          "publicPath": "/PyIndicators/assets/js/27bb27f8.c0b7619b.js"
+        }
+      ]
+    },
+    "7767": {
+      "js": [
+        {
+          "file": "assets/js/4095711a.7fdf801e.js",
+          "hash": "39c9be1ebcdc3864",
+          "publicPath": "/PyIndicators/assets/js/4095711a.7fdf801e.js"
+        }
+      ]
+    },
+    "7886": {
+      "js": [
+        {
+          "file": "assets/js/1b018a26.16d68bec.js",
+          "hash": "bb32ddf34af386db",
+          "publicPath": "/PyIndicators/assets/js/1b018a26.16d68bec.js"
+        }
+      ]
+    },
+    "7900": {
+      "js": [
+        {
+          "file": "assets/js/2acb7e69.d1f17621.js",
+          "hash": "94619374afd777dc",
+          "publicPath": "/PyIndicators/assets/js/2acb7e69.d1f17621.js"
+        }
+      ]
+    },
+    "8126": {
+      "js": [
+        {
+          "file": "assets/js/27b94f12.29125a4b.js",
+          "hash": "85f5e97975fe8d8d",
+          "publicPath": "/PyIndicators/assets/js/27b94f12.29125a4b.js"
+        }
+      ]
+    },
+    "8401": {
+      "js": [
+        {
+          "file": "assets/js/17896441.d2a2ed10.js",
+          "hash": "274dfccabbacadd2",
+          "publicPath": "/PyIndicators/assets/js/17896441.d2a2ed10.js"
+        }
+      ]
+    },
+    "8445": {
+      "js": [
+        {
+          "file": "assets/js/50e1a3dc.36009ff4.js",
+          "hash": "d7aa853bf7203cd5",
+          "publicPath": "/PyIndicators/assets/js/50e1a3dc.36009ff4.js"
+        }
+      ]
+    },
+    "8479": {
+      "js": [
+        {
+          "file": "assets/js/8df637b4.96c976fb.js",
+          "hash": "dcb13c5fbef30805",
+          "publicPath": "/PyIndicators/assets/js/8df637b4.96c976fb.js"
+        }
+      ]
+    },
+    "8573": {
+      "js": [
+        {
+          "file": "assets/js/875cced9.dd92b210.js",
+          "hash": "79995be20482d9af",
+          "publicPath": "/PyIndicators/assets/js/875cced9.dd92b210.js"
+        }
+      ]
+    },
+    "8634": {
+      "js": [
+        {
+          "file": "assets/js/bb4bf074.74a6698a.js",
+          "hash": "02649e705d5e65eb",
+          "publicPath": "/PyIndicators/assets/js/bb4bf074.74a6698a.js"
+        }
+      ]
+    },
+    "8724": {
+      "js": [
+        {
+          "file": "assets/js/a81cf257.5fabccb9.js",
+          "hash": "ef491e172bb6f666",
+          "publicPath": "/PyIndicators/assets/js/a81cf257.5fabccb9.js"
+        }
+      ]
+    },
+    "8729": {
+      "js": [
+        {
+          "file": "assets/js/865586bb.456f1435.js",
+          "hash": "669dfa17953b89fe",
+          "publicPath": "/PyIndicators/assets/js/865586bb.456f1435.js"
+        }
+      ]
+    },
+    "8774": {
+      "js": [
+        {
+          "file": "assets/js/2fd9612a.0f71ec2a.js",
+          "hash": "276ee659da07b9e6",
+          "publicPath": "/PyIndicators/assets/js/2fd9612a.0f71ec2a.js"
+        }
+      ]
+    },
+    "8792": {
+      "js": [
+        {
+          "file": "assets/js/main.219c4529.js",
+          "hash": "c22b4d5eeae22b23",
+          "publicPath": "/PyIndicators/assets/js/main.219c4529.js"
+        }
+      ]
+    },
+    "8913": {
+      "js": [
+        {
+          "file": "assets/js/79e6443b.dfd75502.js",
+          "hash": "509b70932867791f",
+          "publicPath": "/PyIndicators/assets/js/79e6443b.dfd75502.js"
+        }
+      ]
+    },
+    "8971": {
+      "js": [
+        {
+          "file": "assets/js/3179f796.9d7efde6.js",
+          "hash": "c18efc17a3700cd8",
+          "publicPath": "/PyIndicators/assets/js/3179f796.9d7efde6.js"
+        }
+      ]
+    },
+    "9048": {
+      "js": [
+        {
+          "file": "assets/js/a94703ab.7e7ad9d1.js",
+          "hash": "3a0455adc743bb3d",
+          "publicPath": "/PyIndicators/assets/js/a94703ab.7e7ad9d1.js"
+        }
+      ]
+    },
+    "9346": {
+      "js": [
+        {
+          "file": "assets/js/26c5dd67.deea6996.js",
+          "hash": "0daa76245663ff41",
+          "publicPath": "/PyIndicators/assets/js/26c5dd67.deea6996.js"
+        }
+      ]
+    },
+    "9520": {
+      "js": [
+        {
+          "file": "assets/js/8a7cc2f9.01b7bab6.js",
+          "hash": "c37be44b34251766",
+          "publicPath": "/PyIndicators/assets/js/8a7cc2f9.01b7bab6.js"
+        }
+      ]
+    },
+    "9583": {
+      "js": [
+        {
+          "file": "assets/js/076a570d.15b17d8b.js",
+          "hash": "f30afd65fc3b838b",
+          "publicPath": "/PyIndicators/assets/js/076a570d.15b17d8b.js"
+        }
+      ]
+    },
+    "9647": {
+      "js": [
+        {
+          "file": "assets/js/5e95c892.4953e3a1.js",
+          "hash": "d45f80a975440209",
+          "publicPath": "/PyIndicators/assets/js/5e95c892.4953e3a1.js"
+        }
+      ]
+    },
+    "9754": {
+      "js": [
+        {
+          "file": "assets/js/430fefc4.e7771071.js",
+          "hash": "520d2f139d1a4ac7",
+          "publicPath": "/PyIndicators/assets/js/430fefc4.e7771071.js"
+        }
+      ]
+    },
+    "9871": {
+      "js": [
+        {
+          "file": "assets/js/1e4792e7.b0a45c47.js",
+          "hash": "c629e88d4abb9df2",
+          "publicPath": "/PyIndicators/assets/js/1e4792e7.b0a45c47.js"
+        }
+      ]
+    }
+  }
+}

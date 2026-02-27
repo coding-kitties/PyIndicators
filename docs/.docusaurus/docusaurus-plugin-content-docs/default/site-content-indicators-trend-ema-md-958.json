@@ -1,0 +1,37 @@
+{
+  "id": "indicators/trend/ema",
+  "title": "Exponential Moving Average (EMA)",
+  "description": "Minimum bars needed: period bars",
+  "source": "@site/content/indicators/trend/ema.md",
+  "sourceDirName": "indicators/trend",
+  "slug": "/indicators/trend/ema",
+  "permalink": "/PyIndicators/indicators/trend/ema",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/trend/ema.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Exponential Moving Average (EMA)",
+    "sidebar_position": 3,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Simple Moving Average (SMA)",
+    "permalink": "/PyIndicators/indicators/trend/sma"
+  },
+  "next": {
+    "title": "Zero-Lag EMA Envelope (ZLEMA)",
+    "permalink": "/PyIndicators/indicators/trend/zero-lag-ema-envelope"
+  }
+}

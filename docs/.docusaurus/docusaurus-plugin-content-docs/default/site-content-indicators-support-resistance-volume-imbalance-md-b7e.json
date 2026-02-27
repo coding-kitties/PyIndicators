@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/volume-imbalance",
+  "title": "Volume Imbalance (VI)",
+  "description": "Volume Imbalances are detected on the current bar by comparing it to the previous bar.",
+  "source": "@site/content/indicators/support-resistance/volume-imbalance.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/volume-imbalance",
+  "permalink": "/PyIndicators/indicators/support-resistance/volume-imbalance",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/volume-imbalance.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 22,
+  "frontMatter": {
+    "title": "Volume Imbalance (VI)",
+    "sidebar_position": 22,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Accumulation & Distribution Zones",
+    "permalink": "/PyIndicators/indicators/support-resistance/accumulation-distribution-zones"
+  },
+  "next": {
+    "title": "Opening Gap (OG)",
+    "permalink": "/PyIndicators/indicators/support-resistance/opening-gap"
+  }
+}

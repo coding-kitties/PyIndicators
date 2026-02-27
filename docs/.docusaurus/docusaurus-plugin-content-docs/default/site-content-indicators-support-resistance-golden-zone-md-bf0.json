@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/golden-zone",
+  "title": "Golden Zone",
+  "description": "Minimum bars needed: length bars",
+  "source": "@site/content/indicators/support-resistance/golden-zone.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/golden-zone",
+  "permalink": "/PyIndicators/indicators/support-resistance/golden-zone",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/golden-zone.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Golden Zone",
+    "sidebar_position": 2,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Fibonacci Retracement",
+    "permalink": "/PyIndicators/indicators/support-resistance/fibonacci-retracement"
+  },
+  "next": {
+    "title": "Golden Zone Signal",
+    "permalink": "/PyIndicators/indicators/support-resistance/golden-zone-signal"
+  }
+}

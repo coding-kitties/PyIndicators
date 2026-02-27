@@ -1,0 +1,37 @@
+{
+  "id": "indicators/momentum/z-score-predictive-zones",
+  "title": "Z-Score Predictive Zones",
+  "description": "Z-Score smoothing and dynamic reversal levels introduce lag relative to the actual reversal.",
+  "source": "@site/content/indicators/momentum/z-score-predictive-zones.md",
+  "sourceDirName": "indicators/momentum",
+  "slug": "/indicators/momentum/z-score-predictive-zones",
+  "permalink": "/PyIndicators/indicators/momentum/z-score-predictive-zones",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/momentum/z-score-predictive-zones.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 8,
+  "frontMatter": {
+    "title": "Z-Score Predictive Zones",
+    "sidebar_position": 8,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Momentum Confluence",
+    "permalink": "/PyIndicators/indicators/momentum/momentum-confluence"
+  },
+  "next": {
+    "title": "Momentum Cycle Sentry",
+    "permalink": "/PyIndicators/indicators/momentum/momentum-cycle-sentry"
+  }
+}

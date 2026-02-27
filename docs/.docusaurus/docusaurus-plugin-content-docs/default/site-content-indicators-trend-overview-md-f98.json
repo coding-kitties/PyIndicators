@@ -1,0 +1,29 @@
+{
+  "id": "indicators/trend/overview",
+  "title": "Trend Indicators",
+  "description": "Trend indicators help you identify the direction and strength of a market move. They smooth out price noise so you can focus on the underlying trajectory. Because they rely on historical averages, all trend indicators are lagging — they confirm a trend rather than predict it. Use them to align your trades with the dominant direction and to filter out counter-trend noise.",
+  "source": "@site/content/indicators/trend/overview.md",
+  "sourceDirName": "indicators/trend",
+  "slug": "/indicators/trend/overview",
+  "permalink": "/PyIndicators/indicators/trend/overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/trend/overview.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0,
+  "frontMatter": {
+    "title": "Trend Indicators",
+    "sidebar_label": "Overview",
+    "sidebar_position": 0
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Installation",
+    "permalink": "/PyIndicators/installation"
+  },
+  "next": {
+    "title": "Weighted Moving Average (WMA)",
+    "permalink": "/PyIndicators/indicators/trend/wma"
+  }
+}

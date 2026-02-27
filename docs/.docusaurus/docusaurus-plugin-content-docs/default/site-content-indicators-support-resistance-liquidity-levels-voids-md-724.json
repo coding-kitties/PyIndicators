@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/liquidity-levels-voids",
+  "title": "Liquidity Levels / Voids (VP)",
+  "description": "Minimum bars needed: detection_length bars",
+  "source": "@site/content/indicators/support-resistance/liquidity-levels-voids.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/liquidity-levels-voids",
+  "permalink": "/PyIndicators/indicators/support-resistance/liquidity-levels-voids",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/liquidity-levels-voids.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 16,
+  "frontMatter": {
+    "title": "Liquidity Levels / Voids (VP)",
+    "sidebar_position": 16,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Liquidity Pools",
+    "permalink": "/PyIndicators/indicators/support-resistance/liquidity-pools"
+  },
+  "next": {
+    "title": "Internal & External Liquidity Zones",
+    "permalink": "/PyIndicators/indicators/support-resistance/internal-external-liquidity-zones"
+  }
+}

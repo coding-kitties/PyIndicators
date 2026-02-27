@@ -1,0 +1,37 @@
+{
+  "id": "indicators/trend/pulse-mean-accelerator",
+  "title": "Pulse Mean Accelerator (PMA)",
+  "description": "Minimum bars needed: max(malength, accellookback) bars",
+  "source": "@site/content/indicators/trend/pulse-mean-accelerator.md",
+  "sourceDirName": "indicators/trend",
+  "slug": "/indicators/trend/pulse-mean-accelerator",
+  "permalink": "/PyIndicators/indicators/trend/pulse-mean-accelerator",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/trend/pulse-mean-accelerator.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 8,
+  "frontMatter": {
+    "title": "Pulse Mean Accelerator (PMA)",
+    "sidebar_position": 8,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "SuperTrend Clustering",
+    "permalink": "/PyIndicators/indicators/trend/supertrend-clustering"
+  },
+  "next": {
+    "title": "Volume Weighted Trend (VWT)",
+    "permalink": "/PyIndicators/indicators/trend/volume-weighted-trend"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/order-blocks",
+  "title": "Order Blocks",
+  "description": "Minimum bars needed: 2 × swing_length + 1 bars",
+  "source": "@site/content/indicators/support-resistance/order-blocks.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/order-blocks",
+  "permalink": "/PyIndicators/indicators/support-resistance/order-blocks",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/order-blocks.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "Order Blocks",
+    "sidebar_position": 5,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Fair Value Gap (FVG)",
+    "permalink": "/PyIndicators/indicators/support-resistance/fair-value-gap"
+  },
+  "next": {
+    "title": "Breaker Blocks",
+    "permalink": "/PyIndicators/indicators/support-resistance/breaker-blocks"
+  }
+}

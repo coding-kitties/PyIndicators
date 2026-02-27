@@ -1,0 +1,37 @@
+{
+  "id": "indicators/trend/zero-lag-ema-envelope",
+  "title": "Zero-Lag EMA Envelope (ZLEMA)",
+  "description": "Minimum bars needed: length bars",
+  "source": "@site/content/indicators/trend/zero-lag-ema-envelope.md",
+  "sourceDirName": "indicators/trend",
+  "slug": "/indicators/trend/zero-lag-ema-envelope",
+  "permalink": "/PyIndicators/indicators/trend/zero-lag-ema-envelope",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/trend/zero-lag-ema-envelope.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Zero-Lag EMA Envelope (ZLEMA)",
+    "sidebar_position": 4,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Exponential Moving Average (EMA)",
+    "permalink": "/PyIndicators/indicators/trend/ema"
+  },
+  "next": {
+    "title": "EMA Trend Ribbon",
+    "permalink": "/PyIndicators/indicators/trend/ema-trend-ribbon"
+  }
+}

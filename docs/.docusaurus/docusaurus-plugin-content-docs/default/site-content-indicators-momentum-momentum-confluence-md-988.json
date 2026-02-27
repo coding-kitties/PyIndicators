@@ -1,0 +1,37 @@
+{
+  "id": "indicators/momentum/momentum-confluence",
+  "title": "Momentum Confluence",
+  "description": "Minimum bars needed: max(moneyflowlength, trendwavelength) bars",
+  "source": "@site/content/indicators/momentum/momentum-confluence.md",
+  "sourceDirName": "indicators/momentum",
+  "slug": "/indicators/momentum/momentum-confluence",
+  "permalink": "/PyIndicators/indicators/momentum/momentum-confluence",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/momentum/momentum-confluence.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "title": "Momentum Confluence",
+    "sidebar_position": 7,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Stochastic Oscillator (STO)",
+    "permalink": "/PyIndicators/indicators/momentum/stochastic-oscillator"
+  },
+  "next": {
+    "title": "Z-Score Predictive Zones",
+    "permalink": "/PyIndicators/indicators/momentum/z-score-predictive-zones"
+  }
+}

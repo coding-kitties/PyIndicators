@@ -1,0 +1,37 @@
+{
+  "id": "indicators/helpers/crossover",
+  "title": "Crossover",
+  "description": "Minimum bars needed: 2 bars",
+  "source": "@site/content/indicators/helpers/crossover.md",
+  "sourceDirName": "indicators/helpers",
+  "slug": "/indicators/helpers/crossover",
+  "permalink": "/PyIndicators/indicators/helpers/crossover",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/helpers/crossover.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Crossover",
+    "sidebar_position": 1,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Overview",
+    "permalink": "/PyIndicators/indicators/helpers/overview"
+  },
+  "next": {
+    "title": "Is Crossover",
+    "permalink": "/PyIndicators/indicators/helpers/is-crossover"
+  }
+}

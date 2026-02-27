@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/volumetric-supply-demand-zones",
+  "title": "Volumetric Supply & Demand Zones",
+  "description": "Zone detection is triggered immediately when a pivot is confirmed with a qualifying impulse move.",
+  "source": "@site/content/indicators/support-resistance/volumetric-supply-demand-zones.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/volumetric-supply-demand-zones",
+  "permalink": "/PyIndicators/indicators/support-resistance/volumetric-supply-demand-zones",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/volumetric-supply-demand-zones.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 19,
+  "frontMatter": {
+    "title": "Volumetric Supply & Demand Zones",
+    "sidebar_position": 19,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Premium / Discount Zones",
+    "permalink": "/PyIndicators/indicators/support-resistance/premium-discount-zones"
+  },
+  "next": {
+    "title": "Accumulation & Distribution Zones",
+    "permalink": "/PyIndicators/indicators/support-resistance/accumulation-distribution-zones"
+  }
+}

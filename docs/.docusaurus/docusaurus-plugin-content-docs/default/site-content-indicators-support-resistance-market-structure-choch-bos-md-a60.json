@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/market-structure-choch-bos",
+  "title": "Market Structure CHoCH/BOS",
+  "description": "Minimum bars needed: 2 × length + 1 bars",
+  "source": "@site/content/indicators/support-resistance/market-structure-choch-bos.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/market-structure-choch-bos",
+  "permalink": "/PyIndicators/indicators/support-resistance/market-structure-choch-bos",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/market-structure-choch-bos.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 11,
+  "frontMatter": {
+    "title": "Market Structure CHoCH/BOS",
+    "sidebar_position": 11,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Market Structure Break",
+    "permalink": "/PyIndicators/indicators/support-resistance/market-structure-break"
+  },
+  "next": {
+    "title": "Liquidity Sweeps",
+    "permalink": "/PyIndicators/indicators/support-resistance/liquidity-sweeps"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "indicators/support-resistance/internal-external-liquidity-zones",
+  "title": "Internal & External Liquidity Zones",
+  "description": "Minimum bars needed: 2 × externalpivotlength + 1 bars",
+  "source": "@site/content/indicators/support-resistance/internal-external-liquidity-zones.md",
+  "sourceDirName": "indicators/support-resistance",
+  "slug": "/indicators/support-resistance/internal-external-liquidity-zones",
+  "permalink": "/PyIndicators/indicators/support-resistance/internal-external-liquidity-zones",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/support-resistance/internal-external-liquidity-zones.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 17,
+  "frontMatter": {
+    "title": "Internal & External Liquidity Zones",
+    "sidebar_position": 17,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Liquidity Levels / Voids (VP)",
+    "permalink": "/PyIndicators/indicators/support-resistance/liquidity-levels-voids"
+  },
+  "next": {
+    "title": "Premium / Discount Zones",
+    "permalink": "/PyIndicators/indicators/support-resistance/premium-discount-zones"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "indicators/helpers/overview",
+  "title": "Indicator Helpers",
+  "description": "Helper functions are utility tools that work alongside indicators to generate signals and evaluate conditions. Most are real-time with no lag — they simply compare values on the current bar. Use them to build composite trading rules from individual indicator outputs.",
+  "source": "@site/content/indicators/helpers/overview.md",
+  "sourceDirName": "indicators/helpers",
+  "slug": "/indicators/helpers/overview",
+  "permalink": "/PyIndicators/indicators/helpers/overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/helpers/overview.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0,
+  "frontMatter": {
+    "title": "Indicator Helpers",
+    "sidebar_label": "Overview",
+    "sidebar_position": 0
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Detect Bearish Divergence",
+    "permalink": "/PyIndicators/indicators/pattern-recognition/bearish-divergence"
+  },
+  "next": {
+    "title": "Crossover",
+    "permalink": "/PyIndicators/indicators/helpers/crossover"
+  }
+}

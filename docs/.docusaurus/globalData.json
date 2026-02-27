@@ -1,0 +1,358 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/PyIndicators/",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/PyIndicators/",
+          "mainDocId": "introduction",
+          "docs": [
+            {
+              "id": "indicators/helpers/crossover",
+              "path": "/PyIndicators/indicators/helpers/crossover",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/helpers/crossunder",
+              "path": "/PyIndicators/indicators/helpers/crossunder",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/helpers/has-any-lower-then-threshold",
+              "path": "/PyIndicators/indicators/helpers/has-any-lower-then-threshold",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/helpers/is-crossover",
+              "path": "/PyIndicators/indicators/helpers/is-crossover",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/helpers/is-crossunder",
+              "path": "/PyIndicators/indicators/helpers/is-crossunder",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/helpers/is-downtrend",
+              "path": "/PyIndicators/indicators/helpers/is-downtrend",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/helpers/is-uptrend",
+              "path": "/PyIndicators/indicators/helpers/is-uptrend",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/helpers/overview",
+              "path": "/PyIndicators/indicators/helpers/overview",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/adx",
+              "path": "/PyIndicators/indicators/momentum/adx",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/macd",
+              "path": "/PyIndicators/indicators/momentum/macd",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/momentum-confluence",
+              "path": "/PyIndicators/indicators/momentum/momentum-confluence",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/momentum-cycle-sentry",
+              "path": "/PyIndicators/indicators/momentum/momentum-cycle-sentry",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/overview",
+              "path": "/PyIndicators/indicators/momentum/overview",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/rsi",
+              "path": "/PyIndicators/indicators/momentum/rsi",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/stochastic-oscillator",
+              "path": "/PyIndicators/indicators/momentum/stochastic-oscillator",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/wilders-rsi",
+              "path": "/PyIndicators/indicators/momentum/wilders-rsi",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/williams-r",
+              "path": "/PyIndicators/indicators/momentum/williams-r",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/momentum/z-score-predictive-zones",
+              "path": "/PyIndicators/indicators/momentum/z-score-predictive-zones",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/pattern-recognition/bearish-divergence",
+              "path": "/PyIndicators/indicators/pattern-recognition/bearish-divergence",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/pattern-recognition/bullish-divergence",
+              "path": "/PyIndicators/indicators/pattern-recognition/bullish-divergence",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/pattern-recognition/detect-peaks",
+              "path": "/PyIndicators/indicators/pattern-recognition/detect-peaks",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/pattern-recognition/overview",
+              "path": "/PyIndicators/indicators/pattern-recognition/overview",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/accumulation-distribution-zones",
+              "path": "/PyIndicators/indicators/support-resistance/accumulation-distribution-zones",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/breaker-blocks",
+              "path": "/PyIndicators/indicators/support-resistance/breaker-blocks",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/buyside-sellside-liquidity",
+              "path": "/PyIndicators/indicators/support-resistance/buyside-sellside-liquidity",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/fair-value-gap",
+              "path": "/PyIndicators/indicators/support-resistance/fair-value-gap",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/fibonacci-retracement",
+              "path": "/PyIndicators/indicators/support-resistance/fibonacci-retracement",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/golden-zone",
+              "path": "/PyIndicators/indicators/support-resistance/golden-zone",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/golden-zone-signal",
+              "path": "/PyIndicators/indicators/support-resistance/golden-zone-signal",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/internal-external-liquidity-zones",
+              "path": "/PyIndicators/indicators/support-resistance/internal-external-liquidity-zones",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/liquidity-levels-voids",
+              "path": "/PyIndicators/indicators/support-resistance/liquidity-levels-voids",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/liquidity-pools",
+              "path": "/PyIndicators/indicators/support-resistance/liquidity-pools",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/liquidity-sweeps",
+              "path": "/PyIndicators/indicators/support-resistance/liquidity-sweeps",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/market-structure-break",
+              "path": "/PyIndicators/indicators/support-resistance/market-structure-break",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/market-structure-choch-bos",
+              "path": "/PyIndicators/indicators/support-resistance/market-structure-choch-bos",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/mitigation-blocks",
+              "path": "/PyIndicators/indicators/support-resistance/mitigation-blocks",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/opening-gap",
+              "path": "/PyIndicators/indicators/support-resistance/opening-gap",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/optimal-trade-entry",
+              "path": "/PyIndicators/indicators/support-resistance/optimal-trade-entry",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/order-blocks",
+              "path": "/PyIndicators/indicators/support-resistance/order-blocks",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/overview",
+              "path": "/PyIndicators/indicators/support-resistance/overview",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/premium-discount-zones",
+              "path": "/PyIndicators/indicators/support-resistance/premium-discount-zones",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/pure-price-action-liquidity-sweeps",
+              "path": "/PyIndicators/indicators/support-resistance/pure-price-action-liquidity-sweeps",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/range-intelligence",
+              "path": "/PyIndicators/indicators/support-resistance/range-intelligence",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/rejection-blocks",
+              "path": "/PyIndicators/indicators/support-resistance/rejection-blocks",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/strong-weak-high-low",
+              "path": "/PyIndicators/indicators/support-resistance/strong-weak-high-low",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/trendline-breakout-navigator",
+              "path": "/PyIndicators/indicators/support-resistance/trendline-breakout-navigator",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/volume-imbalance",
+              "path": "/PyIndicators/indicators/support-resistance/volume-imbalance",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/support-resistance/volumetric-supply-demand-zones",
+              "path": "/PyIndicators/indicators/support-resistance/volumetric-supply-demand-zones",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/ema",
+              "path": "/PyIndicators/indicators/trend/ema",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/ema-trend-ribbon",
+              "path": "/PyIndicators/indicators/trend/ema-trend-ribbon",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/overview",
+              "path": "/PyIndicators/indicators/trend/overview",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/pulse-mean-accelerator",
+              "path": "/PyIndicators/indicators/trend/pulse-mean-accelerator",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/sma",
+              "path": "/PyIndicators/indicators/trend/sma",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/supertrend",
+              "path": "/PyIndicators/indicators/trend/supertrend",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/supertrend-clustering",
+              "path": "/PyIndicators/indicators/trend/supertrend-clustering",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/volume-weighted-trend",
+              "path": "/PyIndicators/indicators/trend/volume-weighted-trend",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/wma",
+              "path": "/PyIndicators/indicators/trend/wma",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/trend/zero-lag-ema-envelope",
+              "path": "/PyIndicators/indicators/trend/zero-lag-ema-envelope",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/volatility/atr",
+              "path": "/PyIndicators/indicators/volatility/atr",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/volatility/bollinger-bands",
+              "path": "/PyIndicators/indicators/volatility/bollinger-bands",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/volatility/bollinger-overshoot",
+              "path": "/PyIndicators/indicators/volatility/bollinger-overshoot",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/volatility/moving-average-envelope",
+              "path": "/PyIndicators/indicators/volatility/moving-average-envelope",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/volatility/nadaraya-watson-envelope",
+              "path": "/PyIndicators/indicators/volatility/nadaraya-watson-envelope",
+              "sidebar": "docs"
+            },
+            {
+              "id": "indicators/volatility/overview",
+              "path": "/PyIndicators/indicators/volatility/overview",
+              "sidebar": "docs"
+            },
+            {
+              "id": "installation",
+              "path": "/PyIndicators/installation",
+              "sidebar": "docs"
+            },
+            {
+              "id": "introduction",
+              "path": "/PyIndicators/",
+              "sidebar": "docs"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "docs": {
+              "link": {
+                "path": "/PyIndicators/",
+                "label": "introduction"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

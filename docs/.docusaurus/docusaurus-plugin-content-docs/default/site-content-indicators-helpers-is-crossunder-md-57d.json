@@ -1,0 +1,37 @@
+{
+  "id": "indicators/helpers/is-crossunder",
+  "title": "Is Crossunder",
+  "description": "Minimum bars needed: 2 bars",
+  "source": "@site/content/indicators/helpers/is-crossunder.md",
+  "sourceDirName": "indicators/helpers",
+  "slug": "/indicators/helpers/is-crossunder",
+  "permalink": "/PyIndicators/indicators/helpers/is-crossunder",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/helpers/is-crossunder.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Is Crossunder",
+    "sidebar_position": 4,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Crossunder",
+    "permalink": "/PyIndicators/indicators/helpers/crossunder"
+  },
+  "next": {
+    "title": "Is Downtrend",
+    "permalink": "/PyIndicators/indicators/helpers/is-downtrend"
+  }
+}

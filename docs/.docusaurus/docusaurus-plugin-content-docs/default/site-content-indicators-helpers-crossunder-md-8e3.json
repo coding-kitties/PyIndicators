@@ -1,0 +1,37 @@
+{
+  "id": "indicators/helpers/crossunder",
+  "title": "Crossunder",
+  "description": "Minimum bars needed: 2 bars",
+  "source": "@site/content/indicators/helpers/crossunder.md",
+  "sourceDirName": "indicators/helpers",
+  "slug": "/indicators/helpers/crossunder",
+  "permalink": "/PyIndicators/indicators/helpers/crossunder",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/helpers/crossunder.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "real-time",
+      "permalink": "/PyIndicators/tags/real-time"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Crossunder",
+    "sidebar_position": 3,
+    "tags": [
+      "real-time"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Is Crossover",
+    "permalink": "/PyIndicators/indicators/helpers/is-crossover"
+  },
+  "next": {
+    "title": "Is Crossunder",
+    "permalink": "/PyIndicators/indicators/helpers/is-crossunder"
+  }
+}

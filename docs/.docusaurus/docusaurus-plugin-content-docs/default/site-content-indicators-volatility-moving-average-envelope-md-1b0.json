@@ -1,0 +1,37 @@
+{
+  "id": "indicators/volatility/moving-average-envelope",
+  "title": "Moving Average Envelope (MAE)",
+  "description": "Minimum bars needed: period bars",
+  "source": "@site/content/indicators/volatility/moving-average-envelope.md",
+  "sourceDirName": "indicators/volatility",
+  "slug": "/indicators/volatility/moving-average-envelope",
+  "permalink": "/PyIndicators/indicators/volatility/moving-average-envelope",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/volatility/moving-average-envelope.md",
+  "tags": [
+    {
+      "inline": true,
+      "label": "lagging",
+      "permalink": "/PyIndicators/tags/lagging"
+    }
+  ],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Moving Average Envelope (MAE)",
+    "sidebar_position": 4,
+    "tags": [
+      "lagging"
+    ]
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Average True Range (ATR)",
+    "permalink": "/PyIndicators/indicators/volatility/atr"
+  },
+  "next": {
+    "title": "Nadaraya-Watson Envelope (NWE)",
+    "permalink": "/PyIndicators/indicators/volatility/nadaraya-watson-envelope"
+  }
+}

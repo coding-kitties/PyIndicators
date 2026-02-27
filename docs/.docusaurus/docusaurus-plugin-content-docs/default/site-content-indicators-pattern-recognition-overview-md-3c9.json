@@ -1,0 +1,29 @@
+{
+  "id": "indicators/pattern-recognition/overview",
+  "title": "Pattern Recognition",
+  "description": "Pattern recognition indicators automatically detect recurring price structures such as peaks, troughs, and divergences. They are real-time but require a confirmation delay of several bars to validate each pattern. Use them for systematic scanning of setups that would be time-consuming to spot manually.",
+  "source": "@site/content/indicators/pattern-recognition/overview.md",
+  "sourceDirName": "indicators/pattern-recognition",
+  "slug": "/indicators/pattern-recognition/overview",
+  "permalink": "/PyIndicators/indicators/pattern-recognition/overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/CodingKitties/PyIndicators/tree/main/docs/content/indicators/pattern-recognition/overview.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0,
+  "frontMatter": {
+    "title": "Pattern Recognition",
+    "sidebar_label": "Overview",
+    "sidebar_position": 0
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Trendline Breakout Navigator",
+    "permalink": "/PyIndicators/indicators/support-resistance/trendline-breakout-navigator"
+  },
+  "next": {
+    "title": "Detect Peaks",
+    "permalink": "/PyIndicators/indicators/pattern-recognition/detect-peaks"
+  }
+}
