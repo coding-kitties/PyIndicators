@@ -123,6 +123,10 @@ INDICATOR_MAP = {
     "Premium / Discount Zones": (
         "indicators/support-resistance", "premium-discount-zones", 18
     ),
+    "Trendline Breakout Navigator": (
+        "indicators/support-resistance",
+        "trendline-breakout-navigator", 19
+    ),
     # ── Pattern Recognition ──
     "Detect Peaks": (
         "indicators/pattern-recognition", "detect-peaks", 1

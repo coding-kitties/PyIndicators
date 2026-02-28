@@ -154,6 +154,14 @@ Premium / Discount Zones
 
 </a>
 
+<a href="trendline-breakout-navigator" className="indicator-card">
+
+![Trendline Breakout Navigator](/img/indicators/trendline_breakout_navigator.png)
+
+Trendline Breakout Navigator
+
+</a>
+
 </div>
 
 ## Indicators at a glance
@@ -178,6 +186,7 @@ Premium / Discount Zones
 | [Liquidity Levels / Voids (VP)](liquidity-levels-voids) | 🟢 Real-time | `detection_length` bars | ≈ `detection_length` bars | Highlights volume-profile voids — price areas with little trading activity. Price tends to move quickly through voids. Use them to spot potential fast-move zones. |
 | [Internal & External Liquidity Zones](internal-external-liquidity-zones) | 🟢 Real-time | `2 × external_pivot_length + 1` bars | ≈ `external_pivot_length` bars | Distinguishes between internal (range-bound) and external (breakout) liquidity. Use it to understand whether price is targeting internal or external levels. |
 | [Premium / Discount Zones](premium-discount-zones) | 🟢 Real-time | `2 × swing_length + 1` bars | ≈ `swing_length` bars after the swing | Divides the current range into premium (upper) and discount (lower) zones. Buy in discount, sell in premium — the core SMC/ICT framework for directional bias. |
+| [Trendline Breakout Navigator](trendline-breakout-navigator) | 🔴 Lagging | `2 × swing_long + 1` bars | ≈ `swing_long` bars after the pivot | Multi-timeframe trendline detection. Constructs trendlines on HH/LL reversals at long, medium, and short swing lengths with a composite trend score (−3 to +3). |
 
 ## Detailed descriptions
 
@@ -325,3 +334,10 @@ Distinguishes between internal (range-bound) and external (breakout) liquidity. 
 
 Divides the current range into premium (upper) and discount (lower) zones. Buy in discount, sell in premium — the core SMC/ICT framework for directional bias.
 
+### [Trendline Breakout Navigator](trendline-breakout-navigator)
+
+> 🔴 **Lagging** — ≈ `swing_long` bars after the pivot
+>
+> **Warmup:** `2 × swing_long + 1` bars (default: 121 bars (swing_long=60))
+
+Multi-timeframe trendline detection ported from LuxAlgo PineScript. Constructs trendlines on HH/LL reversals at three swing lengths with a composite trend score (−3 to +3). Detects wick breaks and trend changes.
