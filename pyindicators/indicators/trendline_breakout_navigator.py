@@ -256,6 +256,16 @@ def _compute_single_timeframe(
                                     tl_slope_set = True
                                 else:
                                     tl_cur_slope = slope
+
+                                # Retroactively redraw trendline
+                                # from anchor (like PineScript
+                                # line.set_xy2)
+                                for b in range(tl_x1, bar + 1):
+                                    tl_value[b] = (
+                                        tl_y1 + tl_cur_slope
+                                        * (b - tl_x1)
+                                    )
+                                    tl_slope[b] = tl_cur_slope
                             else:
                                 # Close breaks trendline at swing
                                 tl_active = False
@@ -323,6 +333,16 @@ def _compute_single_timeframe(
                                     tl_slope_set = True
                                 else:
                                     tl_cur_slope = slope
+
+                                # Retroactively redraw trendline
+                                # from anchor (like PineScript
+                                # line.set_xy2)
+                                for b in range(tl_x1, bar + 1):
+                                    tl_value[b] = (
+                                        tl_y1 + tl_cur_slope
+                                        * (b - tl_x1)
+                                    )
+                                    tl_slope[b] = tl_cur_slope
                             else:
                                 tl_active = False
 
