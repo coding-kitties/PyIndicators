@@ -291,6 +291,8 @@ class TestChochBosSignal(unittest.TestCase):
         self.df = pd.DataFrame({
             'choch_bullish': [0, 1, 0, 0, 0],
             'choch_bearish': [0, 0, 0, 1, 0],
+            'choch_plus_bullish': [0, 0, 0, 0, 0],
+            'choch_plus_bearish': [0, 0, 0, 0, 0],
             'bos_bullish': [0, 0, 1, 0, 0],
             'bos_bearish': [1, 0, 0, 0, 0]
         })
