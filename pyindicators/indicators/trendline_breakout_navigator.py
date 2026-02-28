@@ -223,10 +223,11 @@ def _compute_single_timeframe(
                     # Check if bearish trendline gets updated
                     if tl_active and not np.isnan(v):
                         slope = (v - tl_cp_price) / max(x - tl_cp_idx, 1)
-                        # Line direction is down and wick breaks or first LH
+                        # Project current trendline to pivot index
+                        cur_proj = tl_y1 + tl_cur_slope * (x - tl_x1)
 
-                        if (v < tl_y1 + slope * (x - tl_x1) and
-                                (v > tl_y2 + slope * (bar - tl_x2) or
+                        if (v < cur_proj and
+                                (v > tl_y2 or
                                  not tl_slope_set)):
                             # Get trendline price at pivot bar
                             if tl_x2 != tl_x1:
@@ -296,9 +297,10 @@ def _compute_single_timeframe(
                     # Check if bullish trendline gets updated
                     if tl_active and not np.isnan(v):
                         slope = (v - tl_cp_price) / max(x - tl_cp_idx, 1)
-                        # Line direction is up and wick breaks or first HL
-                        if (v > tl_y1 + slope * (x - tl_x1) and
-                                (v < tl_y2 + slope * (bar - tl_x2) or
+                        # Project current trendline to pivot index
+                        cur_proj = tl_y1 + tl_cur_slope * (x - tl_x1)
+                        if (v > cur_proj and
+                                (v < tl_y2 or
                                  not tl_slope_set)):
                             # Get trendline price at pivot bar
                             if tl_x2 != tl_x1:
