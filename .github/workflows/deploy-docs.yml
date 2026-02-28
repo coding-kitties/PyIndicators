@@ -38,7 +38,7 @@ jobs:
           pip install --upgrade pip
           pip install poetry
           poetry install --no-interaction
-          pip install plotly kaleido
+          pip install plotly kaleido investing-algorithm-framework
 
       - name: Generate indicator charts
         run: python scripts/charts/generate_all.py --download

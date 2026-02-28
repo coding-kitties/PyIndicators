@@ -219,15 +219,23 @@ def _compute_single_timeframe(
                     tl_cp_price = prev_pl_price
                     tl_active = True
                     tl_slope_set = False
+
+                    # Initialize from anchor to current
+                    for b in range(
+                        max(0, tl_x1), bar + 1
+                    ):
+                        tl_value[b] = tl_y1
+                        tl_slope[b] = 0.0
+                        trend[b] = cur_trend
                 else:
                     # Check if bearish trendline gets updated
                     if tl_active and not np.isnan(v):
                         slope = (v - tl_cp_price) / max(x - tl_cp_idx, 1)
-                        # Line direction is down and wick breaks or first LH
+                        # Project current trendline to pivot index
+                        cur_proj = tl_y1 + tl_cur_slope * (x - tl_x1)
 
-
-                        if (v < tl_y1 + slope * (x - tl_x1) and
-                                (v > tl_y2 + slope * (bar - tl_x2) or
+                        if (v < cur_proj and
+                                (v > tl_y2 or
                                  not tl_slope_set)):
                             # Get trendline price at pivot bar
                             if tl_x2 != tl_x1:
@@ -256,6 +264,17 @@ def _compute_single_timeframe(
                                     tl_slope_set = True
                                 else:
                                     tl_cur_slope = slope
+
+                                # Retroactively redraw trendline
+                                # from anchor (like PineScript
+                                # line.set_xy2)
+                                for b in range(tl_x1, bar + 1):
+                                    tl_value[b] = (
+                                        tl_y1 + tl_cur_slope
+                                        * (b - tl_x1)
+                                    )
+                                    tl_slope[b] = tl_cur_slope
+                                    trend[b] = cur_trend
                             else:
                                 # Close breaks trendline at swing
                                 tl_active = False
@@ -293,13 +312,22 @@ def _compute_single_timeframe(
                     tl_cp_price = prev_ph_price
                     tl_active = True
                     tl_slope_set = False
+
+                    # Initialize from anchor to current
+                    for b in range(
+                        max(0, tl_x1), bar + 1
+                    ):
+                        tl_value[b] = tl_y1
+                        tl_slope[b] = 0.0
+                        trend[b] = cur_trend
                 else:
                     # Check if bullish trendline gets updated
                     if tl_active and not np.isnan(v):
                         slope = (v - tl_cp_price) / max(x - tl_cp_idx, 1)
-                        # Line direction is up and wick breaks or first HL
-                        if (v > tl_y1 + slope * (x - tl_x1) and
-                                (v < tl_y2 + slope * (bar - tl_x2) or
+                        # Project current trendline to pivot index
+                        cur_proj = tl_y1 + tl_cur_slope * (x - tl_x1)
+                        if (v > cur_proj and
+                                (v < tl_y2 or
                                  not tl_slope_set)):
                             # Get trendline price at pivot bar
                             if tl_x2 != tl_x1:
@@ -322,6 +350,17 @@ def _compute_single_timeframe(
                                     tl_slope_set = True
                                 else:
                                     tl_cur_slope = slope
+
+                                # Retroactively redraw trendline
+                                # from anchor (like PineScript
+                                # line.set_xy2)
+                                for b in range(tl_x1, bar + 1):
+                                    tl_value[b] = (
+                                        tl_y1 + tl_cur_slope
+                                        * (b - tl_x1)
+                                    )
+                                    tl_slope[b] = tl_cur_slope
+                                    trend[b] = cur_trend
                             else:
                                 tl_active = False
 
@@ -521,7 +560,7 @@ def trendline_breakout_navigator(
         DataFrame with added columns:
 
         - ``tbn_trend_long`` / ``tbn_trend_medium`` / ``tbn_trend_short``
-          — trend direction per timeframe: 1 bullish, −1 bearish, 0 undetermined
+          -- trend direction per TF: 1 bull, -1 bear, 0 undetermined
         - ``tbn_value_long`` / ``tbn_value_medium`` / ``tbn_value_short``
           — projected trendline price per timeframe (NaN when no active line)
         - ``tbn_slope_long`` / ``tbn_slope_medium`` / ``tbn_slope_short``

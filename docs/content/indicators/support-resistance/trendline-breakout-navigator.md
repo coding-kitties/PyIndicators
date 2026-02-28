@@ -133,3 +133,5 @@ print(stats)
 pd_df[["Close", "tbn_trend_long", "tbn_value_long", "tbn_composite_trend",
        "tbn_wick_bull", "tbn_wick_bear", "tbn_hh", "tbn_ll", "tbn_signal"]].tail(10)
 ```
+
+![TRENDLINE_BREAKOUT_NAVIGATOR](/img/indicators/trendline_breakout_navigator.png)

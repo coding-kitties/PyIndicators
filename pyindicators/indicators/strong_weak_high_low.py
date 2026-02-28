@@ -223,9 +223,15 @@ def get_strong_weak_high_low_stats(
     high_mask = data[sw_high_column] == 1
     low_mask = data[sw_low_column] == 1
 
-    strong_h = int((data.loc[high_mask, sw_high_type_column] == "Strong").sum()) if sh else 0
+    strong_h = int(
+        (data.loc[high_mask, sw_high_type_column]
+         == "Strong").sum()
+    ) if sh else 0
     weak_h = sh - strong_h
-    strong_l = int((data.loc[low_mask, sw_low_type_column] == "Strong").sum()) if sl else 0
+    strong_l = int(
+        (data.loc[low_mask, sw_low_type_column]
+         == "Strong").sum()
+    ) if sl else 0
     weak_l = sl - strong_l
 
     return {
@@ -345,8 +351,14 @@ def _compute_sw(
             last_sh_price = h[i]
 
             # Volume percentage
-            if not np.isnan(last_low_vol) and (last_high_vol + last_low_vol) > 0:
-                sh_vp[i] = round(last_high_vol / (last_high_vol + last_low_vol) * 100, 1)
+            if (
+                not np.isnan(last_low_vol)
+                and (last_high_vol + last_low_vol) > 0
+            ):
+                sh_vp[i] = round(
+                    last_high_vol
+                    / (last_high_vol + last_low_vol)
+                    * 100, 1)
 
         if piv_lows[i]:
             sl_flag[i] = 1
@@ -364,8 +376,14 @@ def _compute_sw(
             last_sl_price = low[i]
 
             # Volume percentage
-            if not np.isnan(last_high_vol) and (last_high_vol + last_low_vol) > 0:
-                sl_vp[i] = round(last_low_vol / (last_high_vol + last_low_vol) * 100, 1)
+            if (
+                not np.isnan(last_high_vol)
+                and (last_high_vol + last_low_vol) > 0
+            ):
+                sl_vp[i] = round(
+                    last_low_vol
+                    / (last_high_vol + last_low_vol)
+                    * 100, 1)
 
         # Equilibrium
         if not np.isnan(last_sh_price) and not np.isnan(last_sl_price):

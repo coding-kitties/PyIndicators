@@ -101,7 +101,8 @@ class _SDZone:
 #  Helper: pivot detection                                            #
 # ------------------------------------------------------------------ #
 def _pivot_high(high: np.ndarray, length: int) -> np.ndarray:
-    """Return array with pivot-high price at confirmation bar, NaN elsewhere."""
+    """Return array with pivot-high price at confirmation
+    bar, NaN elsewhere."""
     n = len(high)
     result = np.full(n, np.nan)
 
@@ -249,7 +250,11 @@ def _build_volume_profile(
 
     row_delta = row_buy - row_sell
     total_delta = float(np.sum(row_delta))
-    max_abs_delta = np.max(np.abs(row_delta)) if np.max(np.abs(row_delta)) > 0 else 1.0
+    max_abs_delta = (
+        np.max(np.abs(row_delta))
+        if np.max(np.abs(row_delta)) > 0
+        else 1.0
+    )
 
     # Build profile rows
     profile = []
@@ -482,8 +487,12 @@ def _volumetric_supply_demand_zones_pandas(
         if nearest_demand is not None and nearest_supply is not None:
             # Output whichever is closer to current price
             mid = (high[i] + low[i]) / 2
-            d_dist = abs(mid - (nearest_demand.zone_top + nearest_demand.zone_bottom) / 2)
-            s_dist = abs(mid - (nearest_supply.zone_top + nearest_supply.zone_bottom) / 2)
+            d_dist = abs(mid - (
+                nearest_demand.zone_top
+                + nearest_demand.zone_bottom) / 2)
+            s_dist = abs(mid - (
+                nearest_supply.zone_top
+                + nearest_supply.zone_bottom) / 2)
             primary = nearest_demand if d_dist <= s_dist else nearest_supply
         elif nearest_demand is not None:
             primary = nearest_demand
@@ -645,19 +654,30 @@ def _try_merge(
 
             for r in range(len(existing.profile)):
                 existing.profile[r].width_pct = (
-                    existing.profile[r].volume / max_vol if max_vol > 0 else 0.5
+                    existing.profile[r].volume
+                    / max_vol
+                    if max_vol > 0 else 0.5
                 )
                 existing.profile[r].is_poc = (r == poc_idx)
 
             # Merge delta rows
-            for r in range(min(len(existing.delta_profile), len(new_zone.delta_profile))):
-                existing.delta_profile[r].delta += new_zone.delta_profile[r].delta
+            for r in range(min(
+                len(existing.delta_profile),
+                len(new_zone.delta_profile),
+            )):
+                existing.delta_profile[r].delta += (
+                    new_zone.delta_profile[r].delta
+                )
                 existing.delta_profile[r].is_positive = (
                     existing.delta_profile[r].delta >= 0
                 )
 
             # Update POC
-            row_height = (existing.zone_top - existing.zone_bottom) / len(existing.profile)
+            row_height = (
+                (existing.zone_top
+                 - existing.zone_bottom)
+                / len(existing.profile)
+            )
             existing.poc_price = (
                 existing.zone_bottom + poc_idx * row_height + row_height / 2
             )
@@ -753,7 +773,8 @@ def volumetric_supply_demand_zones(
     """
     if mitigation_type not in ("Wick", "Close"):
         raise PyIndicatorException(
-            f"mitigation_type must be 'Wick' or 'Close', got '{mitigation_type}'"
+            "mitigation_type must be 'Wick' or "
+            f"'Close', got '{mitigation_type}'"
         )
 
     if isinstance(data, PdDataFrame):

@@ -291,6 +291,8 @@ class TestChochBosSignal(unittest.TestCase):
         self.df = pd.DataFrame({
             'choch_bullish': [0, 1, 0, 0, 0],
             'choch_bearish': [0, 0, 0, 1, 0],
+            'choch_plus_bullish': [0, 0, 0, 0, 0],
+            'choch_plus_bearish': [0, 0, 0, 0, 0],
             'bos_bullish': [0, 0, 1, 0, 0],
             'bos_bearish': [1, 0, 0, 0, 0]
         })
@@ -334,6 +336,8 @@ class TestGetChochBosStats(unittest.TestCase):
         self.df = pd.DataFrame({
             'choch_bullish': [0, 1, 0, 1, 0],
             'choch_bearish': [1, 0, 1, 0, 0],
+            'choch_plus_bullish': [0, 0, 0, 1, 0],
+            'choch_plus_bearish': [0, 1, 0, 0, 0],
             'bos_bullish': [0, 0, 1, 0, 1],
             'bos_bearish': [1, 0, 0, 1, 0]
         })
@@ -348,8 +352,10 @@ class TestGetChochBosStats(unittest.TestCase):
         result = get_choch_bos_stats(self.df)
         expected_keys = [
             'choch_bullish_count', 'choch_bearish_count',
+            'choch_plus_bullish_count',
+            'choch_plus_bearish_count',
             'bos_bullish_count', 'bos_bearish_count',
-            'total_choch', 'total_bos'
+            'total_choch', 'total_choch_plus', 'total_bos'
         ]
         for key in expected_keys:
             self.assertIn(key, result)
@@ -359,9 +365,12 @@ class TestGetChochBosStats(unittest.TestCase):
         result = get_choch_bos_stats(self.df)
         self.assertEqual(result['choch_bullish_count'], 2)
         self.assertEqual(result['choch_bearish_count'], 2)
+        self.assertEqual(result['choch_plus_bullish_count'], 1)
+        self.assertEqual(result['choch_plus_bearish_count'], 1)
         self.assertEqual(result['bos_bullish_count'], 2)
         self.assertEqual(result['bos_bearish_count'], 2)
         self.assertEqual(result['total_choch'], 4)
+        self.assertEqual(result['total_choch_plus'], 2)
         self.assertEqual(result['total_bos'], 4)
 
 
@@ -408,4 +417,3 @@ class TestPolarsSupport(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
