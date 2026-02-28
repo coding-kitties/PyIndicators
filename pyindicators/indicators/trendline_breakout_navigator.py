@@ -219,6 +219,14 @@ def _compute_single_timeframe(
                     tl_cp_price = prev_pl_price
                     tl_active = True
                     tl_slope_set = False
+
+                    # Initialize from anchor to current
+                    for b in range(
+                        max(0, tl_x1), bar + 1
+                    ):
+                        tl_value[b] = tl_y1
+                        tl_slope[b] = 0.0
+                        trend[b] = cur_trend
                 else:
                     # Check if bearish trendline gets updated
                     if tl_active and not np.isnan(v):
@@ -266,6 +274,7 @@ def _compute_single_timeframe(
                                         * (b - tl_x1)
                                     )
                                     tl_slope[b] = tl_cur_slope
+                                    trend[b] = cur_trend
                             else:
                                 # Close breaks trendline at swing
                                 tl_active = False
@@ -303,6 +312,14 @@ def _compute_single_timeframe(
                     tl_cp_price = prev_ph_price
                     tl_active = True
                     tl_slope_set = False
+
+                    # Initialize from anchor to current
+                    for b in range(
+                        max(0, tl_x1), bar + 1
+                    ):
+                        tl_value[b] = tl_y1
+                        tl_slope[b] = 0.0
+                        trend[b] = cur_trend
                 else:
                     # Check if bullish trendline gets updated
                     if tl_active and not np.isnan(v):
@@ -343,6 +360,7 @@ def _compute_single_timeframe(
                                         * (b - tl_x1)
                                     )
                                     tl_slope[b] = tl_cur_slope
+                                    trend[b] = cur_trend
                             else:
                                 tl_active = False
 
