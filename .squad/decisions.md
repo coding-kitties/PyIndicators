@@ -45,3 +45,11 @@
 **Issue:** #3
 **What:** Created `analysis/indicators/trendline_breakout_navigator.ipynb` following Carlos's spec. PNG output to both `static/images/indicators/` and `docs/static/img/indicators/`. Used `git add -f` for gitignored analysis directory. Composite trend Y-axis hardcoded `[-3.5, 3.5]`.
 **Why:** Implements the chart plan. Dual PNG output lets Doc Vader reference the docs copy directly without extra steps.
+
+---
+
+### 2026-02-28T12:00:00Z: TBN Chart Dark Theme Overhaul
+**By:** DevMeister3000 (Core Dev)
+**Issue:** #3
+**What:** Switched TBN analysis notebook chart from light theme to professional dark theme (#131722 background). Updated all colors, opacities, markers, grid lines, and fonts for dark-background readability. Chart dimensions increased to 1000×1400px.
+**Why:** Existing light-themed chart was flagged as wrong/ugly. Dark themes are standard in financial charting tools and provide better contrast for overlaid trendlines and markers. Establishes precedent: future indicator analysis notebooks should use this dark theme palette for visual consistency.
