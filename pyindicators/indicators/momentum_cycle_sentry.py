@@ -387,11 +387,17 @@ def get_momentum_cycle_sentry_stats(
         "bullish_pct": round(bull / total * 100, 1) if total > 0 else 0.0,
         "bearish_pct": round(bear / total * 100, 1) if total > 0 else 0.0,
         "retracing_bars": retrace_count,
-        "retracing_pct": round(retrace_count / total * 100, 1) if total > 0 else 0.0,
+        "retracing_pct": (
+            round(retrace_count / total * 100, 1)
+            if total > 0 else 0.0
+        ),
         "overbought_bars": ob_bars,
         "oversold_bars": os_bars,
         "max_momentum": round(float(p1.max()), 4) if len(p1) > 0 else 0.0,
         "min_momentum": round(float(p1.min()), 4) if len(p1) > 0 else 0.0,
-        "avg_momentum": round(float(p1.abs().mean()), 4) if len(p1) > 0 else 0.0,
+        "avg_momentum": (
+            round(float(p1.abs().mean()), 4)
+            if len(p1) > 0 else 0.0
+        ),
         "zero_crossings": crossings,
     }

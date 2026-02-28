@@ -160,10 +160,12 @@ def _build_volume_profile(
         bar_vol = volume[i] if not np.isnan(volume[i]) else 1.0
         is_bull = close[i] >= opn[i]
 
-        min_bin = max(0, min(vp_rows - 1,
-                             int(np.floor((bar_low - range_low) / bin_height))))
-        max_bin = max(0, min(vp_rows - 1,
-                             int(np.floor((bar_high - range_low) / bin_height))))
+        min_bin = max(0, min(vp_rows - 1, int(
+            np.floor((bar_low - range_low)
+                     / bin_height))))
+        max_bin = max(0, min(vp_rows - 1, int(
+            np.floor((bar_high - range_low)
+                     / bin_height))))
         bins_covered = max_bin - min_bin + 1
         vol_share = bar_vol / bins_covered if bins_covered > 0 else 0.0
 
@@ -315,15 +317,22 @@ def _range_intelligence_pandas(
             buy_bins[:] = 0.0
             sell_bins[:] = 0.0
             net_delta_acc = 0.0
-            bin_height = (r_high - r_low) / vp_rows if r_high > r_low else 1e-10
+            bin_height = (
+                (r_high - r_low) / vp_rows
+                if r_high > r_low else 1e-10
+            )
 
             for j in range(r_start, i + 1):
                 bar_vol = vol[j] if not np.isnan(vol[j]) else 1.0
                 is_bull = close[j] >= opn[j]
-                min_bin = max(0, min(vp_rows - 1,
-                                     int(np.floor((low[j] - r_low) / bin_height))))
-                max_bin = max(0, min(vp_rows - 1,
-                                     int(np.floor((high[j] - r_low) / bin_height))))
+                min_bin = max(
+                    0, min(vp_rows - 1, int(
+                        np.floor((low[j] - r_low)
+                                 / bin_height))))
+                max_bin = max(
+                    0, min(vp_rows - 1, int(
+                        np.floor((high[j] - r_low)
+                                 / bin_height))))
                 bc = max_bin - min_bin + 1
                 vs = bar_vol / bc if bc > 0 else 0.0
                 for b in range(min_bin, max_bin + 1):
@@ -347,15 +356,20 @@ def _range_intelligence_pandas(
 
         # ── Update active range ──────────────────────────────────
         if range_active:
-            bin_height = (r_high - r_low) / vp_rows if r_high > r_low else 1e-10
+            bin_height = (
+                (r_high - r_low) / vp_rows
+                if r_high > r_low else 1e-10
+            )
 
             # Accumulate current bar volume
             bar_vol = vol[i] if not np.isnan(vol[i]) else 1.0
             is_bull = close[i] >= opn[i]
             min_bin = max(0, min(vp_rows - 1,
                                  int(np.floor((low[i] - r_low) / bin_height))))
-            max_bin = max(0, min(vp_rows - 1,
-                                 int(np.floor((high[i] - r_low) / bin_height))))
+            max_bin = max(
+                0, min(vp_rows - 1, int(
+                    np.floor((high[i] - r_low)
+                             / bin_height))))
             bc = max_bin - min_bin + 1
             vs = bar_vol / bc if bc > 0 else 0.0
             for b in range(min_bin, max_bin + 1):
@@ -386,7 +400,11 @@ def _range_intelligence_pandas(
                             (duration / length) * 50.0
                             + (abs(net_delta_acc) / recent_vol) * 50.0)
 
-            state_str = "Accumulation" if net_delta_acc >= 0 else "Distribution"
+            state_str = (
+                "Accumulation"
+                if net_delta_acc >= 0
+                else "Distribution"
+            )
 
             # Write row output
             out_active[i] = 1

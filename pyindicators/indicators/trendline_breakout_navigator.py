@@ -225,7 +225,6 @@ def _compute_single_timeframe(
                         slope = (v - tl_cp_price) / max(x - tl_cp_idx, 1)
                         # Line direction is down and wick breaks or first LH
 
-
                         if (v < tl_y1 + slope * (x - tl_x1) and
                                 (v > tl_y2 + slope * (bar - tl_x2) or
                                  not tl_slope_set)):
@@ -521,7 +520,7 @@ def trendline_breakout_navigator(
         DataFrame with added columns:
 
         - ``tbn_trend_long`` / ``tbn_trend_medium`` / ``tbn_trend_short``
-          — trend direction per timeframe: 1 bullish, −1 bearish, 0 undetermined
+          -- trend direction per TF: 1 bull, -1 bear, 0 undetermined
         - ``tbn_value_long`` / ``tbn_value_medium`` / ``tbn_value_short``
           — projected trendline price per timeframe (NaN when no active line)
         - ``tbn_slope_long`` / ``tbn_slope_medium`` / ``tbn_slope_short``

@@ -26,7 +26,8 @@ Output columns:
     zspz_sup_band_low     - Support band low (price space, VWMA smoothed)
     zspz_rsi_ma           - EMA of RSI (for gradient coloring)
     zspz_long_signal      - 1 when price first enters support band, 0 otherwise
-    zspz_short_signal     - 1 when price first enters resistance band, 0 otherwise
+    zspz_short_signal     - 1 when price first enters
+                            resistance band, 0 otherwise
     zspz_signal           - +1 for long, -1 for short, 0 otherwise
 """
 from typing import Union, Dict
