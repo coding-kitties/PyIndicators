@@ -1,0 +1,114 @@
+name: "🔴 Failing Pipeline"
+description: "Report a failing CI pipeline, broken tests, or build issue"
+title: "[Pipeline] "
+labels: ["squad", "bug", "ci"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Failing Pipeline Report
+        Use this template to report a failing CI pipeline, broken test, or build issue.
+        **Include the error output** so the team can reproduce and fix the issue quickly.
+
+  - type: dropdown
+    id: pipeline-type
+    attributes:
+      label: What's failing?
+      options:
+        - Unit tests
+        - Lint / flake8
+        - Type checking
+        - Documentation build (Docusaurus)
+        - Package build (pyproject.toml)
+        - GitHub Actions workflow
+        - Local development setup
+    validations:
+      required: true
+
+  - type: input
+    id: branch
+    attributes:
+      label: Branch
+      description: "Which branch is failing?"
+      placeholder: "e.g., main, squad/42-fix-auth"
+    validations:
+      required: false
+
+  - type: input
+    id: run-link
+    attributes:
+      label: GitHub Actions Run Link
+      description: "Link to the failing GitHub Actions run (if applicable)"
+      placeholder: "https://github.com/CodingKitties/PyIndicators/actions/runs/..."
+    validations:
+      required: false
+
+  - type: textarea
+    id: error-output
+    attributes:
+      label: Error Output
+      description: |
+        Paste the relevant error output, stack trace, or failing test names.
+        Use a code block for readability.
+      placeholder: |
+        ```
+        FAIL: test_something (tests.indicators.test_example.TestExample)
+        AssertionError: expected X but got Y
+        ...
+        ```
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: "How can someone reproduce this failure locally?"
+      placeholder: |
+        1. Checkout branch `main`
+        2. Run `.venv/bin/python -m unittest discover -s tests`
+        3. See failure in test_example.py
+    validations:
+      required: false
+
+  - type: textarea
+    id: recent-changes
+    attributes:
+      label: Recent Changes
+      description: "What changed recently that might have caused this? (PR, dependency update, new indicator, etc.)"
+      placeholder: "e.g., Merged PR #15 which added the new SuperTrend indicator"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: "How critical is this?"
+      options:
+        - "🔴 Blocking — main branch is broken, no PRs can merge"
+        - "🟡 High — specific tests/features failing but main works"
+        - "🟢 Low — cosmetic warnings or flaky tests"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: "What needs to be delivered?"
+      options:
+        - label: "Fix the failing test(s)"
+        - label: "Fix the build/lint issue"
+        - label: "Add missing test coverage to prevent regression"
+        - label: "Update CI workflow configuration"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: "Anything else? Environment details, Python version, OS, etc."
+      placeholder: "Optional additional context..."
+    validations:
+      required: false
