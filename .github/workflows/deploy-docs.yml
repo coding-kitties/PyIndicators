@@ -48,12 +48,6 @@ jobs:
       - name: Generate doc pages
         run: python scripts/generate_docs.py
 
-      # ── Copy images to Docusaurus static dir ──
-      - name: Copy indicator images to docs
-        run: |
-          mkdir -p docs/static/img/indicators
-          cp static/images/indicators/*.png docs/static/img/indicators/
-
       # ── Node: build Docusaurus ──
       - name: Set up Node.js
         uses: actions/setup-node@v4
