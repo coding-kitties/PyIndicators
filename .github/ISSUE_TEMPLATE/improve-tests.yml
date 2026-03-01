@@ -1,0 +1,97 @@
+name: "🧪 Improve Tests"
+description: "Request new or improved test coverage for an indicator or feature"
+title: "[Tests] "
+labels: ["squad", "testing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Test Improvement
+        Use this template to request new or improved test coverage.
+
+  - type: input
+    id: indicator-name
+    attributes:
+      label: Indicator / Feature Name
+      description: "Which indicator or feature needs test work?"
+      placeholder: "e.g., SuperTrend, liquidity_sweeps, date_range"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test-type
+    attributes:
+      label: What needs to happen?
+      options:
+        - Add missing test file (indicator has no tests at all)
+        - Add edge case tests (empty data, single row, NaN handling)
+        - Add signal function tests
+        - Add stats function tests
+        - Add polars DataFrame tests
+        - Fix flaky or broken tests
+        - Improve test assertions (too weak / not checking output values)
+    validations:
+      required: true
+
+  - type: input
+    id: current-test-file
+    attributes:
+      label: Current Test File (if exists)
+      description: "Path to the existing test file, or leave blank if none exists"
+      placeholder: "e.g., tests/indicators/test_supertrend.py"
+    validations:
+      required: false
+
+  - type: textarea
+    id: whats-missing
+    attributes:
+      label: What's Missing or Broken?
+      description: |
+        Describe what tests are missing or what's wrong with existing tests.
+      placeholder: |
+        - No test file exists for this indicator
+        - Missing tests for the signal function
+        - No edge case tests for empty DataFrame input
+        - Tests don't verify output column values, only that columns exist
+        - ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: test-scenarios
+    attributes:
+      label: Specific Test Scenarios
+      description: "List specific scenarios that should be tested."
+      placeholder: |
+        - Test with default parameters on BTC/EUR 4h data
+        - Test with custom parameters (e.g., period=50)
+        - Test empty DataFrame raises appropriate error
+        - Test single-row DataFrame
+        - Test with NaN values in input
+        - Test polars DataFrame input returns polars DataFrame
+        - Test output column names are correct
+        - Test signal values are only -1, 0, or 1
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: "What needs to be delivered?"
+      options:
+        - label: "New test file following project unittest pattern"
+        - label: "Edge case tests (empty, NaN, single row)"
+        - label: "Signal function tests"
+        - label: "Stats function tests"
+        - label: "Polars DataFrame compatibility tests"
+        - label: "All tests passing locally"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: "Anything else? Known bugs, related indicators, reference implementations."
+      placeholder: "Optional additional context..."
+    validations:
+      required: false

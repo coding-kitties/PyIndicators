@@ -1,0 +1,91 @@
+name: "📖 Improve Documentation"
+description: "Request new or improved documentation for an indicator or feature"
+title: "[Docs] "
+labels: ["squad", "docs"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Documentation Improvement
+        Use this template to request new or improved documentation.
+
+  - type: input
+    id: indicator-name
+    attributes:
+      label: Indicator / Feature Name
+      description: "Which indicator or feature needs documentation work?"
+      placeholder: "e.g., SuperTrend, RSI, installation guide"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: docs-type
+    attributes:
+      label: What needs to happen?
+      options:
+        - Add missing documentation page (indicator has no docs)
+        - Improve existing documentation (unclear, incomplete, outdated)
+        - Add usage examples or code snippets
+        - Fix incorrect documentation
+        - Add API reference details (parameters, return values)
+        - Add to sidebar / navigation
+    validations:
+      required: true
+
+  - type: input
+    id: current-page
+    attributes:
+      label: Current Docs Page (if exists)
+      description: "Path to the existing docs page, or leave blank if none exists"
+      placeholder: "e.g., docs/content/indicators/trend/supertrend.md"
+    validations:
+      required: false
+
+  - type: textarea
+    id: whats-wrong
+    attributes:
+      label: What's Missing or Wrong?
+      description: |
+        Describe what's missing, unclear, or incorrect in the current documentation.
+      placeholder: |
+        - The parameter table is missing the `atr_multiplier` parameter
+        - No example showing how to use with polars DataFrames
+        - The return columns section doesn't list all output columns
+        - ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-content
+    attributes:
+      label: Expected Content
+      description: "What should the documentation include? Be specific."
+      placeholder: |
+        - Full parameter table with types and defaults
+        - Working code example using pandas
+        - Description of all output columns
+        - Warmup window information
+        - Chart showing the indicator in action
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: "What needs to be delivered?"
+      options:
+        - label: "New or updated Docusaurus documentation page"
+        - label: "Add indicator to sidebar navigation"
+        - label: "Add or update README section"
+        - label: "Add chart image to docs page"
+        - label: "Add code examples"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: "Anything else? Links to reference material, related indicators, etc."
+      placeholder: "Optional additional context..."
+    validations:
+      required: false
