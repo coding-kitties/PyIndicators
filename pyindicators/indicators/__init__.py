@@ -86,6 +86,7 @@ from .premium_discount_zones import (
 from .internal_external_liquidity_zones import (
     internal_external_liquidity_zones,
     internal_external_liquidity_zones_signal,
+    internal_external_liquidity_zones_signal_live,
     get_internal_external_liquidity_zones_stats
 )
 from .volume_weighted_trend import (
@@ -247,6 +248,7 @@ __all__ = [
     'get_premium_discount_zones_stats',
     'internal_external_liquidity_zones',
     'internal_external_liquidity_zones_signal',
+    'internal_external_liquidity_zones_signal_live',
     'get_internal_external_liquidity_zones_stats',
     'volume_weighted_trend',
     'volume_weighted_trend_signal',

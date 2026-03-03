@@ -327,6 +327,302 @@ def internal_external_liquidity_zones_signal(
         )
 
 
+def internal_external_liquidity_zones_signal_live(
+    data: Union[PdDataFrame, PlDataFrame],
+    internal_pivot_length: int = 3,
+    external_pivot_length: int = 10,
+    atr_length: int = 14,
+    zone_size_atr: float = 0.40,
+    high_column: str = "High",
+    low_column: str = "Low",
+    ext_high_column: str = "ielz_ext_high",
+    ext_low_column: str = "ielz_ext_low",
+    ext_high_price_column: str = "ielz_ext_high_price",
+    ext_low_price_column: str = "ielz_ext_low_price",
+    int_high_column: str = "ielz_int_high",
+    int_low_column: str = "ielz_int_low",
+    int_high_price_column: str = "ielz_int_high_price",
+    int_low_price_column: str = "ielz_int_low_price",
+    ext_sweep_bull_column: str = "ielz_live_ext_sweep_bull",
+    ext_sweep_bear_column: str = "ielz_live_ext_sweep_bear",
+    int_sweep_bull_column: str = "ielz_live_int_sweep_bull",
+    int_sweep_bear_column: str = "ielz_live_int_sweep_bear",
+    signal_column: str = "ielz_live_signal",
+) -> Union[PdDataFrame, PlDataFrame]:
+    """
+    Generate trading signals from IELZ zones **without lookahead bias**.
+
+    Unlike :func:`internal_external_liquidity_zones_signal`, this
+    function delays zone activation by the pivot confirmation window.
+    Pivots are only confirmed ``pivot_length`` bars after the pivot
+    bar, so zones cannot trigger sweeps until they are confirmed.
+
+    This makes the signals suitable for **live trading** and
+    **realistic backtesting**.
+
+    Args:
+        data: DataFrame with IELZ columns (output of
+            :func:`internal_external_liquidity_zones`).
+        internal_pivot_length: The internal pivot length used in the
+            original calculation (must match). Zones are delayed by
+            this many bars.
+        external_pivot_length: The external pivot length used in the
+            original calculation (must match). External zones are
+            delayed by this many bars.
+        atr_length: ATR period used for zone sizing
+            (default: 14).
+        zone_size_atr: Half-height of zones as ATR fraction
+            (default: 0.40). Must match original calculation.
+        high_column: Column name for highs.
+        low_column: Column name for lows.
+        ext_high_column: Column with external high zone flags.
+        ext_low_column: Column with external low zone flags.
+        ext_high_price_column: Column with external high prices.
+        ext_low_price_column: Column with external low prices.
+        int_high_column: Column with internal high zone flags.
+        int_low_column: Column with internal low zone flags.
+        int_high_price_column: Column with internal high prices.
+        int_low_price_column: Column with internal low prices.
+        ext_sweep_bull_column: Output column for live external
+            bullish sweeps.
+        ext_sweep_bear_column: Output column for live external
+            bearish sweeps.
+        int_sweep_bull_column: Output column for live internal
+            bullish sweeps.
+        int_sweep_bear_column: Output column for live internal
+            bearish sweeps.
+        signal_column: Output column for combined signal.
+
+    Returns:
+        DataFrame with live sweep columns and combined signal:
+
+        - ``{ext_sweep_bull_column}`` - 1 on external low zone sweep
+        - ``{ext_sweep_bear_column}`` - 1 on external high zone sweep
+        - ``{int_sweep_bull_column}`` - 1 on internal low zone sweep
+        - ``{int_sweep_bear_column}`` - 1 on internal high zone sweep
+        - ``{signal_column}`` - 1 (bullish), -1 (bearish), or 0
+
+    Example:
+        >>> df = internal_external_liquidity_zones(df, ...)
+        >>> df = internal_external_liquidity_zones_signal_live(
+        ...     df,
+        ...     internal_pivot_length=3,
+        ...     external_pivot_length=10,
+        ... )
+        >>> # Use ielz_live_signal for trading
+    """
+    if isinstance(data, PlDataFrame):
+        import polars as pl
+
+        pd_data = data.to_pandas()
+        result = _ielz_signal_live_pandas(
+            pd_data,
+            internal_pivot_length=internal_pivot_length,
+            external_pivot_length=external_pivot_length,
+            atr_length=atr_length,
+            zone_size_atr=zone_size_atr,
+            high_column=high_column,
+            low_column=low_column,
+            ext_high_column=ext_high_column,
+            ext_low_column=ext_low_column,
+            ext_high_price_column=ext_high_price_column,
+            ext_low_price_column=ext_low_price_column,
+            int_high_column=int_high_column,
+            int_low_column=int_low_column,
+            int_high_price_column=int_high_price_column,
+            int_low_price_column=int_low_price_column,
+            ext_sweep_bull_column=ext_sweep_bull_column,
+            ext_sweep_bear_column=ext_sweep_bear_column,
+            int_sweep_bull_column=int_sweep_bull_column,
+            int_sweep_bear_column=int_sweep_bear_column,
+            signal_column=signal_column,
+        )
+        return pl.from_pandas(result)
+    elif isinstance(data, PdDataFrame):
+        return _ielz_signal_live_pandas(
+            data,
+            internal_pivot_length=internal_pivot_length,
+            external_pivot_length=external_pivot_length,
+            atr_length=atr_length,
+            zone_size_atr=zone_size_atr,
+            high_column=high_column,
+            low_column=low_column,
+            ext_high_column=ext_high_column,
+            ext_low_column=ext_low_column,
+            ext_high_price_column=ext_high_price_column,
+            ext_low_price_column=ext_low_price_column,
+            int_high_column=int_high_column,
+            int_low_column=int_low_column,
+            int_high_price_column=int_high_price_column,
+            int_low_price_column=int_low_price_column,
+            ext_sweep_bull_column=ext_sweep_bull_column,
+            ext_sweep_bear_column=ext_sweep_bear_column,
+            int_sweep_bull_column=int_sweep_bull_column,
+            int_sweep_bear_column=int_sweep_bear_column,
+            signal_column=signal_column,
+        )
+    else:
+        raise PyIndicatorException(
+            "Input data must be a pandas or polars DataFrame."
+        )
+
+
+def _ielz_signal_live_pandas(
+    data: PdDataFrame,
+    *,
+    internal_pivot_length: int,
+    external_pivot_length: int,
+    atr_length: int,
+    zone_size_atr: float,
+    high_column: str,
+    low_column: str,
+    ext_high_column: str,
+    ext_low_column: str,
+    ext_high_price_column: str,
+    ext_low_price_column: str,
+    int_high_column: str,
+    int_low_column: str,
+    int_high_price_column: str,
+    int_low_price_column: str,
+    ext_sweep_bull_column: str,
+    ext_sweep_bear_column: str,
+    int_sweep_bull_column: str,
+    int_sweep_bear_column: str,
+    signal_column: str,
+) -> PdDataFrame:
+    """Core pandas implementation for live signal generation."""
+    data = data.copy()
+    n = len(data)
+
+    high_arr = data[high_column].values.astype(float)
+    low_arr = data[low_column].values.astype(float)
+
+    # Compute ATR for zone sizing
+    close_arr = data["Close"].values.astype(float)
+    atr_arr = _compute_atr(high_arr, low_arr, close_arr, atr_length)
+
+    # Zone detection columns (these have lookahead in their detection)
+    ext_high_flags = data[ext_high_column].values
+    ext_low_flags = data[ext_low_column].values
+    ext_high_prices = data[ext_high_price_column].values
+    ext_low_prices = data[ext_low_price_column].values
+
+    int_high_flags = data[int_high_column].values
+    int_low_flags = data[int_low_column].values
+    int_high_prices = data[int_high_price_column].values
+    int_low_prices = data[int_low_price_column].values
+
+    # Output arrays
+    out_ext_sweep_bull = np.zeros(n, dtype=int)
+    out_ext_sweep_bear = np.zeros(n, dtype=int)
+    out_int_sweep_bull = np.zeros(n, dtype=int)
+    out_int_sweep_bear = np.zeros(n, dtype=int)
+
+    # Pending zones: detected but not yet confirmed
+    pending_zones: List[dict] = []
+    # Active zones: confirmed and ready for sweep detection
+    active_zones: List[dict] = []
+
+    for i in range(n):
+        cur_atr = atr_arr[i] if not np.isnan(atr_arr[i]) else 0.0
+        half_zone = cur_atr * zone_size_atr * 0.5
+
+        # ── Detect new zones and add to pending ──────────────────
+        zone_defs = [
+            (ext_high_flags, ext_high_prices,
+             external_pivot_length, True, True),
+            (ext_low_flags, ext_low_prices,
+             external_pivot_length, False, True),
+            (int_high_flags, int_high_prices,
+             internal_pivot_length, True, False),
+            (int_low_flags, int_low_prices,
+             internal_pivot_length, False, False),
+        ]
+
+        for flags, prices, delay, is_high, is_external in zone_defs:
+            if flags[i] == 1:
+                price = prices[i]
+                if not np.isnan(price):
+                    # Zone detected at bar i, confirmed at bar i + delay
+                    pending_zones.append({
+                        "detected": i,
+                        "confirmed": i + delay,
+                        "price": price,
+                        "top": price + half_zone,
+                        "bottom": price - half_zone,
+                        "is_high": is_high,
+                        "is_external": is_external,
+                        "state": 0,  # 0 = active, 1 = swept
+                    })
+
+        # ── Move confirmed zones to active ───────────────────────
+        newly_confirmed = [z for z in pending_zones if z["confirmed"] <= i]
+        active_zones.extend(newly_confirmed)
+        pending_zones = [z for z in pending_zones if z["confirmed"] > i]
+
+        # ── Check for sweeps on active zones ─────────────────────
+        h_i = high_arr[i]
+        lo_i = low_arr[i]
+
+        for zone in active_zones:
+            if zone["state"] != 0:
+                continue
+
+            swept = False
+            if zone["is_high"]:
+                # High zone: swept when price wicks into zone from below
+                if h_i >= zone["bottom"]:
+                    swept = True
+            else:
+                # Low zone: swept when price wicks into zone from above
+                if lo_i <= zone["top"]:
+                    swept = True
+
+            if swept:
+                zone["state"] = 1
+                if zone["is_external"]:
+                    if zone["is_high"]:
+                        out_ext_sweep_bear[i] = 1
+                    else:
+                        out_ext_sweep_bull[i] = 1
+                else:
+                    if zone["is_high"]:
+                        out_int_sweep_bear[i] = 1
+                    else:
+                        out_int_sweep_bull[i] = 1
+
+        # ── Remove swept zones to keep list manageable ───────────
+        active_zones = [z for z in active_zones if z["state"] == 0]
+
+    # ── Build combined signal ────────────────────────────────────
+    signal = np.where(
+        out_ext_sweep_bull == 1,
+        1,
+        np.where(
+            out_ext_sweep_bear == 1,
+            -1,
+            np.where(
+                out_int_sweep_bull == 1,
+                1,
+                np.where(
+                    out_int_sweep_bear == 1,
+                    -1,
+                    0,
+                ),
+            ),
+        ),
+    )
+
+    # ── Write output columns ─────────────────────────────────────
+    data[ext_sweep_bull_column] = out_ext_sweep_bull
+    data[ext_sweep_bear_column] = out_ext_sweep_bear
+    data[int_sweep_bull_column] = out_int_sweep_bull
+    data[int_sweep_bear_column] = out_int_sweep_bear
+    data[signal_column] = signal
+
+    return data
+
+
 def get_internal_external_liquidity_zones_stats(
     data: Union[PdDataFrame, PlDataFrame],
     ext_high_column: str = "ielz_ext_high",

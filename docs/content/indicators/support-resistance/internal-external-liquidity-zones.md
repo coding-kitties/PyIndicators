@@ -122,6 +122,46 @@ print(f"Internal sweeps: {stats['total_int_sweeps']}")
 print(f"Bullish sweep ratio: {stats['bullish_sweep_ratio']}")
 ```
 
+## Live Trading Signals (No Lookahead)
+
+:::warning[Lookahead Bias]
+The standard `internal_external_liquidity_zones_signal()` function signals sweeps at the **pivot bar**, but pivots are only confirmed after `pivot_length` bars into the future. This creates **lookahead bias** that inflates backtest results.
+:::
+
+For **live trading** and **realistic backtesting**, use `internal_external_liquidity_zones_signal_live()` instead. This function delays zone activation until pivots are confirmed:
+
+- **External zones**: delayed by `external_pivot_length` bars (default: 10)
+- **Internal zones**: delayed by `internal_pivot_length` bars (default: 3)
+
+```python
+from pyindicators import (
+    internal_external_liquidity_zones,
+    internal_external_liquidity_zones_signal_live,
+)
+
+# First compute standard IELZ zones
+df = internal_external_liquidity_zones(
+    df,
+    internal_pivot_length=3,
+    external_pivot_length=10,
+)
+
+# Then compute live signals (no lookahead)
+df = internal_external_liquidity_zones_signal_live(
+    df,
+    internal_pivot_length=3,   # Must match original!
+    external_pivot_length=10,  # Must match original!
+)
+
+# Use the live signal for trading
+live_signals = df[df['ielz_live_signal'] != 0]
+```
+
+The live signal function returns:
+- `ielz_live_ext_sweep_bull` / `ielz_live_ext_sweep_bear`: External zone sweeps (no lookahead)
+- `ielz_live_int_sweep_bull` / `ielz_live_int_sweep_bear`: Internal zone sweeps (no lookahead)
+- `ielz_live_signal`: Combined signal (1 = bullish, -1 = bearish, 0 = none)
+
 The function returns:
 - `ielz_ext_high` / `ielz_ext_low`: 1 on bars where an external high/low zone is created
 - `ielz_ext_high_price` / `ielz_ext_low_price`: Price level of the external pivot (NaN otherwise)
