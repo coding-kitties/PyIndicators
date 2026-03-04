@@ -132,7 +132,7 @@ from .opening_gap import (
 )
 from .strong_weak_high_low import (
     strong_weak_high_low, strong_weak_high_low_signal,
-    get_strong_weak_high_low_stats
+    strong_weak_high_low_signal_live, get_strong_weak_high_low_stats
 )
 from .range_intelligence import (
     range_intelligence, range_intelligence_signal,
@@ -282,6 +282,7 @@ __all__ = [
     'get_opening_gap_stats',
     'strong_weak_high_low',
     'strong_weak_high_low_signal',
+    'strong_weak_high_low_signal_live',
     'get_strong_weak_high_low_stats',
     'range_intelligence',
     'range_intelligence_signal',

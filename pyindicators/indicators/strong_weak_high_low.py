@@ -189,6 +189,86 @@ def strong_weak_high_low_signal(
     )
 
 
+def strong_weak_high_low_signal_live(
+    data: Union[PdDataFrame, PlDataFrame],
+    swing_lookback: int = 50,
+    sw_high_column: str = "sw_high",
+    sw_low_column: str = "sw_low",
+    sw_high_type_column: str = "sw_high_type",
+    sw_low_type_column: str = "sw_low_type",
+    live_signal_column: str = "sw_live_signal",
+    live_high_column: str = "sw_live_high",
+    live_low_column: str = "sw_live_low",
+    live_high_type_column: str = "sw_live_high_type",
+    live_low_type_column: str = "sw_live_low_type",
+) -> Union[PdDataFrame, PlDataFrame]:
+    """
+    Generate live trading signals from Strong/Weak High-Low (no lookahead).
+
+    The standard ``strong_weak_high_low()`` indicator uses pivot detection
+    that looks forward by ``pivot_length = swing_lookback // 5`` bars,
+    causing lookahead bias unsuitable for live trading or realistic
+    backtesting.
+
+    This function delays the signal by the pivot length to eliminate
+    lookahead. A swing point detected at bar *i* is only signaled at
+    bar *i + pivot_length*, when it would actually be confirmed in
+    real-time.
+
+    Signal values:
+        -  1 : Strong Low confirmed (bullish — institution buying)
+        - -1 : Strong High confirmed (bearish — institution selling)
+        -  0 : Weak swing, no swing, or not yet confirmed
+
+    Args:
+        data: DataFrame with SW columns already computed via
+            ``strong_weak_high_low()``.
+        swing_lookback: Must match the value used in the base
+            indicator call (default: 50). Used to calculate delay.
+        sw_high_column: Column with swing high flags.
+        sw_low_column: Column with swing low flags.
+        sw_high_type_column: Column with high type classification.
+        sw_low_type_column: Column with low type classification.
+        live_signal_column: Output — delayed combined signal.
+        live_high_column: Output — delayed swing high flag.
+        live_low_column: Output — delayed swing low flag.
+        live_high_type_column: Output — delayed high type.
+        live_low_type_column: Output — delayed low type.
+
+    Returns:
+        DataFrame with added live signal columns.
+
+    Example:
+        >>> df = strong_weak_high_low(df, swing_lookback=50)
+        >>> df = strong_weak_high_low_signal_live(df, swing_lookback=50)
+        >>> # Use df["sw_live_signal"] for trading
+    """
+    if isinstance(data, PlDataFrame):
+        pdf = data.to_pandas()
+        pdf = _compute_live_signal(
+            pdf, swing_lookback,
+            sw_high_column, sw_low_column,
+            sw_high_type_column, sw_low_type_column,
+            live_signal_column, live_high_column, live_low_column,
+            live_high_type_column, live_low_type_column,
+        )
+        import polars as pl
+        return pl.from_pandas(pdf)
+
+    if isinstance(data, PdDataFrame):
+        return _compute_live_signal(
+            data, swing_lookback,
+            sw_high_column, sw_low_column,
+            sw_high_type_column, sw_low_type_column,
+            live_signal_column, live_high_column, live_low_column,
+            live_high_type_column, live_low_type_column,
+        )
+
+    raise PyIndicatorException(
+        "Input data must be a pandas or polars DataFrame."
+    )
+
+
 def get_strong_weak_high_low_stats(
     data: Union[PdDataFrame, PlDataFrame],
     sw_high_column: str = "sw_high",
@@ -424,4 +504,65 @@ def _compute_signal(
             sig[i] = -1
 
     df[sig_col] = sig
+    return df
+
+
+def _compute_live_signal(
+    df: PdDataFrame,
+    swing_lookback: int,
+    sh_col: str, sl_col: str,
+    sh_type: str, sl_type: str,
+    live_sig_col: str,
+    live_high_col: str, live_low_col: str,
+    live_high_type_col: str, live_low_type_col: str,
+) -> PdDataFrame:
+    """
+    Generate delayed (live-safe) signals by shifting by pivot_length.
+
+    The pivot detection looks forward by piv_len = swing_lookback // 5
+    bars. To eliminate lookahead, we delay all swing outputs by this
+    amount — a swing detected at bar i is output at bar i + piv_len.
+    """
+    n = len(df)
+    piv_len = max(swing_lookback // 5, 2)
+
+    sh_flags = df[sh_col].values
+    sl_flags = df[sl_col].values
+    sh_types = df[sh_type].values
+    sl_types = df[sl_type].values
+
+    # Delayed output arrays
+    live_sig = np.zeros(n, dtype=int)
+    live_high = np.zeros(n, dtype=int)
+    live_low = np.zeros(n, dtype=int)
+    live_h_type = np.full(n, None, dtype=object)
+    live_l_type = np.full(n, None, dtype=object)
+
+    for i in range(n):
+        # Delayed index: swing at i becomes visible at i + piv_len
+        out_idx = i + piv_len
+        if out_idx >= n:
+            continue
+
+        # Swing high → delay
+        if sh_flags[i] == 1:
+            live_high[out_idx] = 1
+            live_h_type[out_idx] = sh_types[i]
+            if sh_types[i] == "Strong":
+                live_sig[out_idx] = -1
+
+        # Swing low → delay
+        if sl_flags[i] == 1:
+            live_low[out_idx] = 1
+            live_l_type[out_idx] = sl_types[i]
+            if sl_types[i] == "Strong":
+                # If both strong high and low on same delayed bar,
+                # low (bullish) takes precedence
+                live_sig[out_idx] = 1
+
+    df[live_sig_col] = live_sig
+    df[live_high_col] = live_high
+    df[live_low_col] = live_low
+    df[live_high_type_col] = live_h_type
+    df[live_low_type_col] = live_l_type
     return df
